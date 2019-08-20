@@ -26,11 +26,18 @@ public class Main {
 		root7.setRight(new Node(15));
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.preOrderTraversal(root);
-		System.out.println();
+		System.out.println(" - PreOrderTraversal");
 		treeTraversals.inOrderTraversal(root);
-		System.out.println();
+		System.out.println(" - InOrderTraversal");
 		treeTraversals.postOrderTraversal(root);
-		System.out.println();
+		System.out.println(" - PostOrderTraversal");
 		treeTraversals.lineOrderTraversal(root);
+		System.out.println();
+		TreeIntOperations treeIntOperations = new TreeIntOperations();
+		int height = treeIntOperations.height(root);
+		System.out.println("height of tree is " + height);
+		treeIntOperations.checkIfBalanced(root);
+		int size = treeIntOperations.sizeOfTree(root);
+		System.out.println("Size of the tree is " + size);
 	}
 }

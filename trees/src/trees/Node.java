@@ -2,11 +2,11 @@ package trees;
 
 public class Node {
 
-	int value;
+	private int value;
 
-	Node left;
+	private Node left;
 
-	Node right;
+	private Node right;
 
 	public Node(int value, Node left, Node right) {
 		super();
