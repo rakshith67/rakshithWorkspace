@@ -31,13 +31,23 @@ public class Main {
 		System.out.println(" - InOrderTraversal");
 		treeTraversals.postOrderTraversal(root);
 		System.out.println(" - PostOrderTraversal");
-		treeTraversals.lineOrderTraversal(root);
-		System.out.println();
+		treeTraversals.levelOrderTraversal(root);
+		System.out.println(" - LevelOrderTraversal");
 		TreeIntOperations treeIntOperations = new TreeIntOperations();
 		int height = treeIntOperations.height(root);
 		System.out.println("height of tree is " + height);
 		treeIntOperations.checkIfBalanced(root);
 		int size = treeIntOperations.sizeOfTree(root);
 		System.out.println("Size of the tree is " + size);
+		int numberOfLeaves = treeIntOperations.numberOfLeaves(root);
+		System.out.println("number of leaves in the tree is " + numberOfLeaves);
+		int sum = treeIntOperations.sumOfTree(root);
+		System.out.println("Sum of the tree is " + sum);
+		int sumOfLeaves = treeIntOperations.sumOfLeaves(root);
+		System.out.println("Sum of leaves of the tree is " + sumOfLeaves);
+		int maximum = treeIntOperations.maxElement(root);
+		int minimum = treeIntOperations.minElement(root);
+		System.out.println("Max element in the tree is " + maximum);
+		System.out.println("Min element in the tree is " + minimum);
 	}
 }
