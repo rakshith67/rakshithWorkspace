@@ -44,7 +44,7 @@ public class TreeTraversals {
 		System.out.print(root.getValue() + " ");
 	}
 
-	public void lineOrderTraversal(Node root) {
+	public void levelOrderTraversal(Node root) {
 		if (root == null) {
 			return;
 		}
