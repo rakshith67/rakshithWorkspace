@@ -45,9 +45,15 @@ public class Main {
 		System.out.println("Sum of the tree is " + sum);
 		int sumOfLeaves = treeIntOperations.sumOfLeaves(root);
 		System.out.println("Sum of leaves of the tree is " + sumOfLeaves);
+		int sumOfRightLeaves = treeIntOperations.sumOfRightLeaves(root, 0);
+		System.out.println("Sum of right leaves of the tree is " + sumOfRightLeaves);
+		int sumOfLeftLeaves = treeIntOperations.sumOfLeftLeaves(root, 0);
+		System.out.println("Sum of left leaves of the tree is " + sumOfLeftLeaves);
 		int maximum = treeIntOperations.maxElement(root);
 		int minimum = treeIntOperations.minElement(root);
 		System.out.println("Max element in the tree is " + maximum);
 		System.out.println("Min element in the tree is " + minimum);
+		int maximumWidth = treeIntOperations.maxWidth(root);
+		System.out.println("Max width in the tree is " + maximumWidth);
 	}
 }

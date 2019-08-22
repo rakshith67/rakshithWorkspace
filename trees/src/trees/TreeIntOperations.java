@@ -9,6 +9,8 @@ import java.util.Deque;
  */
 public class TreeIntOperations {
 
+	int width[];
+
 	/**
 	 * determines whether the tree is balanced or not. A Tree is balanced if
 	 * difference in heights of let and right is less than or equal to 1
@@ -115,6 +117,37 @@ public class TreeIntOperations {
 	}
 
 	/**
+	 * determines the sum of values of all right leaf nodes of the tree.
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int sumOfRightLeaves(Node root, int number) {
+		if (root == null) {
+			return 0;
+		} else if (root.getLeft() == null && root.getRight() == null && number != 1) {
+			System.out.println(root.getValue());
+			return root.getValue();
+		} else {
+			return sumOfRightLeaves(root.getLeft(), 1) + sumOfRightLeaves(root.getRight(), -1);
+		}
+	}
+
+	/**
+	 * determines the sum of values of all left leaf nodes of the tree.
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int sumOfLeftLeaves(Node root, int number) {
+		if (root == null) {
+			return 0;
+		} else if (root.getLeft() == null && root.getRight() == null && number != -1) {
+			return root.getValue();
+		} else {
+			return sumOfLeftLeaves(root.getLeft(), 1) + sumOfLeftLeaves(root.getRight(), -1);
+		}
+	}
+
+	/**
 	 * determines the maximum element in the tree.
 	 * 
 	 * @param root - the root of the tree
@@ -166,6 +199,38 @@ public class TreeIntOperations {
 			}
 		}
 		return minimum;
+	}
+
+	/**
+	 * determines the maximum width of the tree.
+	 * 
+	 * GFG Link: https://practice.geeksforgeeks.org/problems/maximum-width-of-tree/1
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int maxWidth(Node root) {
+		int depth = 0;
+		int height = height(root);
+		int[] width = new int[height];
+
+		widthArrayFill(root, depth, width);
+		int maximumWidth = 0;
+		for (int i = 0; i < height; i++) {
+			if (width[i] > maximumWidth) {
+				maximumWidth = width[i];
+			}
+		}
+		return maximumWidth;
+	}
+
+	private void widthArrayFill(Node root, int depth, int a[]) {
+		if (root == null) {
+			return;
+		}
+		a[depth]++;
+		depth++;
+		widthArrayFill(root.getLeft(), depth, a);
+		widthArrayFill(root.getRight(), depth, a);
 	}
 
 }
