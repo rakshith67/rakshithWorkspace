@@ -9,8 +9,6 @@ import java.util.Deque;
  */
 public class TreeIntOperations {
 
-	int width[];
-
 	/**
 	 * determines whether the tree is balanced or not. A Tree is balanced if
 	 * difference in heights of let and right is less than or equal to 1
@@ -231,6 +229,32 @@ public class TreeIntOperations {
 		depth++;
 		widthArrayFill(root.getLeft(), depth, a);
 		widthArrayFill(root.getRight(), depth, a);
+	}
+
+	/**
+	 * determines the maximum width of the tree.
+	 * 
+	 * GFG Link:
+	 * https://practice.geeksforgeeks.org/problems/level-of-a-node-in-binary-tree/1
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int findLevelOfKey(Node root, int key) {
+		int a[] = new int[1];
+		a[0] = 0;
+		storLevelInArray(root, key, a, 1);
+		return a[0];
+	}
+
+	public void storLevelInArray(Node root, int key, int a[], int depth) {
+		if (root == null) {
+			return;
+		} else if (root.getValue() == key) {
+			a[0] = depth;
+		}
+		depth++;
+		storLevelInArray(root.getRight(), key, a, depth);
+		storLevelInArray(root.getLeft(), key, a, depth);
 	}
 
 }

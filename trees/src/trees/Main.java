@@ -55,5 +55,7 @@ public class Main {
 		System.out.println("Min element in the tree is " + minimum);
 		int maximumWidth = treeIntOperations.maxWidth(root);
 		System.out.println("Max width in the tree is " + maximumWidth);
+		int level = treeIntOperations.findLevelOfKey(root, 15);
+		System.out.println("15 depth in the tree is " + level);
 	}
 }
