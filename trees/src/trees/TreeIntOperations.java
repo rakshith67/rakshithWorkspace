@@ -13,6 +13,9 @@ public class TreeIntOperations {
 	 * determines whether the tree is balanced or not. A Tree is balanced if
 	 * difference in heights of let and right is less than or equal to 1
 	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/check-for-balanced-tree/1
+	 * 
 	 * @param root - the root of the tree
 	 */
 	public void checkIfBalanced(Node root) {
@@ -29,8 +32,8 @@ public class TreeIntOperations {
 		} else if (root.getLeft() == null && root.getRight() == null) {
 			return true;
 		}
-		int leftHeight = height(root.getLeft());
-		int rightHeight = height(root.getRight());
+		int leftHeight = 1 + height(root.getLeft());
+		int rightHeight = 1 + height(root.getRight());
 		int diff = leftHeight - rightHeight;
 		if (Math.abs(diff) > 1) {
 			return false;
@@ -42,13 +45,13 @@ public class TreeIntOperations {
 	/**
 	 * determines the depth or height of the tree.
 	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/height-of-binary-tree/1
+	 * 
 	 * @param root - the root of the tree
 	 */
 	public int height(Node root) {
 		if (root == null) {
 			return 0;
-		} else if (root.getLeft() == null && root.getRight() == null) {
-			return 1;
 		}
 		int leftHeight = 1 + height(root.getLeft());
 		int rightHeight = 1 + height(root.getRight());
@@ -58,6 +61,8 @@ public class TreeIntOperations {
 
 	/**
 	 * determines the size or number of nodes of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/size-of-binary-tree/1
 	 * 
 	 * @param root - the root of the tree
 	 */
@@ -72,6 +77,9 @@ public class TreeIntOperations {
 	/**
 	 * determines the number of leaves of the tree.
 	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/count-leaves-in-binary-tree/1
+	 * 
 	 * @param root - the root of the tree
 	 */
 	public int numberOfLeaves(Node root) {
@@ -85,7 +93,33 @@ public class TreeIntOperations {
 	}
 
 	/**
+	 * determines the number of non leaves of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/count-non-leaf-nodes-in-tree/1
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int numberOfNonLeaves(Node root) {
+		int a[] = new int[1];
+		countNumberOfNonLeaves(root, a);
+		return a[0];
+	}
+
+	private void countNumberOfNonLeaves(Node root, int a[]) {
+		if (root == null) {
+			return;
+		} else if (root.getLeft() != null || root.getRight() != null) {
+			a[0]++;
+		}
+		countNumberOfNonLeaves(root.getLeft(), a);
+		countNumberOfNonLeaves(root.getRight(), a);
+	}
+
+	/**
 	 * determines the sum of values of all nodes of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/sum-of-binary-tree/1
 	 * 
 	 * @param root - the root of the tree
 	 */
@@ -102,6 +136,8 @@ public class TreeIntOperations {
 	/**
 	 * determines the sum of values of all leaf nodes of the tree.
 	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/sum-of-leaf-nodes/1
+	 * 
 	 * @param root - the root of the tree
 	 */
 	public int sumOfLeaves(Node root) {
@@ -117,13 +153,15 @@ public class TreeIntOperations {
 	/**
 	 * determines the sum of values of all right leaf nodes of the tree.
 	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/sum-of-right-leaf-nodes/1
+	 * 
 	 * @param root - the root of the tree
 	 */
 	public int sumOfRightLeaves(Node root, int number) {
 		if (root == null) {
 			return 0;
 		} else if (root.getLeft() == null && root.getRight() == null && number != 1) {
-			System.out.println(root.getValue());
 			return root.getValue();
 		} else {
 			return sumOfRightLeaves(root.getLeft(), 1) + sumOfRightLeaves(root.getRight(), -1);
@@ -132,6 +170,9 @@ public class TreeIntOperations {
 
 	/**
 	 * determines the sum of values of all left leaf nodes of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/sum-of-left-leaf-nodes/1
 	 * 
 	 * @param root - the root of the tree
 	 */
@@ -147,6 +188,9 @@ public class TreeIntOperations {
 
 	/**
 	 * determines the maximum element in the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/max-and-min-element-in-binary-tree/1
 	 * 
 	 * @param root - the root of the tree
 	 */
@@ -173,7 +217,10 @@ public class TreeIntOperations {
 	}
 
 	/**
-	 * determines the maximum element in the tree.
+	 * determines the minimum element in the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/minimum-element-in-bst/1
 	 * 
 	 * @param root - the root of the tree
 	 */
@@ -200,7 +247,7 @@ public class TreeIntOperations {
 	}
 
 	/**
-	 * determines the maximum width of the tree.
+	 * determines the maximum width or diameter of the tree.
 	 * 
 	 * GFG Link: https://practice.geeksforgeeks.org/problems/maximum-width-of-tree/1
 	 * 
@@ -246,7 +293,7 @@ public class TreeIntOperations {
 		return a[0];
 	}
 
-	public void storLevelInArray(Node root, int key, int a[], int depth) {
+	private void storLevelInArray(Node root, int key, int a[], int depth) {
 		if (root == null) {
 			return;
 		} else if (root.getValue() == key) {
@@ -257,4 +304,32 @@ public class TreeIntOperations {
 		storLevelInArray(root.getLeft(), key, a, depth);
 	}
 
+	/**
+	 * determines the minimum depth or height of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/minimum-depth-of-a-binary-tree/1
+	 * 
+	 * @param root - the root of the tree
+	 */
+	public int minimumHeight(Node root) {
+		int a[] = new int[1];
+		minHeight(root, false, 1, a);
+		return a[0];
+	}
+
+	private void minHeight(Node root, boolean end, int depth, int a[]) {
+		if (root == null) {
+			return;
+		} else if (root.getLeft() == null && root.getRight() == null) {
+			end = Boolean.TRUE;
+			a[0] = depth;
+			return;
+		}
+		if (!end) {
+			depth++;
+			minHeight(root.getLeft(), false, depth, a);
+			minHeight(root.getRight(), false, depth, a);
+		}
+	}
 }

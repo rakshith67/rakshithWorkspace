@@ -5,6 +5,13 @@ import java.util.Deque;
 
 public class TreeTraversals {
 
+	/**
+	 * Prints the preOrder traversal of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/preorder-traversal/1
+	 * 
+	 * @param root - root of the tree
+	 */
 	public void preOrderTraversal(Node root) {
 		if (root == null) {
 			return;
@@ -18,6 +25,13 @@ public class TreeTraversals {
 		}
 	}
 
+	/**
+	 * Prints the inOrder traversal of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/inorder-traversal/1
+	 * 
+	 * @param root - root of the tree
+	 */
 	public void inOrderTraversal(Node root) {
 		if (root == null) {
 			return;
@@ -31,6 +45,13 @@ public class TreeTraversals {
 		}
 	}
 
+	/**
+	 * Prints the postOrder traversal of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/postorder-traversal/1
+	 * 
+	 * @param root - root of the tree
+	 */
 	public void postOrderTraversal(Node root) {
 		if (root == null) {
 			return;
@@ -44,6 +65,13 @@ public class TreeTraversals {
 		System.out.print(root.getValue() + " ");
 	}
 
+	/**
+	 * Prints the levelOrder traversal of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/level-order-traversal/1
+	 * 
+	 * @param root - root of the tree
+	 */
 	public void levelOrderTraversal(Node root) {
 		if (root == null) {
 			return;

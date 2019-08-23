@@ -41,6 +41,8 @@ public class Main {
 		System.out.println("Size of the tree is " + size);
 		int numberOfLeaves = treeIntOperations.numberOfLeaves(root);
 		System.out.println("number of leaves in the tree is " + numberOfLeaves);
+		int numberOfNonLeaves = treeIntOperations.numberOfNonLeaves(root);
+		System.out.println("number of non leaves in the tree is " + numberOfNonLeaves);
 		int sum = treeIntOperations.sumOfTree(root);
 		System.out.println("Sum of the tree is " + sum);
 		int sumOfLeaves = treeIntOperations.sumOfLeaves(root);
@@ -56,6 +58,8 @@ public class Main {
 		int maximumWidth = treeIntOperations.maxWidth(root);
 		System.out.println("Max width in the tree is " + maximumWidth);
 		int level = treeIntOperations.findLevelOfKey(root, 15);
-		System.out.println("15 depth in the tree is " + level);
+		System.out.println("15th node depth in the tree is " + level);
+		int minDepth = treeIntOperations.minimumHeight(root);
+		System.out.println("minimum depth of the tree is " + minDepth);
 	}
 }
