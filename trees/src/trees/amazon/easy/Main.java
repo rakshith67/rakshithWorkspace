@@ -26,10 +26,14 @@ public class Main {
 		root6.setRight(new Node(13));
 		root7.setLeft(new Node(14));
 		root7.setRight(new Node(15));
-		TreesAmazonEasy treeOperations = new TreesAmazonEasy();
+		TreesAmazonEasylevel treeOperations = new TreesAmazonEasylevel();
 		boolean ischildSumParentTree = treeOperations.childSumParentTree(root);
 		System.out.println("is child sum parent tree: " + ischildSumParentTree);
 		int maxSumLevel = treeOperations.maxLevelSum(root);
 		System.out.println("Max sum in a level is : " + maxSumLevel);
+		boolean fullBinaryTree = treeOperations.fullBinaryTree(root);
+		System.out.println("Full Binary Tree: " + fullBinaryTree);
+		treeOperations.mirrorTree(root);
+		System.out.println();
 	}
 }

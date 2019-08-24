@@ -94,19 +94,14 @@ public class TreeIntOperations {
 	 * @param root - the root of the tree
 	 */
 	public int numberOfNonLeaves(Node root) {
-		int[] a = new int[1];
-		countNumberOfNonLeaves(root, a);
-		return a[0];
-	}
-
-	private void countNumberOfNonLeaves(Node root, int[] a) {
 		if (root == null) {
-			return;
-		} else if (root.getLeft() != null || root.getRight() != null) {
-			a[0]++;
+			return 0;
 		}
-		countNumberOfNonLeaves(root.getLeft(), a);
-		countNumberOfNonLeaves(root.getRight(), a);
+		if (root.getLeft() != null || root.getRight() != null) {
+			return 1 + numberOfNonLeaves(root.getLeft()) + numberOfNonLeaves(root.getRight());
+		}
+		return 0;
+
 	}
 
 	/**
