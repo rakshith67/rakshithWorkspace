@@ -140,6 +140,38 @@ public class TreeTraversals {
 	}
 
 	/**
+	 * Prints the spiral levelOrder traversal of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/level-order-traversal-in-spiral-form/1
+	 * 
+	 * @param root - root of the tree
+	 */
+	public void spiralLevelOrderTraversal(Node root) {
+		TreeIntOperations intOperations = new TreeIntOperations();
+		int height = intOperations.height(root);
+		for (int i = 1; i <= height; i++) {
+			levelOrderTraversalSpiralRecursive(root, i, 1);
+		}
+	}
+
+	private void levelOrderTraversalSpiralRecursive(Node root, int depth, int j) {
+		if (root == null) {
+			return;
+		}
+		if (depth == j) {
+			System.out.print(root.getValue() + " ");
+		}
+		if (depth % 2 == 0) {
+			levelOrderTraversalSpiralRecursive(root.getLeft(), depth, j + 1);
+			levelOrderTraversalSpiralRecursive(root.getRight(), depth, j + 1);
+		} else {
+			levelOrderTraversalSpiralRecursive(root.getRight(), depth, j + 1);
+			levelOrderTraversalSpiralRecursive(root.getLeft(), depth, j + 1);
+		}
+	}
+
+	/**
 	 * Prints the reverse levelOrder traversal of the tree.
 	 * 
 	 * GFG link:
@@ -173,5 +205,17 @@ public class TreeTraversals {
 			a[i] = removedNode.getValue();
 			i++;
 		}
+	}
+
+	/**
+	 * Prints the boundary traversal of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1
+	 * 
+	 * @param root - root of the tree
+	 */
+	public void boundaryTraversal(Node root) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 }
