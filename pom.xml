@@ -17,6 +17,7 @@
 	 <modules>
         <module>trees</module>
         <module>arrays</module>
+        <module>linkedlists</module>
     </modules>
 
 

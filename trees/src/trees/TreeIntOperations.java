@@ -27,19 +27,13 @@ public class TreeIntOperations {
 	}
 
 	private boolean balancedTree(Node root) {
-		if (root == null) {
-			return true;
-		} else if (root.getLeft() == null && root.getRight() == null) {
+		if (root == null || (root.getLeft() == null && root.getRight() == null)) {
 			return true;
 		}
 		int leftHeight = 1 + height(root.getLeft());
 		int rightHeight = 1 + height(root.getRight());
 		int diff = leftHeight - rightHeight;
-		if (Math.abs(diff) > 1) {
-			return false;
-		} else {
-			return true;
-		}
+		return Math.abs(diff) > 1 ? Boolean.FALSE : Boolean.TRUE;
 	}
 
 	/**
@@ -55,8 +49,7 @@ public class TreeIntOperations {
 		}
 		int leftHeight = 1 + height(root.getLeft());
 		int rightHeight = 1 + height(root.getRight());
-		int height = leftHeight > rightHeight ? leftHeight : rightHeight;
-		return height;
+		return leftHeight > rightHeight ? leftHeight : rightHeight;
 	}
 
 	/**
@@ -101,12 +94,12 @@ public class TreeIntOperations {
 	 * @param root - the root of the tree
 	 */
 	public int numberOfNonLeaves(Node root) {
-		int a[] = new int[1];
+		int[] a = new int[1];
 		countNumberOfNonLeaves(root, a);
 		return a[0];
 	}
 
-	private void countNumberOfNonLeaves(Node root, int a[]) {
+	private void countNumberOfNonLeaves(Node root, int[] a) {
 		if (root == null) {
 			return;
 		} else if (root.getLeft() != null || root.getRight() != null) {
@@ -268,7 +261,7 @@ public class TreeIntOperations {
 		return maximumWidth;
 	}
 
-	private void widthArrayFill(Node root, int depth, int a[]) {
+	private void widthArrayFill(Node root, int depth, int[] a) {
 		if (root == null) {
 			return;
 		}
@@ -287,13 +280,13 @@ public class TreeIntOperations {
 	 * @param root - the root of the tree
 	 */
 	public int findLevelOfKey(Node root, int key) {
-		int a[] = new int[1];
+		int[] a = new int[1];
 		a[0] = 0;
 		storLevelInArray(root, key, a, 1);
 		return a[0];
 	}
 
-	private void storLevelInArray(Node root, int key, int a[], int depth) {
+	private void storLevelInArray(Node root, int key, int[] a, int depth) {
 		if (root == null) {
 			return;
 		} else if (root.getValue() == key) {
@@ -313,12 +306,12 @@ public class TreeIntOperations {
 	 * @param root - the root of the tree
 	 */
 	public int minimumHeight(Node root) {
-		int a[] = new int[1];
+		int[] a = new int[1];
 		minHeight(root, false, 1, a);
 		return a[0];
 	}
 
-	private void minHeight(Node root, boolean end, int depth, int a[]) {
+	private void minHeight(Node root, boolean end, int depth, int[] a) {
 		if (root == null) {
 			return;
 		} else if (root.getLeft() == null && root.getRight() == null) {

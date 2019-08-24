@@ -33,6 +33,10 @@ public class Main {
 		System.out.println(" - PostOrderTraversal");
 		treeTraversals.levelOrderTraversal(root);
 		System.out.println(" - LevelOrderTraversal");
+		treeTraversals.reverseLevelOrderTraversal(root);
+		System.out.println(" - ReverseLevelOrderTraversal");
+		treeTraversals.levelOrderTraversalLine(root);
+		System.out.println(" - LineLevelOrderTraversal");
 		TreeIntOperations treeIntOperations = new TreeIntOperations();
 		int height = treeIntOperations.height(root);
 		System.out.println("height of tree is " + height);
