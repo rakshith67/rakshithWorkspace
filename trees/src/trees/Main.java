@@ -24,6 +24,7 @@ public class Main {
 		root6.setRight(new Node(13));
 		root7.setLeft(new Node(14));
 		root7.setRight(new Node(15));
+
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.preOrderTraversal(root);
 		System.out.println(" - PreOrderTraversal");
@@ -39,6 +40,19 @@ public class Main {
 		System.out.println(" - LineLevelOrderTraversal");
 		treeTraversals.spiralLevelOrderTraversal(root);
 		System.out.println(" - spiralLevelOrderTraversal");
+		treeTraversals.boundaryTraversal(root);
+		System.out.println("- boundaryTraversal");
+
+		TreeViews treeViews = new TreeViews();
+		treeViews.leftView(root);
+		System.out.println("- leftView");
+		treeViews.rightView(root);
+		System.out.println("- rightView");
+		treeViews.bottomView(root);
+		System.out.println("- bottomView");
+		treeViews.topView(root);
+		System.out.println("- topView");
+
 		TreeIntOperations treeIntOperations = new TreeIntOperations();
 		int height = treeIntOperations.height(root);
 		System.out.println("height of tree is " + height);

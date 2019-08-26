@@ -9,7 +9,7 @@ import trees.TreeTraversals;
  * @author Rakshith
  *
  */
-public class TreesAmazonEasylevel {
+public class TreesAmazonEasyLevel {
 
 	public static final String NOT_IMPLEMENTED = "Not implemented yet.";
 

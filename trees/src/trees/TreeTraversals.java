@@ -5,8 +5,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-import trees.amazon.easy.TreesAmazonEasylevel;
-
 /**
  * 
  * @author Rakshith
@@ -218,6 +216,6 @@ public class TreeTraversals {
 	 * @param root - root of the tree
 	 */
 	public void boundaryTraversal(Node root) {
-		throw new UnsupportedOperationException(TreesAmazonEasylevel.NOT_IMPLEMENTED);
 	}
+
 }

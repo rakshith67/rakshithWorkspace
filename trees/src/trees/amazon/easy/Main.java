@@ -26,7 +26,8 @@ public class Main {
 		root6.setRight(new Node(13));
 		root7.setLeft(new Node(14));
 		root7.setRight(new Node(15));
-		TreesAmazonEasylevel treeOperations = new TreesAmazonEasylevel();
+
+		TreesAmazonEasyLevel treeOperations = new TreesAmazonEasyLevel();
 		boolean ischildSumParentTree = treeOperations.childSumParentTree(root);
 		System.out.println("is child sum parent tree: " + ischildSumParentTree);
 		int maxSumLevel = treeOperations.maxLevelSum(root);
