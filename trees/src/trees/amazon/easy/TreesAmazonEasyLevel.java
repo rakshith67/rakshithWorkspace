@@ -1,8 +1,14 @@
 package trees.amazon.easy;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+
 import trees.Node;
 import trees.TreeIntOperations;
 import trees.TreeTraversals;
+import trees.TreeViews;
 
 /**
  * 
@@ -141,4 +147,131 @@ public class TreesAmazonEasyLevel {
 		return childSumParentTree(root.getLeft()) && childSumParentTree(root.getRight());
 	}
 
+	/**
+	 * removes the half nodes in the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/remove-half-nodes/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public Node removeHalfNodes(Node root) {
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+	}
+
+	/**
+	 * calculates the vertical sum of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/vertical-sum/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void verticalSum(Node root) {
+		TreeViews treeViews = new TreeViews();
+		int[] edge = new int[2];
+		treeViews.verticalEdgesFill(root, edge, 0);
+		edge[0] = Math.abs(edge[0]);
+		edge[1] = Math.abs(edge[1]);
+		int[] a = new int[edge[0] + edge[1] + 1];
+		fillArrayVerticalSum(root, edge[1], a);
+		for (int i = 0; i < edge[1] + edge[0] + 1; i++) {
+			System.out.print(a[i] + " ");
+		}
+	}
+
+	private void fillArrayVerticalSum(Node root, int rootIndex, int[] a) {
+		Deque<Node> deque = new ArrayDeque<>();
+		deque.push(root);
+		Map<Node, Integer> map = new HashMap<>();
+		map.put(root, rootIndex);
+		while (!deque.isEmpty()) {
+			Node currentNode = deque.removeFirst();
+			int currentLevel = map.get(currentNode);
+			a[currentLevel] += currentNode.getValue();
+			if (currentNode.getLeft() != null) {
+				map.put(currentNode.getLeft(), currentLevel - 1);
+				deque.add(currentNode.getLeft());
+			}
+			if (currentNode.getRight() != null) {
+				map.put(currentNode.getRight(), currentLevel + 1);
+				deque.add(currentNode.getRight());
+			}
+		}
+	}
+
+	/**
+	 * calculates the diagonal sum of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/diagonal-sum-in-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void diagonalSum(Node root) {
+		Map<Integer, Integer> map = new HashMap<>();
+		fillMapWithDiagonalSum(root, map, 0);
+		int i = 0;
+		while (map.get(i) != null) {
+			System.out.print(map.get(i) + " ");
+			i++;
+		}
+	}
+
+	private void fillMapWithDiagonalSum(Node root, Map<Integer, Integer> map, int currentDiagonal) {
+		if (root == null) {
+			return;
+		}
+		if (map.get(currentDiagonal) == null) {
+			map.put(currentDiagonal, root.getValue());
+		} else {
+			map.put(currentDiagonal, map.get(currentDiagonal) + root.getValue());
+		}
+		fillMapWithDiagonalSum(root.getLeft(), map, currentDiagonal + 1);
+		fillMapWithDiagonalSum(root.getRight(), map, currentDiagonal);
+	}
+
+	/**
+	 * determines the max node level of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/maximum-node-level/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public int maxNodeLevel(Node root) {
+		if (root == null) {
+			return -1;
+		}
+		TreeIntOperations treeIntOperations = new TreeIntOperations();
+		int height = treeIntOperations.height(root);
+		int[] level = new int[height];
+		fillLevelArrayWithNumberOfNodes(root, level, 0);
+		int maximumLevel = 0;
+		int maximumValue = 0;
+		for (int i = 0; i < height; i++) {
+			if (level[i] > maximumValue) {
+				maximumLevel = i;
+				maximumValue = level[i];
+			}
+		}
+		return maximumLevel;
+	}
+
+	private void fillLevelArrayWithNumberOfNodes(Node root, int[] level, int currentLevel) {
+		if (root != null) {
+			level[currentLevel]++;
+			fillLevelArrayWithNumberOfNodes(root.getLeft(), level, currentLevel + 1);
+			fillLevelArrayWithNumberOfNodes(root.getRight(), level, currentLevel + 1);
+		}
+	}
+
+	/**
+	 * determines the root to leaf paths sum of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/root-to-leaf-paths-sum/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void rootToLeafPathsSum(Node root) {
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+	}
 }

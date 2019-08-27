@@ -1,6 +1,7 @@
 package trees.amazon.easy;
 
 import trees.Node;
+import trees.TreeTraversals;
 
 public class Main {
 
@@ -34,7 +35,20 @@ public class Main {
 		System.out.println("Max sum in a level is : " + maxSumLevel);
 		boolean fullBinaryTree = treeOperations.fullBinaryTree(root);
 		System.out.println("Full Binary Tree: " + fullBinaryTree);
+		treeOperations.verticalSum(root);
+		System.out.println(" - vertical sum of the tree");
+		treeOperations.diagonalSum(root);
+		System.out.println(" - diagonal sum of the tree");
+		treeOperations.rootToLeafPathsSum(root);
+		System.out.println(" - Root to leaf paths sum");
+		int maxNodeLevel = treeOperations.maxNodeLevel(root);
+		System.out.println("Max node level: " + maxNodeLevel);
+		TreeTraversals treeTraversals = new TreeTraversals();
+		treeOperations.removeHalfNodes(root);
+		treeTraversals.inOrderTraversal(root);
+		System.out.println("- Inorder traversal of removed half nodes tree");
 		treeOperations.mirrorTree(root);
-		System.out.println();
+		treeTraversals.inOrderTraversal(root);
+		System.out.println("- Inorder traversal of Mirror tree");
 	}
 }

@@ -106,7 +106,7 @@ public class TreeViews {
 		}
 	}
 
-	private void verticalEdgesFill(Node root, int[] edge, int currentEdge) {
+	public void verticalEdgesFill(Node root, int[] edge, int currentEdge) {
 		if (edge[0] < currentEdge) {
 			edge[0] = currentEdge;
 		} else if (edge[1] > currentEdge) {
