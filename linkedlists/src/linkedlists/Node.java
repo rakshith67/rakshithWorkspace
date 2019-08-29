@@ -6,6 +6,16 @@ public class Node {
 
 	private Node next;
 
+	Node(int value) {
+		this.value = value;
+		this.next = null;
+	}
+
+	Node(int value, Node next) {
+		this.value = value;
+		this.next = next;
+	}
+
 	public int getValue() {
 		return value;
 	}

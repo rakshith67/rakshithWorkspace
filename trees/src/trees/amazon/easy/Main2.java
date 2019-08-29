@@ -38,5 +38,19 @@ public class Main2 {
 		} else {
 			System.out.println("Not Identical Trees");
 		}
+		treeOperations.toSumTree(root);
+		System.out.println(" - Sum tree");
+		boolean isSymmetric = treeOperations.isSymmetricTree(root);
+		if (isSymmetric) {
+			System.out.println("Symmetric Tree");
+		} else {
+			System.out.println("Not Symmetric Tree");
+		}
+		boolean areMirrorTrees = treeOperations.areMirrorTrees(root, root);
+		if (areMirrorTrees) {
+			System.out.println("Mirror Tree");
+		} else {
+			System.out.println("Not mirror Tree");
+		}
 	}
 }
