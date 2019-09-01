@@ -21,6 +21,12 @@ public class Node {
 		this.right = null;
 	}
 
+	public Node() {
+		this.value = 0;
+		this.left = null;
+		this.right = null;
+	}
+
 	public int getValue() {
 		return value;
 	}

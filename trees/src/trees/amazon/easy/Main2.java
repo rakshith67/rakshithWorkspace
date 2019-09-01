@@ -27,7 +27,7 @@ public class Main2 {
 		root7.setLeft(new Node(14));
 		root7.setRight(new Node(15));
 
-		TreeAmazonEasyLevel2 treeOperations = new TreeAmazonEasyLevel2();
+		TreesAmazonEasyLevel2 treeOperations = new TreesAmazonEasyLevel2();
 		treeOperations.printNodesAtKLevel(root, 3);
 		System.out.println("- Nodes at 3rd level from root");
 		int oddEvenDifferenece = treeOperations.diffOddEvenLevelSum(root);

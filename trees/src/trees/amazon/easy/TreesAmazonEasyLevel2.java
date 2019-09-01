@@ -7,7 +7,9 @@ import trees.Node;
 import trees.TreeIntOperations;
 import trees.TreeTraversals;
 
-public class TreeAmazonEasyLevel2 {
+public class TreesAmazonEasyLevel2 {
+
+	public static final String NOT_IMPLEMENTED = "Not implemented yet.";
 
 	/**
 	 * prints the nodes that are k distance from the root of the tree.
@@ -175,7 +177,7 @@ public class TreeAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public boolean areIsomorphicTrees(Node root1, Node root2) {
-		return Boolean.FALSE;
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
 	}
 
 	/**
@@ -187,6 +189,6 @@ public class TreeAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public Node leastCommonAncestor(Node root, int value1, int value2) {
-		return root;
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
 	}
 }

@@ -1,8 +1,10 @@
 package trees.amazon.easy;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import trees.Node;
@@ -16,8 +18,6 @@ import trees.TreeViews;
  *
  */
 public class TreesAmazonEasyLevel {
-
-	public static final String NOT_IMPLEMENTED = "Not implemented yet.";
 
 	/**
 	 * determines whether the both trees are mirror trees or not.
@@ -155,7 +155,19 @@ public class TreesAmazonEasyLevel {
 	 * @param root - Root of the tree
 	 */
 	public Node removeHalfNodes(Node root) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		if (root == null) {
+			return null;
+		}
+		root.setLeft(removeHalfNodes(root.getLeft()));
+		root.setRight(removeHalfNodes(root.getRight()));
+		if (root.getLeft() == null && root.getRight() == null) {
+			return root;
+		} else if (root.getLeft() == null) {
+			return root.getRight();
+		} else if (root.getRight() == null) {
+			return root.getLeft();
+		}
+		return root;
 	}
 
 	/**
@@ -271,7 +283,68 @@ public class TreesAmazonEasyLevel {
 	 * 
 	 * @param root - Root of the tree
 	 */
-	public void rootToLeafPathsSum(Node root) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+	public int rootToLeafPathsSum(Node root) {
+		int[] path = new int[100];
+		List<Integer> list = new ArrayList<>();
+		printSumOfLeafPaths(root, path, 0, list);
+		return totalSum(list);
+	}
+
+	private int totalSum(List<Integer> list) {
+		int sum = 0;
+		for (Integer integer : list) {
+			sum = sum + integer;
+		}
+		return sum;
+	}
+
+	private void printSumOfLeafPaths(Node root, int[] path, int pathLength, List<Integer> list) {
+		if (root == null) {
+			return;
+		}
+		path[pathLength] = root.getValue();
+		pathLength++;
+		if (root.getLeft() == null && root.getRight() == null) {
+			int currentSum = 0;
+			for (int i = 0; i < pathLength; i++) {
+				int index = pathLength - i - 1;
+				currentSum = (int) (currentSum + (path[i] * Math.pow(10, index)));
+			}
+			list.add(currentSum);
+		}
+		printSumOfLeafPaths(root.getLeft(), path, pathLength, list);
+		printSumOfLeafPaths(root.getRight(), path, pathLength, list);
+	}
+
+	/**
+	 * prints the root to leaf paths of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/root-to-leaf-paths/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void rootToLeafPaths(Node root) {
+		int[] path = new int[100];
+		printRootToLeafPaths(root, path, 0);
+	}
+
+	private void printRootToLeafPaths(Node root, int[] path, int pathLength) {
+		if (root == null) {
+			return;
+		}
+		path[pathLength] = root.getValue();
+		pathLength++;
+		if (root.getLeft() == null && root.getRight() == null) {
+			printCurrentPath(path, pathLength);
+		}
+		printRootToLeafPaths(root.getLeft(), path, pathLength);
+		printRootToLeafPaths(root.getRight(), path, pathLength);
+	}
+
+	private void printCurrentPath(int[] path, int pathLength) {
+		for (int i = 0; i < pathLength; i++) {
+			System.out.print(path[i] + " ");
+		}
+		System.out.print("#");
 	}
 }

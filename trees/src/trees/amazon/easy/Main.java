@@ -39,8 +39,10 @@ public class Main {
 		System.out.println(" - vertical sum of the tree");
 		treeOperations.diagonalSum(root);
 		System.out.println(" - diagonal sum of the tree");
-		treeOperations.rootToLeafPathsSum(root);
-		System.out.println(" - Root to leaf paths sum");
+		treeOperations.rootToLeafPaths(root);
+		System.out.println(" - Root to leaf paths");
+		long sum = treeOperations.rootToLeafPathsSum(root);
+		System.out.println(sum + " - Root to leaf paths sum");
 		int maxNodeLevel = treeOperations.maxNodeLevel(root);
 		System.out.println("Max node level: " + maxNodeLevel);
 		TreeTraversals treeTraversals = new TreeTraversals();
@@ -48,7 +50,6 @@ public class Main {
 		treeTraversals.inOrderTraversal(root);
 		System.out.println("- Inorder traversal of removed half nodes tree");
 		treeOperations.mirrorTree(root);
-		treeTraversals.inOrderTraversal(root);
-		System.out.println("- Inorder traversal of Mirror tree");
+		System.out.println("- Inorder traversal of mirror tree");
 	}
 }
