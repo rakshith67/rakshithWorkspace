@@ -1,6 +1,8 @@
 package trees.amazon.easy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import trees.Node;
@@ -169,6 +171,136 @@ public class TreesAmazonEasyLevel2 {
 	}
 
 	/**
+	 * checks whether the leaves of the tree are at same level.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/leaf-at-same-level/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public boolean leavesAtSameLevel(Node root) {
+		int[] a = new int[2];
+		checkLevelOfLeaves(root, a, 0);
+		if (a[0] == a[1]) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	private void checkLevelOfLeaves(Node root, int[] a, int level) {
+		if (root == null) {
+			return;
+		}
+		if (root.getLeft() == null && root.getRight() == null) {
+			if (a[0] == 0) {
+				a[0] = level;
+				a[1] = level;
+			} else {
+				a[1] = level;
+			}
+		}
+		if (a[0] == a[1]) {
+			checkLevelOfLeaves(root.getLeft(), a, level + 1);
+			checkLevelOfLeaves(root.getRight(), a, level + 1);
+		}
+	}
+
+	/**
+	 * returns the kth largest element in BST.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/kth-largest-element-in-bst/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void kthLargestElement(Node root, int k) {
+		int[] a = new int[1];
+		kthLargest(root, k, a);
+	}
+
+	private void kthLargest(Node root, int k, int[] a) {
+		if (root == null) {
+			return;
+		}
+		kthLargest(root.getRight(), k, a);
+		a[0]++;
+		if (a[0] == k) {
+			System.out.print(root.getValue() + " ");
+		}
+		kthLargest(root.getLeft(), k, a);
+	}
+
+	/**
+	 * prints elements in a given range of BST.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/print-bst-elements-in-given-range/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void printElementsInRange(Node root, int k1, int k2) {
+		if (root == null) {
+			return;
+		}
+		printElementsInRange(root.getLeft(), k1, k2);
+		if (root.getValue() >= k1 && root.getValue() <= k2) {
+			System.out.print(root.getValue() + " ");
+		}
+		if (root.getValue() < k2) {
+			printElementsInRange(root.getRight(), k1, k2);
+		}
+	}
+
+	/**
+	 * returns the maximum sum of path of tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/maximum-path-sum/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public int maximumPathSum(Node root) {
+		if (root == null) {
+			return 0;
+		}
+		int leftChildSum = determineMaxPathSum(root.getLeft());
+		int rightChildSum = determineMaxPathSum(root.getRight());
+		int leftSum = maximumPathSum(root.getLeft());
+		int rightSum = maximumPathSum(root.getRight());
+		return Math.max(leftChildSum + rightChildSum + root.getValue(), Math.max(leftSum, rightSum));
+	}
+
+	public int determineMaxPathSum(Node root) {
+		if (root == null) {
+			return 0;
+		}
+		int[] path = new int[10];
+		List<Integer> list = new ArrayList<>();
+		sumOfLeafPaths(root, path, 0, list);
+		return list.get(0);
+	}
+
+	private void sumOfLeafPaths(Node root, int[] path, int pathLength, List<Integer> list) {
+		if (root == null) {
+			return;
+		}
+		path[pathLength] = root.getValue();
+		pathLength++;
+		if (root.getLeft() == null && root.getRight() == null) {
+			int sum = 0;
+			for (int i = 0; i < pathLength; i++) {
+				sum = sum + path[i];
+			}
+			if (list.isEmpty()) {
+				list.add(sum);
+			} else if (sum > list.get(0)) {
+				list.clear();
+				list.add(sum);
+			}
+		}
+		sumOfLeafPaths(root.getLeft(), path, pathLength, list);
+		sumOfLeafPaths(root.getRight(), path, pathLength, list);
+	}
+
+	/**
 	 * checks whether the trees are isomorphic.
 	 * 
 	 * GFG link:
@@ -177,7 +309,32 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public boolean areIsomorphicTrees(Node root1, Node root2) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		Map<Integer, Integer> map1 = new HashMap<>();
+		Map<Integer, Integer> map2 = new HashMap<>();
+		checkIsomorphicTrees(root1, root2, map1, map2);
+		for (Map.Entry<Integer, Integer> entry : map1.entrySet()) {
+			if (map2.get(entry.getKey()) != entry.getValue()) {
+				return Boolean.FALSE;
+			}
+		}
+		return Boolean.TRUE;
+	}
+
+	private void checkIsomorphicTrees(Node root1, Node root2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+		if (root1 != null) {
+			if (map1.get(root1.getValue()) == null) {
+				map1.put(root1.getValue(), 1);
+			} else {
+				map1.put(root1.getValue(), map1.get(root1.getValue()) + 1);
+			}
+		}
+		if (root2 != null) {
+			if (map2.get(root2.getValue()) == null) {
+				map2.put(root2.getValue(), 1);
+			} else {
+				map2.put(root2.getValue(), map2.get(root2.getValue()) + 1);
+			}
+		}
 	}
 
 	/**
@@ -189,6 +346,29 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public Node leastCommonAncestor(Node root, int value1, int value2) {
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+	}
+
+	/**
+	 * prints the ancestors of the given node in a tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/ancestors-in-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void printAncestors(Node root, int k) {
+		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+	}
+
+	/**
+	 * converts binary tree to BST.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/binary-tree-to-bst/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public Node binaryTreeToBST(Node root) {
 		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
 	}
 }

@@ -301,23 +301,17 @@ public class TreeIntOperations {
 	 * @param root - the root of the tree
 	 */
 	public int minimumHeight(Node root) {
-		int[] a = new int[1];
-		minHeight(root, false, 1, a);
-		return a[0];
+		return minHeight(root, 1);
 	}
 
-	private void minHeight(Node root, boolean end, int depth, int[] a) {
+	private int minHeight(Node root, int depth) {
 		if (root == null) {
-			return;
+			return 0;
 		} else if (root.getLeft() == null && root.getRight() == null) {
-			end = Boolean.TRUE;
-			a[0] = depth;
-			return;
-		}
-		if (!end) {
+			return depth;
+		} else {
 			depth++;
-			minHeight(root.getLeft(), false, depth, a);
-			minHeight(root.getRight(), false, depth, a);
+			return Math.min(minHeight(root.getLeft(), depth), minHeight(root.getRight(), depth));
 		}
 	}
 }

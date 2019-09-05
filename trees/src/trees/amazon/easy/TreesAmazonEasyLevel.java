@@ -347,4 +347,25 @@ public class TreesAmazonEasyLevel {
 		}
 		System.out.print("#");
 	}
+
+	/**
+	 * prints the root to leaf paths of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public int diameter(Node root) {
+		if (root == null) {
+			return 0;
+		}
+		TreeIntOperations treeOperations = new TreeIntOperations();
+		int leftHeight = treeOperations.height(root.getLeft());
+		int rightHeight = treeOperations.height(root.getRight());
+		int leftDiameter = diameter(root.getLeft());
+		int rightDiameter = diameter(root.getRight());
+		return Math.max(leftHeight + rightHeight + 1, Math.max(leftDiameter, rightDiameter));
+	}
+
 }

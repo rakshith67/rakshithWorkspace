@@ -38,8 +38,6 @@ public class Main2 {
 		} else {
 			System.out.println("Not Identical Trees");
 		}
-		treeOperations.toSumTree(root);
-		System.out.println(" - Sum tree");
 		boolean isSymmetric = treeOperations.isSymmetricTree(root);
 		if (isSymmetric) {
 			System.out.println("Symmetric Tree");
@@ -52,5 +50,17 @@ public class Main2 {
 		} else {
 			System.out.println("Not mirror Tree");
 		}
+		boolean leavesSameLevel = treeOperations.leavesAtSameLevel(root);
+		if (leavesSameLevel) {
+			System.out.println("Leaves at same level.");
+		} else {
+			System.out.println("Leaves not at same level.");
+		}
+		treeOperations.kthLargestElement(root, 3);
+		System.out.println("- kth largest element");
+		int maxPathSum = treeOperations.maximumPathSum(root);
+		System.out.println(maxPathSum + "- max path sum");
+		treeOperations.toSumTree(root);
+		System.out.println(" - Sum tree");
 	}
 }

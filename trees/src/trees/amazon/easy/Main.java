@@ -51,5 +51,7 @@ public class Main {
 		System.out.println("- Inorder traversal of removed half nodes tree");
 		treeOperations.mirrorTree(root);
 		System.out.println("- Inorder traversal of mirror tree");
+		int diameter = treeOperations.diameter(root);
+		System.out.println(diameter + " - diameter of the tree");
 	}
 }
