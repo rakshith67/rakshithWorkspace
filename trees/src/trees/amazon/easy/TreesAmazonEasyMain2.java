@@ -1,31 +1,12 @@
 package trees.amazon.easy;
 
 import trees.Node;
+import trees.TreeTraversals;
 
-public class Main2 {
+public class TreesAmazonEasyMain2 {
 
 	public static void main(String[] args) {
-		Node root = new Node(1);
-		Node root2 = new Node(2);
-		root.setLeft(root2);
-		Node root3 = new Node(3);
-		root.setRight(root3);
-		Node root4 = new Node(4);
-		Node root5 = new Node(5);
-		root2.setLeft(root4);
-		root2.setRight(root5);
-		Node root6 = new Node(6);
-		Node root7 = new Node(7);
-		root3.setLeft(root6);
-		root3.setRight(root7);
-		root4.setLeft(new Node(8));
-		root4.setRight(new Node(9));
-		root5.setLeft(new Node(10));
-		root5.setRight(new Node(11));
-		root6.setLeft(new Node(12));
-		root6.setRight(new Node(13));
-		root7.setLeft(new Node(14));
-		root7.setRight(new Node(15));
+		Node root = Node.createTree();
 
 		TreesAmazonEasyLevel2 treeOperations = new TreesAmazonEasyLevel2();
 		treeOperations.printNodesAtKLevel(root, 3);
@@ -60,6 +41,20 @@ public class Main2 {
 		System.out.println("- kth largest element");
 		int maxPathSum = treeOperations.maximumPathSum(root);
 		System.out.println(maxPathSum + "- max path sum");
+		boolean isIsomorphic = treeOperations.isIsomorphicTrees(root, root);
+		if (isIsomorphic) {
+			System.out.println("Isomorphic trees");
+		} else {
+			System.out.println("Not Isomorphic trees");
+		}
+		treeOperations.printAncestors(root, 15);
+		System.out.println("Ancestors of 15");
+		Node leastCommonAncestor = treeOperations.leastCommonAncestor(root, 6, 15);
+		System.out.println("LCA of 6 and 15 is " + leastCommonAncestor.getValue());
+		Node rootBST = treeOperations.binaryTreeToBST(root);
+		TreeTraversals treeTraversals = new TreeTraversals();
+		treeTraversals.inOrderTraversal(rootBST);
+		System.out.println(" - BST inorder traversal");
 		treeOperations.toSumTree(root);
 		System.out.println(" - Sum tree");
 	}

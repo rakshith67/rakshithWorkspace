@@ -1,4 +1,4 @@
-package trees.amazon.easy;
+package trees;
 
 public class NodeString {
 	private String value;

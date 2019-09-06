@@ -11,8 +11,6 @@ import trees.TreeTraversals;
 
 public class TreesAmazonEasyLevel2 {
 
-	public static final String NOT_IMPLEMENTED = "Not implemented yet.";
-
 	/**
 	 * prints the nodes that are k distance from the root of the tree.
 	 * 
@@ -308,33 +306,20 @@ public class TreesAmazonEasyLevel2 {
 	 * 
 	 * @param root - Root of the tree
 	 */
-	public boolean areIsomorphicTrees(Node root1, Node root2) {
-		Map<Integer, Integer> map1 = new HashMap<>();
-		Map<Integer, Integer> map2 = new HashMap<>();
-		checkIsomorphicTrees(root1, root2, map1, map2);
-		for (Map.Entry<Integer, Integer> entry : map1.entrySet()) {
-			if (map2.get(entry.getKey()) != entry.getValue()) {
-				return Boolean.FALSE;
-			}
+	public boolean isIsomorphicTrees(Node root1, Node root2) {
+		if (root1 == null && root2 == null) {
+			return true;
 		}
-		return Boolean.TRUE;
-	}
-
-	private void checkIsomorphicTrees(Node root1, Node root2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
-		if (root1 != null) {
-			if (map1.get(root1.getValue()) == null) {
-				map1.put(root1.getValue(), 1);
-			} else {
-				map1.put(root1.getValue(), map1.get(root1.getValue()) + 1);
-			}
+		if (root1 == null || root2 == null) {
+			return true;
 		}
-		if (root2 != null) {
-			if (map2.get(root2.getValue()) == null) {
-				map2.put(root2.getValue(), 1);
-			} else {
-				map2.put(root2.getValue(), map2.get(root2.getValue()) + 1);
-			}
+		if (root1.getValue() != root2.getValue()) {
+			return false;
 		}
+		return isIsomorphicTrees(root1.getLeft(), root2.getLeft())
+				&& isIsomorphicTrees(root1.getRight(), root2.getRight())
+				|| isIsomorphicTrees(root1.getLeft(), root2.getRight())
+				|| isIsomorphicTrees(root2.getLeft(), root1.getRight());
 	}
 
 	/**
@@ -346,7 +331,21 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public Node leastCommonAncestor(Node root, int value1, int value2) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		if (root == null) {
+			return null;
+		}
+		if (root.getValue() == value1 || root.getValue() == value2) {
+			return root;
+		}
+		Node left = leastCommonAncestor(root.getLeft(), value1, value2);
+		Node right = leastCommonAncestor(root.getRight(), value1, value2);
+		if (left != null && right != null) {
+			return root;
+		}
+		if (left == null && right == null) {
+			return null;
+		}
+		return left != null ? left : right;
 	}
 
 	/**
@@ -358,7 +357,24 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public void printAncestors(Node root, int k) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		int[] path = new int[100];
+		printRootToLeafPath(root, path, 0, k);
+	}
+
+	private void printRootToLeafPath(Node root, int[] path, int pathLength, int k) {
+		if (root == null) {
+			return;
+		}
+		if (root.getValue() == k) {
+			for (int i = pathLength - 1; i >= 0; i--) {
+				System.out.print(path[i] + " ");
+			}
+		} else {
+			path[pathLength] = root.getValue();
+			pathLength++;
+			printRootToLeafPath(root.getLeft(), path, pathLength, k);
+			printRootToLeafPath(root.getRight(), path, pathLength, k);
+		}
 	}
 
 	/**
@@ -369,6 +385,29 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Root of the tree
 	 */
 	public Node binaryTreeToBST(Node root) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		List<Integer> list = new ArrayList<>();
+		inOrderTraversal(root, list);
+		list.sort(null);
+		makeBSTFromBinaryTree(root, list);
+		return root;
+	}
+
+	private void inOrderTraversal(Node root, List<Integer> list) {
+		if (root == null) {
+			return;
+		}
+		inOrderTraversal(root.getLeft(), list);
+		list.add(root.getValue());
+		inOrderTraversal(root.getRight(), list);
+	}
+
+	private void makeBSTFromBinaryTree(Node root, List<Integer> list) {
+		if (root == null) {
+			return;
+		}
+		makeBSTFromBinaryTree(root.getLeft(), list);
+		root.setValue(list.get(0));
+		list.remove(0);
+		makeBSTFromBinaryTree(root.getRight(), list);
 	}
 }
