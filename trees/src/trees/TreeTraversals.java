@@ -11,8 +11,6 @@ import java.util.Map;
  */
 public class TreeTraversals {
 
-	public static final String NOT_IMPLEMENTED = "NotImplemented";
-
 	/**
 	 * Prints the preOrder traversal of the tree.
 	 * 
@@ -218,7 +216,7 @@ public class TreeTraversals {
 	 * @param root - root of the tree
 	 */
 	public void boundaryTraversal(Node root) {
-		throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -23,6 +23,18 @@ public class TreesAmazonEasyMain {
 		System.out.println(" - Root to leaf paths");
 		long sum = treeOperations.rootToLeafPathsSum(root);
 		System.out.println(sum + " - Root to leaf paths sum");
+		boolean hasPathSum = treeOperations.hasPathSum(root, 15);
+		if (hasPathSum) {
+			System.out.println("tree has path sum");
+		} else {
+			System.out.println("tree does not has path sum");
+		}
+		boolean isCousins = treeOperations.isCousins(root, 11, 15);
+		if (isCousins) {
+			System.out.println("Is Cousins");
+		} else {
+			System.out.println("Not Cousins");
+		}
 		int maxNodeLevel = treeOperations.maxNodeLevel(root);
 		System.out.println("Max node level: " + maxNodeLevel);
 		TreeTraversals treeTraversals = new TreeTraversals();

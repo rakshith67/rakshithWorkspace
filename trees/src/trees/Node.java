@@ -59,8 +59,8 @@ public class Node {
 	public static Node createTree() {
 		Node root = new Node(1);
 		Node root2 = new Node(2);
-		root.setLeft(root2);
 		Node root3 = new Node(3);
+		root.setLeft(root2);
 		root.setRight(root3);
 		Node root4 = new Node(4);
 		Node root5 = new Node(5);

@@ -318,6 +318,38 @@ public class TreesAmazonEasyLevel {
 	}
 
 	/**
+	 * determines the root to leaf paths sum has the sum given.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/root-to-leaf-paths-sum/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public boolean hasPathSum(Node root, int sum) {
+		int[] path = new int[100];
+		return checkIfPathSumExists(root, sum, path, 0);
+	}
+
+	private boolean checkIfPathSumExists(Node root, int sum, int[] path, int pathLength) {
+		if (root == null) {
+			return Boolean.FALSE;
+		}
+		path[pathLength] = root.getValue();
+		pathLength++;
+		if (root.getLeft() == null && root.getRight() == null) {
+			int currentSum = 0;
+			for (int i = 0; i < pathLength; i++) {
+				currentSum = currentSum + path[i];
+			}
+			if (sum == currentSum) {
+				return Boolean.TRUE;
+			}
+		}
+		return checkIfPathSumExists(root.getLeft(), sum, path, pathLength)
+				|| checkIfPathSumExists(root.getRight(), sum, path, pathLength);
+	}
+
+	/**
 	 * prints the root to leaf paths of the tree.
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/root-to-leaf-paths/1
@@ -369,4 +401,73 @@ public class TreesAmazonEasyLevel {
 		return Math.max(leftHeight + rightHeight + 1, Math.max(leftDiameter, rightDiameter));
 	}
 
+	/**
+	 * checks if the two nodes are cousins or not.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/check-if-two-nodes-are-cousins/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public boolean isCousins(Node root, int x, int y) {
+		int[] array = new int[2];
+		Map<Integer, Node> map = new HashMap<>();
+		levelOrderTraversal(root, root, 0, array, x, y, map);
+		if (array[0] == array[1] && array[0] != 0 && map.get(x) != map.get(y)) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	private void levelOrderTraversal(Node root, Node parent, int depth, int[] array, int x, int y,
+			Map<Integer, Node> map) {
+		if (root == null) {
+			return;
+		}
+		if (root.getValue() == x) {
+			array[0] = depth;
+			map.put(x, parent);
+		}
+		if (root.getValue() == y) {
+			array[1] = depth;
+			map.put(y, parent);
+		}
+		levelOrderTraversal(root.getLeft(), root, depth + 1, array, x, y, map);
+		levelOrderTraversal(root.getRight(), root, depth + 1, array, x, y, map);
+	}
+
+	/**
+	 * prints the root to leaf paths of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/reverse-alternate-levels-of-a-perfect-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void reverseAlternateLevels(Node root) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * prints the nodes that don't have the siblings.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/print-all-nodes-that-dont-have-sibling/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void printNonSiblingNodes(Node root) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * prints the nodes that don't have the siblings.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/array-to-bst/0
+	 * 
+	 * @param array - array of values of nodes
+	 */
+	public void arrayToBST(int[] array) {
+		throw new UnsupportedOperationException();
+	}
 }

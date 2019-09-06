@@ -124,6 +124,55 @@ public class TreesAmazonEasyLevel2 {
 	}
 
 	/**
+	 * checks if the tree is sum tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/sum-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public boolean isSumTree(Node root) {
+		Map<Node, Integer> map = new HashMap<>();
+		fillMap(root, map);
+		return checkSumTree(root, map);
+	}
+
+	private boolean checkSumTree(Node root, Map<Node, Integer> map) {
+		if (root == null || root.getLeft() == null && root.getRight() == null) {
+			return Boolean.TRUE;
+		} else if (root.getLeft() == null) {
+			if (root.getValue() != map.get(root.getRight())) {
+				return Boolean.FALSE;
+			}
+		} else if (root.getRight() == null) {
+			if (root.getValue() != map.get(root.getLeft())) {
+				return Boolean.FALSE;
+			}
+		} else {
+			if (root.getValue() != map.get(root.getLeft()) + map.get(root.getRight())) {
+				return Boolean.FALSE;
+			}
+		}
+		return checkSumTree(root.getLeft(), map) && checkSumTree(root.getRight(), map);
+	}
+
+	private void fillMap(Node root, Map<Node, Integer> map) {
+		if (root == null) {
+			return;
+		}
+		fillMap(root.getLeft(), map);
+		fillMap(root.getRight(), map);
+		if (root.getLeft() == null && root.getRight() == null) {
+			map.put(root, root.getValue());
+		} else if (root.getLeft() == null) {
+			map.put(root, root.getValue() + map.get(root.getRight()));
+		} else if (root.getRight() == null) {
+			map.put(root, root.getValue() + map.get(root.getLeft()));
+		} else {
+			map.put(root, root.getValue() + map.get(root.getLeft()) + map.get(root.getRight()));
+		}
+	}
+
+	/**
 	 * checks whether the tree is symmetric tree.
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/symmetric-tree/1
@@ -409,5 +458,40 @@ public class TreesAmazonEasyLevel2 {
 		root.setValue(list.get(0));
 		list.remove(0);
 		makeBSTFromBinaryTree(root.getRight(), list);
+	}
+
+	/**
+	 * builds binary tree from preOrder and inOrder traversals.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/construct-tree-1/1
+	 * 
+	 * @param inorder  - inOrder of the tree
+	 * @param preorder - preOrder of the tree
+	 */
+	public static Node buildTree(int inorder[], int preorder[], int st, int end) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * prints common nodes in the two BST's.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/print-common-nodes-in-bst/1
+	 * 
+	 * @param root - Roots of the trees
+	 */
+	public void printCommonNodesBST(Node root1, Node root2) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * determines height of the spiral tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/height-of-spiral-tree/1
+	 * 
+	 * @param root - Roots of the trees
+	 */
+	public void heightOfSpiralTree(Node root) {
+		throw new UnsupportedOperationException();
 	}
 }

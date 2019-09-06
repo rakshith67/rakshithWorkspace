@@ -51,6 +51,12 @@ public class TreesAmazonEasyMain2 {
 		System.out.println("Ancestors of 15");
 		Node leastCommonAncestor = treeOperations.leastCommonAncestor(root, 6, 15);
 		System.out.println("LCA of 6 and 15 is " + leastCommonAncestor.getValue());
+		boolean isSumTree = treeOperations.isSumTree(root);
+		if (isSumTree) {
+			System.out.println("sum tree");
+		} else {
+			System.out.println("Not sum tree");
+		}
 		Node rootBST = treeOperations.binaryTreeToBST(root);
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.inOrderTraversal(rootBST);
