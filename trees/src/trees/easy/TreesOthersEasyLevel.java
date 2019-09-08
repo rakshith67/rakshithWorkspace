@@ -19,7 +19,7 @@ public class TreesOthersEasyLevel {
 	 * @param preOrder - preOrder traversal
 	 * @param n        - size of the array
 	 */
-	void printPostOrder(int[] inOrder, int[] preOrder, int n) {
+	public void printPostOrder(int[] inOrder, int[] preOrder, int n) {
 		TreesAmazonEasyLevel2 treeAmazonEasyLevel2 = new TreesAmazonEasyLevel2();
 		int[] currentIndex = new int[1];
 		Node root = treeAmazonEasyLevel2.buildTree(inOrder, preOrder, 0, n - 1, currentIndex);

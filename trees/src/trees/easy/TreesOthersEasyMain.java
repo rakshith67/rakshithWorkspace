@@ -24,6 +24,13 @@ public class TreesOthersEasyMain {
 		int count = treeOperations.getCountForBudget(root, 13);
 		System.out.println("count for 13 budget is " + count);
 		treeOperations.printSumOfLeafNodesAtMinLevel(root);
+		treeOperations.printPredecessorAndSuccessor(root, 12);
+		boolean ismaxHeap = treeOperations.isMaxHeap(root);
+		if (ismaxHeap) {
+			System.out.println("Max heap tree.");
+		} else {
+			System.out.println("Not Max heap tree.");
+		}
 		Node deletedTreeRoot = treeOperations.deleteNodesGreaterThanKey(root, 9);
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.inOrderTraversal(deletedTreeRoot);
