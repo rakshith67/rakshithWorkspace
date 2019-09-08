@@ -1,12 +1,14 @@
-package trees.amazon.easy;
+package trees.easy;
 
-import trees.Node;
-import trees.TreeTraversals;
+import trees.basic.Node;
+import trees.basic.TreeTraversals;
 
 public class TreesAmazonEasyMain2 {
 
 	public static void main(String[] args) {
 		Node root = Node.createTree();
+		int[] inOrder = new int[] { 8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15 };
+		int[] preOrder = new int[] { 1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 15, 7, 14, 15 };
 
 		TreesAmazonEasyLevel2 treeOperations = new TreesAmazonEasyLevel2();
 		treeOperations.printNodesAtKLevel(root, 3);
@@ -63,5 +65,9 @@ public class TreesAmazonEasyMain2 {
 		System.out.println(" - BST inorder traversal");
 		treeOperations.toSumTree(root);
 		System.out.println(" - Sum tree");
+		int[] currentIndex = new int[] { 0 };
+		Node createdRoot = treeOperations.buildTree(inOrder, preOrder, 0, 14, currentIndex);
+		treeTraversals.inOrderTraversal(createdRoot);
+		System.out.println(" - inOrder Traversal of create root");
 	}
 }

@@ -1,4 +1,4 @@
-package trees;
+package trees.basic;
 
 public class NodeString {
 	private String value;

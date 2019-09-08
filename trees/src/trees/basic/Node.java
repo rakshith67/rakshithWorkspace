@@ -1,4 +1,4 @@
-package trees;
+package trees.basic;
 
 public class Node {
 
@@ -80,4 +80,39 @@ public class Node {
 		root7.setRight(new Node(15));
 		return root;
 	}
+
+	public static Node createLeftTree() {
+		Node root = new Node(1);
+		Node root2 = new Node(2);
+		Node root3 = new Node(3);
+		Node root4 = new Node(4);
+		Node root5 = new Node(5);
+		Node root6 = new Node(6);
+		Node root7 = new Node(7);
+		root.setLeft(root2);
+		root2.setLeft(root3);
+		root3.setLeft(root4);
+		root4.setLeft(root5);
+		root5.setLeft(root6);
+		root6.setLeft(root7);
+		return root;
+	}
+
+	public static Node createRightTree() {
+		Node root = new Node(1);
+		Node root2 = new Node(2);
+		Node root3 = new Node(3);
+		Node root4 = new Node(4);
+		Node root5 = new Node(5);
+		Node root6 = new Node(6);
+		Node root7 = new Node(7);
+		root.setRight(root2);
+		root2.setRight(root3);
+		root3.setRight(root4);
+		root4.setRight(root5);
+		root5.setRight(root6);
+		root6.setRight(root7);
+		return root;
+	}
+
 }

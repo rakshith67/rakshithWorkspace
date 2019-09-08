@@ -1,4 +1,4 @@
-package trees.amazon.easy;
+package trees.easy;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import trees.Node;
-import trees.NodeString;
-import trees.TreeIntOperations;
-import trees.TreeTraversals;
-import trees.TreeViews;
+import trees.basic.Node;
+import trees.basic.NodeString;
+import trees.basic.TreeIntOperations;
+import trees.basic.TreeTraversals;
+import trees.basic.TreeViews;
 
 /**
  * 
@@ -457,17 +457,51 @@ public class TreesAmazonEasyLevel {
 	 * @param root - Root of the tree
 	 */
 	public void printNonSiblingNodes(Node root) {
-		throw new UnsupportedOperationException();
+		List<Integer> list = new ArrayList<>();
+		fillListWithNonSiblingNodes(root.getLeft(), root, list);
+		fillListWithNonSiblingNodes(root.getRight(), root, list);
+		if (list.isEmpty()) {
+			System.out.print("-1");
+		} else {
+			list.sort(null);
+			for (Integer integer : list) {
+				System.out.print(integer + " ");
+			}
+		}
+	}
+
+	private void fillListWithNonSiblingNodes(Node root, Node parent, List<Integer> list) {
+		if (root == null) {
+			return;
+		} else if (parent.getLeft() != null && parent.getRight() == null) {
+			list.add(root.getValue());
+		} else if (parent.getLeft() == null && parent.getRight() != null) {
+			list.add(root.getValue());
+		}
+		fillListWithNonSiblingNodes(root.getLeft(), root, list);
+		fillListWithNonSiblingNodes(root.getRight(), root, list);
 	}
 
 	/**
-	 * prints the nodes that don't have the siblings.
+	 * Builds the tree for array and prints inOrder traversal.
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/array-to-bst/0
 	 * 
 	 * @param array - array of values of nodes
 	 */
 	public void arrayToBST(int[] array) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * prints the longest consecutive sequence of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/longest-consecutive-sequence-in-binary-tree/1
+	 * 
+	 * @param root - root of the tree
+	 */
+	public void largestConsecutiveSequence(Node root) {
 		throw new UnsupportedOperationException();
 	}
 }

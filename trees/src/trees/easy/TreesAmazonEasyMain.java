@@ -1,12 +1,12 @@
-package trees.amazon.easy;
+package trees.easy;
 
-import trees.Node;
-import trees.TreeTraversals;
+import trees.basic.Node;
+import trees.basic.TreeTraversals;
 
 public class TreesAmazonEasyMain {
 
 	public static void main(String[] args) {
-		Node root = Node.createTree();
+		Node root = Node.createLeftTree();
 
 		TreesAmazonEasyLevel treeOperations = new TreesAmazonEasyLevel();
 		boolean ischildSumParentTree = treeOperations.childSumParentTree(root);
@@ -37,6 +37,8 @@ public class TreesAmazonEasyMain {
 		}
 		int maxNodeLevel = treeOperations.maxNodeLevel(root);
 		System.out.println("Max node level: " + maxNodeLevel);
+		treeOperations.printNonSiblingNodes(root);
+		System.out.println(" - Non sibling nodes");
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeOperations.removeHalfNodes(root);
 		treeTraversals.inOrderTraversal(root);

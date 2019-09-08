@@ -1,13 +1,13 @@
-package trees.amazon.easy;
+package trees.easy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import trees.Node;
-import trees.TreeIntOperations;
-import trees.TreeTraversals;
+import trees.basic.Node;
+import trees.basic.TreeIntOperations;
+import trees.basic.TreeTraversals;
 
 public class TreesAmazonEasyLevel2 {
 
@@ -468,8 +468,28 @@ public class TreesAmazonEasyLevel2 {
 	 * @param inorder  - inOrder of the tree
 	 * @param preorder - preOrder of the tree
 	 */
-	public static Node buildTree(int inorder[], int preorder[], int st, int end) {
-		throw new UnsupportedOperationException();
+	public Node buildTree(int[] inOrder, int[] preOrder, int start, int end, int[] currentIndex) {
+		if (start > end) {
+			return null;
+		}
+		Node node = new Node(preOrder[currentIndex[0]]);
+		currentIndex[0]++;
+		if (start == end) {
+			return node;
+		}
+		int index = search(inOrder, node.getValue(), start, end);
+		node.setLeft(buildTree(inOrder, preOrder, start, index - 1, currentIndex));
+		node.setRight(buildTree(inOrder, preOrder, index + 1, end, currentIndex));
+		return node;
+	}
+
+	private int search(int[] array, int element, int start, int end) {
+		for (int i = start; i <= end; i++) {
+			if (array[i] == element) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -481,7 +501,25 @@ public class TreesAmazonEasyLevel2 {
 	 * @param root - Roots of the trees
 	 */
 	public void printCommonNodesBST(Node root1, Node root2) {
-		throw new UnsupportedOperationException();
+		List<Integer> list1 = new ArrayList<>();
+		inOrderTraversal(root1, list1);
+		List<Integer> list2 = new ArrayList<>();
+		addCommonNodes(root2, list1, list2);
+		list2.sort(null);
+		for (Integer integer : list2) {
+			System.out.print(integer + " ");
+		}
+	}
+
+	private void addCommonNodes(Node root, List<Integer> list1, List<Integer> list2) {
+		if (root == null) {
+			return;
+		}
+		addCommonNodes(root.getLeft(), list1, list2);
+		if (list1.contains(root.getValue())) {
+			list2.add(root.getValue());
+		}
+		addCommonNodes(root.getRight(), list1, list2);
 	}
 
 	/**
@@ -491,7 +529,14 @@ public class TreesAmazonEasyLevel2 {
 	 * 
 	 * @param root - Roots of the trees
 	 */
-	public void heightOfSpiralTree(Node root) {
-		throw new UnsupportedOperationException();
+	public int heightOfSpiralTree(Node root) {
+		if (root == null) {
+			return 0;
+		} else if (root.getRight() != null && root.getRight().getLeft() == root) {
+			return 1;
+		}
+		int leftHeight = heightOfSpiralTree(root.getLeft());
+		int rightHeight = heightOfSpiralTree(root.getRight());
+		return leftHeight > rightHeight ? leftHeight : rightHeight;
 	}
 }
