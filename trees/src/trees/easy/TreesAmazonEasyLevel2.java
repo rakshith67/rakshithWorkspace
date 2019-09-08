@@ -441,7 +441,7 @@ public class TreesAmazonEasyLevel2 {
 		return root;
 	}
 
-	private void inOrderTraversal(Node root, List<Integer> list) {
+	public void inOrderTraversal(Node root, List<Integer> list) {
 		if (root == null) {
 			return;
 		}

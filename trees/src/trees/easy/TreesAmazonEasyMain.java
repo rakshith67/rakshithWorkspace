@@ -7,6 +7,7 @@ public class TreesAmazonEasyMain {
 
 	public static void main(String[] args) {
 		Node root = Node.createLeftTree();
+		int[] array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 		TreesAmazonEasyLevel treeOperations = new TreesAmazonEasyLevel();
 		boolean ischildSumParentTree = treeOperations.childSumParentTree(root);
@@ -47,5 +48,8 @@ public class TreesAmazonEasyMain {
 		System.out.println("- Inorder traversal of mirror tree");
 		int diameter = treeOperations.diameter(root);
 		System.out.println(diameter + " - diameter of the tree");
+		Node createdBSTRoot = treeOperations.arrayToBST(array, 0, 14);
+		treeTraversals.preOrderTraversal(createdBSTRoot);
+		System.out.println(" - preOrderTraversal of created BST");
 	}
 }

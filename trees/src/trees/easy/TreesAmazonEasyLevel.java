@@ -437,18 +437,6 @@ public class TreesAmazonEasyLevel {
 	}
 
 	/**
-	 * prints the root to leaf paths of the tree.
-	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/reverse-alternate-levels-of-a-perfect-binary-tree/1
-	 * 
-	 * @param root - Root of the tree
-	 */
-	public void reverseAlternateLevels(Node root) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
 	 * prints the nodes that don't have the siblings.
 	 * 
 	 * GFG link:
@@ -489,7 +477,29 @@ public class TreesAmazonEasyLevel {
 	 * 
 	 * @param array - array of values of nodes
 	 */
-	public void arrayToBST(int[] array) {
+	public Node arrayToBST(int[] array, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+		int rootIndex = (start + end) / 2;
+		Node node = new Node(array[rootIndex]);
+		if (start == end) {
+			return node;
+		}
+		node.setLeft(arrayToBST(array, start, rootIndex - 1));
+		node.setRight(arrayToBST(array, rootIndex + 1, end));
+		return node;
+	}
+
+	/**
+	 * reverses the alternate levels of the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/reverse-alternate-levels-of-a-perfect-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void reverseAlternateLevels(Node root) {
 		throw new UnsupportedOperationException();
 	}
 
