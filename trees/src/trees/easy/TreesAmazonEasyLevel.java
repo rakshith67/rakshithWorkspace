@@ -499,8 +499,33 @@ public class TreesAmazonEasyLevel {
 	 * 
 	 * @param root - Root of the tree
 	 */
-	public void reverseAlternateLevels(Node root) {
-		throw new UnsupportedOperationException();
+	public void reverseAlternateLevelsOfTree(Node root) {
+		List<Integer> list = new ArrayList<>();
+		fillListWithOddLevels(root, list, 0);
+		inOrderTraversalReverseAlternateLevels(root, list, 0);
+	}
+
+	private void inOrderTraversalReverseAlternateLevels(Node root, List<Integer> list, int level) {
+		if (root == null) {
+			return;
+		}
+		inOrderTraversalReverseAlternateLevels(root.getLeft(), list, level + 1);
+		if (level % 2 == 1) {
+			root.setValue(list.get(list.size() - 1));
+			list.remove(list.size() - 1);
+		}
+		inOrderTraversalReverseAlternateLevels(root.getRight(), list, level + 1);
+	}
+
+	private void fillListWithOddLevels(Node root, List<Integer> list, int currentLevel) {
+		if (root == null) {
+			return;
+		}
+		fillListWithOddLevels(root.getLeft(), list, currentLevel + 1);
+		if (currentLevel % 2 == 1) {
+			list.add(root.getValue());
+		}
+		fillListWithOddLevels(root.getRight(), list, currentLevel + 1);
 	}
 
 	/**
@@ -511,7 +536,30 @@ public class TreesAmazonEasyLevel {
 	 * 
 	 * @param root - root of the tree
 	 */
-	public void largestConsecutiveSequence(Node root) {
-		throw new UnsupportedOperationException();
+	public int largestConsecutiveSequence(Node root) {
+		int[] a = new int[1];
+		largestSequence(root, 0, root.getValue(), a);
+		if (a[0] == 1) {
+			return -1;
+		}
+		return a[0];
+	}
+
+	private void largestSequence(Node root, int i, int parentValue, int[] a) {
+		if (root == null) {
+			return;
+		} else if (i == 0) {
+			i++;
+			a[0] = 1;
+		} else if (parentValue - root.getValue() == -1) {
+			i++;
+			if (a[0] < i) {
+				a[0] = i;
+			}
+		} else if (parentValue - root.getValue() != -1) {
+			i = 1;
+		}
+		largestSequence(root.getLeft(), i, root.getValue(), a);
+		largestSequence(root.getRight(), i, root.getValue(), a);
 	}
 }

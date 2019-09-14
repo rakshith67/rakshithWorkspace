@@ -57,7 +57,7 @@ public class TreesAmazonEasyLevel2 {
 		return oddSum - evenSum;
 	}
 
-	private void calculateLevelSum(Node root, int i, int[] a) {
+	public void calculateLevelSum(Node root, int i, int[] a) {
 		if (root != null) {
 			a[i] = a[i] + root.getValue();
 			calculateLevelSum(root.getLeft(), i + 1, a);

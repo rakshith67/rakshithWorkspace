@@ -8,6 +8,8 @@ public class TreesOthersEasyMain {
 	public static void main(String[] args) {
 		int[] inOrder = new int[] { 8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15 };
 		int[] preOrder = new int[] { 1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 15, 7, 14, 15 };
+		String ternaryExpression = "1?2?3:4:5";
+		String treeString = "(0(5(6()())(4()(9()())))(7(1()())(3()())))";
 		Node root = Node.createTree();
 
 		TreesOthersEasyLevel treeOperations = new TreesOthersEasyLevel();
@@ -31,8 +33,16 @@ public class TreesOthersEasyMain {
 		} else {
 			System.out.println("Not Max heap tree.");
 		}
+		int shortestDistance = treeOperations.shortestDistance(7, 14);
+		System.out.println("Shortest distance between 7 and 14 is " + shortestDistance);
+		int kthLevelSum = treeOperations.kthLevelSum(treeString, 2);
+		System.out.println("Kth level sum of the tree is " + kthLevelSum);
 		Node deletedTreeRoot = treeOperations.deleteNodesGreaterThanKey(root, 9);
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.inOrderTraversal(deletedTreeRoot);
+		System.out.println(" - deleted tree with nodes greater than 9");
+		Node ternaryRoot = treeOperations.buildTreeFromTernaryExp(ternaryExpression, 0);
+		treeTraversals.inOrderTraversal(ternaryRoot);
+		System.out.println(" - inOrder traversal of created ternary tree.");
 	}
 }

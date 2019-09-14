@@ -6,7 +6,7 @@ import trees.basic.TreeTraversals;
 public class TreesAmazonEasyMain {
 
 	public static void main(String[] args) {
-		Node root = Node.createLeftTree();
+		Node root = Node.createTree();
 		int[] array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 		TreesAmazonEasyLevel treeOperations = new TreesAmazonEasyLevel();
@@ -40,10 +40,15 @@ public class TreesAmazonEasyMain {
 		System.out.println("Max node level: " + maxNodeLevel);
 		treeOperations.printNonSiblingNodes(root);
 		System.out.println(" - Non sibling nodes");
+		int largestSequence = treeOperations.largestConsecutiveSequence(root);
+		System.out.println(largestSequence + " - largest consequence");
 		TreeTraversals treeTraversals = new TreeTraversals();
 		treeOperations.removeHalfNodes(root);
 		treeTraversals.inOrderTraversal(root);
 		System.out.println("- Inorder traversal of removed half nodes tree");
+		treeOperations.reverseAlternateLevelsOfTree(root);
+		treeTraversals.inOrderTraversal(root);
+		System.out.println(" - inOrder traversal of reversed alternate levels");
 		treeOperations.mirrorTree(root);
 		System.out.println("- Inorder traversal of mirror tree");
 		int diameter = treeOperations.diameter(root);

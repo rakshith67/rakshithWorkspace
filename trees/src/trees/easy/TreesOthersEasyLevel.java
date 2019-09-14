@@ -223,6 +223,26 @@ public class TreesOthersEasyLevel {
 	}
 
 	/**
+	 * builds the tree from ternary expression.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/convert-ternary-expression-to-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public Node buildTreeFromTernaryExp(String expression, int i) {
+		if (i > expression.length())
+			return null;
+		Node root = new Node(Integer.valueOf(expression.charAt(i)));
+		i++;
+		if (i < expression.length() && expression.charAt(i) == '?')
+			root.setLeft(buildTreeFromTernaryExp(expression, i + 1));
+		if (i < expression.length() && expression.charAt(i) == ':')
+			root.setRight(buildTreeFromTernaryExp(expression, i + 1));
+		return root;
+	}
+
+	/**
 	 * determines the shortest distance between the two nodes in a infinity tree.
 	 * 
 	 * GFG link:
@@ -231,30 +251,46 @@ public class TreesOthersEasyLevel {
 	 * @param root - Root of the tree
 	 */
 	public int shortestDistance(int x, int y) {
-		throw new UnsupportedOperationException();
+		if (x < y) {
+			int temp = x;
+			x = y;
+			y = temp;
+		}
+		int c = 0;
+		while (x != y) {
+			++c;
+			if (x > y) {
+				x = x / 2;
+			}
+			if (x < y) {
+				y = y / 2;
+				++c;
+			}
+		}
+		return c;
 	}
 
 	/**
-	 * determines the sum of the kth level of the tree.
+	 * determines the sum of the kth level of the tree.Input is taken as string
+	 * which is in the form of expression (0(5(6()())(4()(9()())))(7(1()())(3()())))
 	 * 
 	 * GFG link:
 	 * https://practice.geeksforgeeks.org/problems/binary-tree-k-level-sum/0
 	 * 
 	 * @param root - Root of the tree
 	 */
-	public int kthLevelSum(String string, int level) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * builds the tree from ternary expression.
-	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/convert-ternary-expression-to-binary-tree/1
-	 * 
-	 * @param root - Root of the tree
-	 */
-	public Node buildTreeFromTernaryExp(String expression) {
-		throw new UnsupportedOperationException();
+	public int kthLevelSum(String expression, int k) {
+		int level = -1;
+		int sum = 0;
+		for (int i = 0; i < expression.length(); i++) {
+			if (expression.charAt(i) == '(') {
+				level++;
+			} else if (expression.charAt(i) == ')') {
+				level--;
+			} else if (level == k) {
+				sum = sum + (expression.charAt(i) - '0');
+			}
+		}
+		return sum;
 	}
 }
