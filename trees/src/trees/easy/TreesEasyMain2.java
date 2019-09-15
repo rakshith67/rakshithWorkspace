@@ -3,14 +3,14 @@ package trees.easy;
 import trees.basic.Node;
 import trees.basic.TreeTraversals;
 
-public class TreesAmazonEasyMain2 {
+public class TreesEasyMain2 {
 
 	public static void main(String[] args) {
 		Node root = Node.createTree();
 		int[] inOrder = new int[] { 8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15 };
 		int[] preOrder = new int[] { 1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 15, 7, 14, 15 };
 
-		TreesAmazonEasyLevel2 treeOperations = new TreesAmazonEasyLevel2();
+		TreesEasyLevel2 treeOperations = new TreesEasyLevel2();
 		treeOperations.printNodesAtKLevel(root, 3);
 		System.out.println("- Nodes at 3rd level from root");
 		int oddEvenDifferenece = treeOperations.diffOddEvenLevelSum(root);

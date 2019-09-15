@@ -3,7 +3,7 @@ package trees.easy;
 import trees.basic.Node;
 import trees.basic.TreeTraversals;
 
-public class TreesOthersEasyMain {
+public class TreesEasyMain3 {
 
 	public static void main(String[] args) {
 		int[] inOrder = new int[] { 8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15 };
@@ -12,7 +12,7 @@ public class TreesOthersEasyMain {
 		String treeString = "(0(51(64()())(46()(97()())))(76(17()())(36()())))";
 		Node root = Node.createTree();
 
-		TreesOthersEasyLevel treeOperations = new TreesOthersEasyLevel();
+		TreesEasyLevel3 treeOperations = new TreesEasyLevel3();
 		treeOperations.printPostOrder(inOrder, preOrder, 15);
 		System.out.println(" - PostOrder traversal of created tree.");
 		boolean isPerfect = treeOperations.isPerfectTree(root);

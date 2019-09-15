@@ -18,7 +18,7 @@ import trees.basic.TreeViews;
  * @author Rakshith
  *
  */
-public class TreesAmazonEasyLevel {
+public class TreesEasyLevel {
 
 	/**
 	 * determines whether the both trees are mirror trees or not.

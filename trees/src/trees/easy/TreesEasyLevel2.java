@@ -9,7 +9,7 @@ import trees.basic.Node;
 import trees.basic.TreeIntOperations;
 import trees.basic.TreeTraversals;
 
-public class TreesAmazonEasyLevel2 {
+public class TreesEasyLevel2 {
 
 	/**
 	 * prints the nodes that are k distance from the root of the tree.

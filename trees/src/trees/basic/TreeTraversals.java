@@ -208,6 +208,33 @@ public class TreeTraversals {
 	}
 
 	/**
+	 * Prints the diagonal traversal of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1
+	 * 
+	 * @param root - root of the tree
+	 */
+	public void diagonalTraversal(Node root) {
+		TreeIntOperations treeIntOperations = new TreeIntOperations();
+		int height = treeIntOperations.height(root);
+		for (int i = 0; i < height; i++) {
+			printCurrentDiagonalLevel(root, i, 0);
+		}
+	}
+
+	private void printCurrentDiagonalLevel(Node root, int depth, int currentDepth) {
+		if (root == null) {
+			return;
+		}
+		if (depth == currentDepth) {
+			System.out.print(root.getValue() + " ");
+		}
+		printCurrentDiagonalLevel(root.getLeft(), depth, currentDepth + 1);
+		printCurrentDiagonalLevel(root.getRight(), depth, currentDepth);
+	}
+
+	/**
 	 * Prints the boundary traversal of the tree.
 	 * 
 	 * GFG link:

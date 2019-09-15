@@ -20,6 +20,8 @@ public class Main {
 		System.out.println(" - LineLevelOrderTraversal");
 		treeTraversals.spiralLevelOrderTraversal(root);
 		System.out.println(" - spiralLevelOrderTraversal");
+		treeTraversals.diagonalTraversal(root);
+		System.out.println(" - diagonalTraversal");
 		treeTraversals.boundaryTraversal(root);
 		System.out.println("- boundaryTraversal");
 

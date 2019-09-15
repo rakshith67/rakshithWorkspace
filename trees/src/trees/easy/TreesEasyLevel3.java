@@ -7,7 +7,7 @@ import trees.basic.Node;
 import trees.basic.TreeIntOperations;
 import trees.basic.TreeTraversals;
 
-public class TreesOthersEasyLevel {
+public class TreesEasyLevel3 {
 
 	/**
 	 * prints the postOrder traversal from inOrder and preOrder traversals.
@@ -20,7 +20,7 @@ public class TreesOthersEasyLevel {
 	 * @param n        - size of the array
 	 */
 	public void printPostOrder(int[] inOrder, int[] preOrder, int n) {
-		TreesAmazonEasyLevel2 treeAmazonEasyLevel2 = new TreesAmazonEasyLevel2();
+		TreesEasyLevel2 treeAmazonEasyLevel2 = new TreesEasyLevel2();
 		int[] currentIndex = new int[1];
 		Node root = treeAmazonEasyLevel2.buildTree(inOrder, preOrder, 0, n - 1, currentIndex);
 		TreeTraversals treeTraversals = new TreeTraversals();
@@ -167,7 +167,7 @@ public class TreesOthersEasyLevel {
 	 */
 	public void printPredecessorAndSuccessor(Node root, int key) {
 		List<Integer> list = new ArrayList<>();
-		TreesAmazonEasyLevel2 treeOperations = new TreesAmazonEasyLevel2();
+		TreesEasyLevel2 treeOperations = new TreesEasyLevel2();
 		treeOperations.inOrderTraversal(root, list);
 		int predecessor = -1;
 		int successor = -1;

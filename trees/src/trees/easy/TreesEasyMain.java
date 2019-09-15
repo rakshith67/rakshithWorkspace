@@ -3,13 +3,13 @@ package trees.easy;
 import trees.basic.Node;
 import trees.basic.TreeTraversals;
 
-public class TreesAmazonEasyMain {
+public class TreesEasyMain {
 
 	public static void main(String[] args) {
 		Node root = Node.createTree();
 		int[] array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-		TreesAmazonEasyLevel treeOperations = new TreesAmazonEasyLevel();
+		TreesEasyLevel treeOperations = new TreesEasyLevel();
 		boolean ischildSumParentTree = treeOperations.childSumParentTree(root);
 		System.out.println("is child sum parent tree: " + ischildSumParentTree);
 		int maxSumLevel = treeOperations.maxLevelSum(root);
