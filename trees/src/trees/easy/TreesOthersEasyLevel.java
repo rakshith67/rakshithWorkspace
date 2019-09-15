@@ -282,13 +282,32 @@ public class TreesOthersEasyLevel {
 	public int kthLevelSum(String expression, int k) {
 		int level = -1;
 		int sum = 0;
-		for (int i = 0; i < expression.length(); i++) {
+		int i = 0;
+		while (i < expression.length()) {
 			if (expression.charAt(i) == '(') {
 				level++;
+				i++;
 			} else if (expression.charAt(i) == ')') {
 				level--;
+				i++;
 			} else if (level == k) {
-				sum = sum + (expression.charAt(i) - '0');
+				int power = 0;
+				int j = i;
+				while (expression.charAt(j) != ')' && expression.charAt(j) != '(') {
+					power++;
+					j++;
+				}
+				int value = 0;
+				int currentIndex = 0;
+				while (currentIndex < power) {
+					value = (int) (value + (expression.charAt(i) - '0') * Math.pow(10, power - currentIndex - 1d));
+					i++;
+					currentIndex++;
+				}
+				System.out.print(value + " ");
+				sum = sum + value;
+			} else {
+				i++;
 			}
 		}
 		return sum;

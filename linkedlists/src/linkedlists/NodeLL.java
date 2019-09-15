@@ -1,17 +1,17 @@
 package linkedlists;
 
-public class Node {
+public class NodeLL {
 
 	private int value;
 
-	private Node next;
+	private NodeLL next;
 
-	Node(int value) {
+	NodeLL(int value) {
 		this.value = value;
 		this.next = null;
 	}
 
-	Node(int value, Node next) {
+	NodeLL(int value, NodeLL next) {
 		this.value = value;
 		this.next = next;
 	}
@@ -24,11 +24,11 @@ public class Node {
 		this.value = value;
 	}
 
-	public Node getNext() {
+	public NodeLL getNext() {
 		return next;
 	}
 
-	public void setNext(Node next) {
+	public void setNext(NodeLL next) {
 		this.next = next;
 	}
 

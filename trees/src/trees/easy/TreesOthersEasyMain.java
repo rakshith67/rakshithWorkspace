@@ -9,7 +9,7 @@ public class TreesOthersEasyMain {
 		int[] inOrder = new int[] { 8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15 };
 		int[] preOrder = new int[] { 1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 15, 7, 14, 15 };
 		String ternaryExpression = "1?2?3:4:5";
-		String treeString = "(0(5(6()())(4()(9()())))(7(1()())(3()())))";
+		String treeString = "(0(51(64()())(46()(97()())))(76(17()())(36()())))";
 		Node root = Node.createTree();
 
 		TreesOthersEasyLevel treeOperations = new TreesOthersEasyLevel();
