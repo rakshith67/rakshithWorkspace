@@ -68,7 +68,8 @@ public class TreesEasyLevel2 {
 	/**
 	 * prints the nodes that are k distance from the root of the tree.
 	 * 
-	 * GFG link: https://practice.geeksforgeeks.org/problems/k-distance-from-root/1
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/determine-if-two-trees-are-identical/1
 	 * 
 	 * @param root1, root2 - Root of the trees
 	 */

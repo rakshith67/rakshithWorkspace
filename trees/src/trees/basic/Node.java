@@ -115,4 +115,29 @@ public class Node {
 		return root;
 	}
 
+	public static Node createBST() {
+		Node root8 = new Node(8);
+		Node root12 = new Node(12);
+		Node root4 = new Node(4);
+		Node root2 = new Node(2);
+		Node root6 = new Node(6);
+		Node root10 = new Node(10);
+		Node root14 = new Node(14);
+		root8.setLeft(root4);
+		root8.setRight(root12);
+		root4.setLeft(root2);
+		root4.setRight(root6);
+		root12.setLeft(root10);
+		root12.setRight(root14);
+		root2.setLeft(new Node(1));
+		root2.setRight(new Node(3));
+		root6.setLeft(new Node(5));
+		root6.setRight(new Node(7));
+		root10.setLeft(new Node(9));
+		root10.setRight(new Node(11));
+		root14.setLeft(new Node(13));
+		root14.setRight(new Node(15));
+		return root8;
+	}
+
 }
