@@ -498,59 +498,12 @@ public class TreesMediumLevel {
 		if (root == null && subTreeRoot == null) {
 			return Boolean.TRUE;
 		}
-		if ((root == null && subTreeRoot != null) || (root != null && subTreeRoot == null)) {
+		if ((root == null) || (subTreeRoot == null)) {
 			return Boolean.FALSE;
 		}
 		TreesEasyLevel2 treeEasyLevel2 = new TreesEasyLevel2();
 		boolean isIdentical = treeEasyLevel2.isIdenticalTrees(root, subTreeRoot);
 		return isIdentical || isSubTree(root.getLeft(), subTreeRoot) || isSubTree(root.getRight(), subTreeRoot);
-	}
-
-	/**
-	 * makes tree from preOrder traversal and returns the root.
-	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/construct-tree-from-preorder-traversal/1
-	 * 
-	 * @param pre - preOrder traversal of the tree
-	 */
-	public Node constructTree(int n, int[] pre, char[] preLN) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * prints postOrder traversal of tree from preOrder traversal.
-	 * 
-	 * GFG link: https://practice.geeksforgeeks.org/problems/preorder-to-postorder/0
-	 * 
-	 * @param preOrder - preOrder of the tree
-	 */
-	public void preOrderToPostOrder(int[] preOrder, int size) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Serializes the tree into some generic String expression.
-	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/1
-	 * 
-	 * @param preOrder - root of the tree
-	 */
-	public String serialize(Node root) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Deserializes the String into tree and returns the root.
-	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/1
-	 * 
-	 * @param expression - generic expression of the tree
-	 */
-	public Node deserialize(String expression) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -562,8 +515,143 @@ public class TreesMediumLevel {
 	 * @param post - postOrder of the tree
 	 * @param in   - inOrder of the tree.
 	 */
-	public Node buildTree(int in[], int post[], int n) {
-		throw new UnsupportedOperationException();
+	public Node buildTree(int[] in, int[] post, int n) {
+		int start = 0;
+		int end = n - 1;
+		int[] currentIndex = new int[] { n - 1 };
+		return buildTreeFromInorderAndPostOrder(in, post, start, end, currentIndex);
 	}
 
+	private Node buildTreeFromInorderAndPostOrder(int[] in, int[] post, int start, int end, int[] currentIndex) {
+		if (start > end) {
+			return null;
+		}
+		Node node = new Node(post[currentIndex[0]]);
+		currentIndex[0]--;
+		if (start == end) {
+			return node;
+		}
+		TreesEasyLevel2 treeEasyLevel2 = new TreesEasyLevel2();
+		int index = treeEasyLevel2.search(in, node.getValue(), start, end);
+		node.setRight(buildTreeFromInorderAndPostOrder(in, post, index + 1, end, currentIndex));
+		node.setLeft(buildTreeFromInorderAndPostOrder(in, post, start, index - 1, currentIndex));
+		return node;
+	}
+
+	/**
+	 * Serializes the tree into some generic String expression.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/1
+	 * 
+	 * @param preOrder - root of the tree
+	 */
+	public String serialize(Node root) {
+		StringBuilder builder = new StringBuilder();
+		fillListWithSerializeValues(root, builder);
+		return builder.toString();
+	}
+
+	private void fillListWithSerializeValues(Node root, StringBuilder builder) {
+		if (root == null) {
+			return;
+		}
+		if (root.getLeft() == null && root.getRight() == null) {
+			return;
+		}
+		if (root.getLeft() != null) {
+			builder.append(root.getValue() + " " + root.getLeft().getValue() + " L ");
+		}
+		if (root.getRight() != null) {
+			builder.append(root.getValue() + " " + root.getRight().getValue() + " R ");
+		}
+		fillListWithSerializeValues(root.getLeft(), builder);
+		fillListWithSerializeValues(root.getRight(), builder);
+	}
+
+	/**
+	 * Deserializes the String into tree and returns the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/1
+	 * 
+	 * @param expression - generic expression of the tree
+	 */
+	public Node deserialize(String expression) {
+		int length = expression.length();
+		int i = 0;
+		Node root = null;
+		while (i < length) {
+			if (i == 0) {
+				int value = findValue(expression, i);
+				root = new Node(value);
+			}
+			int parentValue = findValue(expression, i);
+			while (expression.charAt(i) != ' ') {
+				i++;
+			}
+			i++;
+			int rootValue = findValue(expression, i);
+			while (expression.charAt(i) != ' ') {
+				i++;
+			}
+			i++;
+			char lr = expression.charAt(i);
+			insert(root, parentValue, rootValue, lr);
+			i = i + 2;
+
+		}
+		return root;
+	}
+
+	private void insert(Node root, int a, int a1, char lr) {
+		if (root == null) {
+			return;
+		}
+		if (root.getValue() == a) {
+			if (lr == 'L') {
+				root.setLeft(new Node(a1));
+			} else if (lr == 'R') {
+				root.setRight(new Node(a1));
+			}
+			return;
+		}
+		insert(root.getLeft(), a, a1, lr);
+		insert(root.getRight(), a, a1, lr);
+	}
+
+	private int findValue(String expression, int currentIndex) {
+		int value = 0;
+		while (currentIndex < expression.length() && expression.charAt(currentIndex) != ' ') {
+			value = value * 10 + Integer.valueOf(expression.charAt(currentIndex)) - '0';
+			currentIndex++;
+		}
+		return value;
+	}
+
+	/**
+	 * makes tree from preOrder traversal and leaf node array and returns the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/construct-tree-from-preorder-traversal/1
+	 * 
+	 * @param pre - preOrder traversal of the tree
+	 */
+	public Node constructTree(int n, int[] pre, char[] preLN) {
+		int[] currentIndex = new int[1];
+		return constructTreeFromPreOrder(pre, preLN, currentIndex, n);
+	}
+
+	private Node constructTreeFromPreOrder(int[] pre, char[] preLN, int[] currentIndex, int n) {
+		if (currentIndex[0] >= n) {
+			return null;
+		}
+		Node root = new Node(pre[currentIndex[0]]);
+		currentIndex[0]++;
+		if (preLN[currentIndex[0] - 1] == 'N') {
+			root.setLeft(constructTreeFromPreOrder(pre, preLN, currentIndex, n));
+			root.setRight(constructTreeFromPreOrder(pre, preLN, currentIndex, n));
+		}
+		return root;
+	}
 }

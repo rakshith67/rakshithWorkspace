@@ -484,7 +484,7 @@ public class TreesEasyLevel2 {
 		return node;
 	}
 
-	private int search(int[] array, int element, int start, int end) {
+	public int search(int[] array, int element, int start, int end) {
 		for (int i = start; i <= end; i++) {
 			if (array[i] == element) {
 				return i;

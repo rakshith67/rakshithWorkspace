@@ -233,7 +233,7 @@ public class TreesEasyLevel3 {
 	public Node buildTreeFromTernaryExp(String expression, int i) {
 		if (i > expression.length())
 			return null;
-		Node root = new Node(Integer.valueOf(expression.charAt(i)));
+		Node root = new Node(Integer.valueOf(expression.charAt(i)) - '0');
 		i++;
 		if (i < expression.length() && expression.charAt(i) == '?')
 			root.setLeft(buildTreeFromTernaryExp(expression, i + 1));
