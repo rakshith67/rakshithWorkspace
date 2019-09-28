@@ -235,6 +235,64 @@ public class TreeTraversals {
 	}
 
 	/**
+	 * Prints the vertical order traversal of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/print-a-binary-tree-in-vertical-order/1
+	 * 
+	 * @param root - root of the tree
+	 */
+	public void verticalOrderTraversal(Node root) {
+		if (root == null) {
+			return;
+		}
+		Map<Integer, String> map = new HashMap<>();
+		Map<Node, Integer> levelMap = new HashMap<>();
+		Deque<Node> queue = new ArrayDeque<>();
+		queue.add(root);
+		map.put(0, String.valueOf(root.getValue()));
+		levelMap.put(root, 0);
+		int lowestLevel = 0;
+		int highestLevel = 0;
+		while (!queue.isEmpty()) {
+			Node removedNode = queue.removeFirst();
+			if (removedNode.getLeft() != null) {
+				int level = levelMap.get(removedNode) - 1;
+				putInMap(map, level, removedNode.getLeft().getValue());
+				if (level < lowestLevel) {
+					lowestLevel = level;
+				}
+				queue.add(removedNode.getLeft());
+				levelMap.put(removedNode.getLeft(), level);
+			}
+			if (removedNode.getRight() != null) {
+				int level = levelMap.get(removedNode) + 1;
+				putInMap(map, level, removedNode.getRight().getValue());
+				if (level > highestLevel) {
+					highestLevel = level;
+				}
+				queue.add(removedNode.getRight());
+				levelMap.put(removedNode.getRight(), level);
+			}
+		}
+		for (int i = lowestLevel; i <= highestLevel; i++) {
+			System.out.print(map.get(i) + " ");
+		}
+		map.clear();
+		levelMap.clear();
+	}
+
+	private void putInMap(Map<Integer, String> map, Integer key, Integer value) {
+		String currentValue = String.valueOf(value);
+		if (map.get(key) != null) {
+			String x = map.get(key) + " " + currentValue;
+			map.put(key, x);
+		} else {
+			map.put(key, currentValue);
+		}
+	}
+
+	/**
 	 * Prints the boundary traversal of the tree.
 	 * 
 	 * GFG link:

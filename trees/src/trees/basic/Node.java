@@ -141,20 +141,18 @@ public class Node {
 	}
 
 	public static Node createCustomTree() {
-		Node root20 = new Node(20);
-		Node root10 = new Node(10);
-		Node root5 = new Node(5);
+		Node root = new Node(1);
+		Node root1 = new Node(3);
 		Node root2 = new Node(2);
-		Node root3 = new Node(3);
-		Node root30 = new Node(30);
-		Node root15 = new Node(15);
-		root20.setLeft(root10);
-		root20.setRight(root30);
-		root10.setLeft(root5);
-		root5.setLeft(root2);
-		root2.setRight(root3);
-		root30.setLeft(root15);
-		return root20;
+		Node root3 = new Node(-1);
+		Node root4 = new Node(-1);
+		Node root5 = new Node(1);
+		root.setLeft(root1);
+		root.setRight(root3);
+		root1.setLeft(root2);
+		root1.setRight(root4);
+		root3.setRight(root5);
+		return root;
 	}
 
 }

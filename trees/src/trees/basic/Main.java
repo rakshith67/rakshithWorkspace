@@ -22,6 +22,8 @@ public class Main {
 		System.out.println(" - spiralLevelOrderTraversal");
 		treeTraversals.diagonalTraversal(root);
 		System.out.println(" - diagonalTraversal");
+		treeTraversals.verticalOrderTraversal(root);
+		System.out.println(" - verticalOrderTraversal");
 		treeTraversals.boundaryTraversal(root);
 		System.out.println("- boundaryTraversal");
 
