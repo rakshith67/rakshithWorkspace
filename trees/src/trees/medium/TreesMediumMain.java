@@ -63,5 +63,8 @@ public class TreesMediumMain {
 		Node rootPreOrder = treeOperations.constructTree(15, preOrder, preLN);
 		treeTraversals.inOrderTraversal(rootPreOrder);
 		System.out.println(" - Inorder traversal of constructed tree from preOrder and preLN");
+		int sumMirror = treeOperations.imageMultiplicationSum(root);
+		System.out.println("Image multiplication sum: " + sumMirror);
+		treeOperations.printDupSubTrees(root);
 	}
 }

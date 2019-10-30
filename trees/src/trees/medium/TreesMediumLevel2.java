@@ -6,8 +6,12 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import trees.basic.Node;
+import trees.basic.NodeRight;
+import trees.basic.NodeString;
+import trees.basic.TreeTraversals;
 import trees.easy.TreesEasyLevel2;
 
 public class TreesMediumLevel2 {
@@ -81,7 +85,7 @@ public class TreesMediumLevel2 {
 	 * GFG link:
 	 * https://practice.geeksforgeeks.org/problems/maximum-difference-between-node-and-its-ancestor/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 */
 	public int maxDiffNodeAndAncestor(Node root) {
 		int[] maxDifference = new int[1];
@@ -171,7 +175,7 @@ public class TreesMediumLevel2 {
 	 * GFG link:
 	 * https://practice.geeksforgeeks.org/problems/maximum-path-sum-from-any-node/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 */
 	public void kLeafNodes(Node root, int k) {
 		List<Integer> list = new ArrayList<>();
@@ -206,7 +210,7 @@ public class TreesMediumLevel2 {
 	 * GFG link:
 	 * https://practice.geeksforgeeks.org/problems/maximum-path-sum-from-any-node/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 */
 	public int maximumPathSumOfTree(Node root) {
 		int[] path = new int[1];
@@ -233,7 +237,7 @@ public class TreesMediumLevel2 {
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/node-at-distance/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 * @param k    - the kth distance from root
 	 */
 	public int nodesKDistanceFromLeaf(Node root, int k) {
@@ -290,7 +294,7 @@ public class TreesMediumLevel2 {
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/k-sum-paths/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 * @param k    - the k sum.
 	 */
 	public int countNodesSumAnyPathK(Node root, int k) {
@@ -327,7 +331,7 @@ public class TreesMediumLevel2 {
 	 * 
 	 * GFG link: https://practice.geeksforgeeks.org/problems/largest-bst/1
 	 * 
-	 * @param root - Root of the first tree
+	 * @param root - Root of the tree
 	 */
 	public int sizeOfLargestBSTinTree(Node root) {
 		int[] size = new int[3];
@@ -366,5 +370,368 @@ public class TreesMediumLevel2 {
 			isBst[0] = Boolean.FALSE;
 			return 0;
 		}
+	}
+
+	/**
+	 * checks if the given tree duplicate subTree or Not.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/duplicate-subtree-in-binary-tree/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public boolean isDupSubTree(NodeString root) {
+		List<String> list = new ArrayList<>();
+		boolean[] isDup = new boolean[1];
+		isDuplicateSubTree(root, list, isDup);
+		return isDup[0];
+	}
+
+	private String isDuplicateSubTree(NodeString root, List<String> list, boolean[] isDupSubTree) {
+		if (root == null) {
+			return "";
+		}
+		if (root.getLeft() == null && root.getRight() == null) {
+			return root.getValue();
+		}
+		if (!isDupSubTree[0]) {
+			String left = isDuplicateSubTree(root.getLeft(), list, isDupSubTree);
+			String right = isDuplicateSubTree(root.getRight(), list, isDupSubTree);
+			String value = root.getValue() + "$" + left + "$" + right;
+			if (list.contains(value)) {
+				isDupSubTree[0] = true;
+			}
+			list.add(value);
+			return value;
+		}
+		return null;
+	}
+
+	/**
+	 * returns the number of root to leaf paths and its size in the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/number-of-root-to-leaf-paths/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void numberOfRootLeafPaths(Node root) {
+		Map<Integer, Integer> map = new TreeMap<>();
+		printRootToLeafPaths(root, 0, map);
+		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + " $");
+		}
+		System.out.println();
+	}
+
+	private void printRootToLeafPaths(Node root, int pathLength, Map<Integer, Integer> map) {
+		if (root == null) {
+			return;
+		}
+		pathLength++;
+		if (root.getLeft() == null && root.getRight() == null) {
+			storeCount(map, pathLength);
+		}
+		printRootToLeafPaths(root.getLeft(), pathLength, map);
+		printRootToLeafPaths(root.getRight(), pathLength, map);
+	}
+
+	private void storeCount(Map<Integer, Integer> map, int pathLength) {
+		if (map.get(pathLength) == null) {
+			map.put(pathLength, 1);
+		} else {
+			map.put(pathLength, map.get(pathLength) + 1);
+		}
+	}
+
+	/**
+	 * returns the mirror of the given node in the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/mirror-of-a-given-node/1
+	 * 
+	 * @param root - Root of the tree
+	 * @param key  - key for which mirror should be found
+	 */
+	public int mirrorOfKey(Node root, int key) {
+		int[] mirror = new int[] { -1 };
+		findMirror(root, root, key, mirror);
+		return mirror[0];
+	}
+
+	private void findMirror(Node root, Node root2, int key, int[] mirror) {
+		if (root == null || root2 == null) {
+			return;
+		}
+		if (root.getValue() == key && mirror[0] == -1) {
+			mirror[0] = root2.getValue();
+		} else if (root2.getValue() == key && mirror[0] == -1) {
+			mirror[0] = root.getValue();
+		} else {
+			findMirror(root.getLeft(), root2.getRight(), key, mirror);
+			findMirror(root.getRight(), root2.getLeft(), key, mirror);
+		}
+	}
+
+	/**
+	 * prints the inOrder successor of the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/populate-inorder-successor-for-all-nodes/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void inOrderSuccessor(Node root) {
+		if (root == null) {
+			return;
+		}
+		StringBuilder builder = new StringBuilder();
+		int[] successor = new int[] { -1 };
+		fillBuilderWithSuccessor(root, successor, builder);
+		while (root.getRight() != null) {
+			root = root.getRight();
+		}
+		builder.append(root.getValue() + "->-1");
+		System.out.println(builder.toString());
+	}
+
+	private void fillBuilderWithSuccessor(Node root, int[] successor, StringBuilder builder) {
+		if (root == null) {
+			return;
+		}
+		fillBuilderWithSuccessor(root.getLeft(), successor, builder);
+		if (successor[0] != -1) {
+			builder.append(successor[0] + "->" + root.getValue() + " ");
+		}
+		successor[0] = root.getValue();
+		fillBuilderWithSuccessor(root.getRight(), successor, builder);
+	}
+
+	/**
+	 * builds the tree from inOrder and levelOrder traversals and returns the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/construct-tree-from-inorder-and-levelorder/1
+	 * 
+	 * @param inOrder    - inOrder traversal of the tree
+	 * @param levelOrder - levelOrder traversal of the tree
+	 */
+	public Node buildTreeInOrderLevelOrder(int[] inOrder, int[] levelOrder) {
+		int end = inOrder.length;
+		return buildTree(inOrder, levelOrder, 0, end - 1);
+	}
+
+	private Node buildTree(int[] inOrder, int[] levelOrder, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+		Node root = new Node(levelOrder[0]);
+		int inOrderindex = indexOf(inOrder, start, end, root.getValue());
+		int[] leftLevel = extractKeys(levelOrder, inOrder, 0, inOrderindex - 1);
+		int[] rightLevel = extractKeys(levelOrder, inOrder, inOrderindex + 1, end);
+		root.setLeft(buildTree(inOrder, leftLevel, start, inOrderindex - 1));
+		root.setRight(buildTree(inOrder, rightLevel, inOrderindex + 1, end));
+		return root;
+	}
+
+	private int[] extractKeys(int[] levelOrder, int[] inOrder, int start, int end) {
+		List<Integer> list = new ArrayList<>();
+		int size = levelOrder.length;
+		for (int i = 0; i < size; i++) {
+			if (indexOf(inOrder, start, end, levelOrder[i]) != -1) {
+				list.add(levelOrder[i]);
+			}
+		}
+		int[] array = new int[list.size()];
+		int i = 0;
+		for (Integer integer : list) {
+			array[i] = integer;
+			i++;
+		}
+		return array;
+	}
+
+	private int indexOf(int[] inOrder, int start, int end, int value) {
+		for (int i = start; i <= end; i++) {
+			if (inOrder[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * builds the BST from levelOrder traversals and returns the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/convert-level-order-traversal-to-bst/1
+	 * 
+	 * @param levelOrder - levelOrder traversal of the tree
+	 */
+	public Node buildBSTLevelOrder(int[] levelOrder) {
+		int size = levelOrder.length;
+		if (size == 0) {
+			return null;
+		}
+		Node root = null;
+		for (int i = 0; i < size; i++) {
+			root = constructBSTlevel(root, levelOrder[i]);
+		}
+		return root;
+	}
+
+	private Node constructBSTlevel(Node root, int data) {
+		if (root == null) {
+			return new Node(data);
+		}
+		if (root.getValue() > data) {
+			root.setLeft(constructBSTlevel(root.getLeft(), data));
+		} else {
+			root.setRight(constructBSTlevel(root.getRight(), data));
+		}
+		return root;
+	}
+
+	/**
+	 * builds the tree from preOrder and its mirror traversals and returns the root.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/construct-a-full-binary-tree/1
+	 * 
+	 * @param preOrder - preOrder traversal of the tree
+	 */
+	public Node buildTreePreOrderAndMirror(int[] preOrder, int[] preOrderMirror) {
+		int size = preOrder.length;
+		int[] currentIndex = new int[1];
+		return buildTreePreOrderMirror(preOrder, preOrderMirror, 0, size - 1, currentIndex);
+	}
+
+	private Node buildTreePreOrderMirror(int[] preOrder, int[] preOrderMirror, int start, int end, int[] currentIndex) {
+		if (start > end) {
+			return null;
+		}
+		if (start == end) {
+			currentIndex[0]++;
+			return new Node(preOrder[currentIndex[0] - 1]);
+		}
+		Node root = new Node(preOrder[currentIndex[0]]);
+		currentIndex[0]++;
+		int index = indexOf(preOrderMirror, start, end, preOrder[currentIndex[0]]);
+		root.setLeft(buildTreePreOrderMirror(preOrder, preOrderMirror, index, end, currentIndex));
+		root.setRight(buildTreePreOrderMirror(preOrder, preOrderMirror, start + 1, index - 1, currentIndex));
+		return root;
+	}
+
+	/**
+	 * returns the right sibling of that level in the tree. assume right as parent.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/right-sibling-in-binary-tree/1
+	 * 
+	 * @param node - node of the tree
+	 */
+	public NodeRight rightSibling(NodeRight node) {
+		int level = 0;
+		NodeRight temp = node;
+		while (temp.getNextRight() != null) {
+			level++;
+			temp = temp.getNextRight();
+		}
+		NodeRight[] right = new NodeRight[1];
+		boolean[] isFound = new boolean[1];
+		levelOrderTraversal(temp, node, level, 0, right, isFound);
+		return right[0];
+	}
+
+	private void levelOrderTraversal(NodeRight root, NodeRight actual, int depth, int currentLevel, NodeRight[] right,
+			boolean[] isFound) {
+		if (root == null) {
+			return;
+		}
+		if (depth == currentLevel) {
+			if (isFound[0] && right[0] == null) {
+				right[0] = root;
+			} else if (root == actual) {
+				isFound[0] = true;
+			}
+		}
+		if (right[0] == null) {
+			levelOrderTraversal(root.getLeft(), actual, depth, currentLevel + 1, right, isFound);
+			levelOrderTraversal(root.getRight(), actual, depth, currentLevel + 1, right, isFound);
+		}
+	}
+
+	/**
+	 * builds the tree from postFix expression and prints the infix.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/construct-an-expression-tree/1
+	 * 
+	 * @param postfix - postFix expression of the tree
+	 */
+	public void buildTreePostfixExpression(char[] postfix) {
+		Deque<Node> deque = new ArrayDeque<>();
+		Node root;
+		Node left;
+		Node right;
+		for (int i = 0; i < postfix.length; i++) {
+			if (!isOperator(postfix[i])) {
+				root = new Node(postfix[i]);
+				deque.addLast(root);
+			} else {
+				root = new Node(postfix[i]);
+				left = deque.removeLast();
+				right = deque.removeLast();
+				root.setLeft(left);
+				root.setRight(right);
+				deque.addLast(root);
+			}
+		}
+		root = deque.removeLast();
+		TreeTraversals treeOperations = new TreeTraversals();
+		treeOperations.inOrderTraversal(root);
+	}
+
+	private boolean isOperator(char c) {
+		return c == '+' || c == '-' || c == '*' || c == '/' || c == '^' ? Boolean.TRUE : Boolean.FALSE;
+	}
+
+	/**
+	 * returns the max sum of non adjacent nodes in the tree.
+	 * 
+	 * GFG link:
+	 * https://practice.geeksforgeeks.org/problems/maximum-sum-of-non-adjacent-nodes/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public int getMaxSumNonAdjacent(Node root) {
+		if (root == null) {
+			return 0;
+		}
+		Map<Node, Integer> map = new HashMap<>();
+		return getMaxSum(root, map);
+	}
+
+	private int getMaxSum(Node root, Map<Node, Integer> map) {
+		if (root == null) {
+			return 0;
+		}
+		if (map.get(root) != null) {
+			return map.get(root);
+		}
+		int include = root.getValue() + sumOfGrandChildren(root, map);
+		int exclude = getMaxSum(root.getLeft(), map) + getMaxSum(root.getRight(), map);
+		map.put(root, Math.max(include, exclude));
+		return map.get(root);
+	}
+
+	private int sumOfGrandChildren(Node root, Map<Node, Integer> map) {
+		int sum = 0;
+		if (root.getLeft() != null)
+			sum += getMaxSum(root.getLeft().getLeft(), map) + getMaxSum(root.getLeft().getRight(), map);
+		if (root.getRight() != null) {
+			sum += getMaxSum(root.getRight().getLeft(), map) + getMaxSum(root.getRight().getRight(), map);
+		}
+		return sum;
 	}
 }

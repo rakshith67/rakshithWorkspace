@@ -654,4 +654,74 @@ public class TreesMediumLevel {
 		}
 		return root;
 	}
+
+	/**
+	 * returns the sum of product of node and its image node.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/image-multiplication/0
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public int imageMultiplicationSum(Node root) {
+		if (root == null) {
+			return 0;
+		}
+		int[] product = new int[1];
+		Map<Node, Node> map = new HashMap<>();
+		fillSumOfProduct(root, root, product, map);
+		map.clear();
+		return product[0];
+	}
+
+	private void fillSumOfProduct(Node root, Node image, int[] product, Map<Node, Node> map) {
+		product[0] += image.getValue() * root.getValue();
+		map.put(root, image);
+		if (image.getLeft() != null && root.getRight() != null && map.get(image.getLeft()) == null) {
+			fillSumOfProduct(root.getRight(), image.getLeft(), product, map);
+		}
+		if (image.getRight() != null && root.getLeft() != null && map.get(image.getRight()) == null) {
+			fillSumOfProduct(root.getLeft(), image.getRight(), product, map);
+		}
+	}
+
+	/**
+	 * prints the root nodes of duplicate subtrees of the tree.
+	 * 
+	 * GFG link: https://practice.geeksforgeeks.org/problems/duplicate-subtrees/1
+	 * 
+	 * @param root - Root of the tree
+	 */
+	public void printDupSubTrees(Node root) {
+		System.out.print("Duplicate subtree roots: ");
+		Map<String, Integer> map = new HashMap<>();
+		List<Integer> list = new ArrayList<>();
+		isDuplicateSubTree(root, map, list);
+		map.clear();
+		if (list.isEmpty()) {
+			System.out.println("-1");
+		} else {
+			list.sort(null);
+			for (Integer integer : list) {
+				System.out.print(integer + " ");
+			}
+			System.out.println();
+		}
+	}
+
+	private String isDuplicateSubTree(Node root, Map<String, Integer> map, List<Integer> list) {
+		if (root == null) {
+			return "";
+		}
+		String value = isDuplicateSubTree(root.getLeft(), map, list);
+		value += isDuplicateSubTree(root.getRight(), map, list);
+		value += "$" + root.getValue();
+		if (map.get(value) != null && map.get(value) == 1) {
+			list.add(root.getValue());
+			map.put(value, 2);
+		} else {
+			map.put(value, 1);
+		}
+		return value;
+	}
+
 }
