@@ -64,4 +64,9 @@ public class NodeLL {
 		node14.setNext(node15);
 		return head;
 	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 }

@@ -9,7 +9,7 @@ public class TreesHardMain {
 
 		TreesHardLevel treeOperations = new TreesHardLevel();
 		treeOperations.treeToDLL(root);
-		treeOperations.printKdistanceNodes(root, root, 3);
+		treeOperations.printKDistanceNodes(root, root, 3);
 		System.out.println(" - nodes at distance 3 from root");
 		int turns = treeOperations.numberOfTurns(root, 8, 14);
 		System.out.println("Number of turns to reach from 8 to 14 is " + turns);

@@ -18,6 +18,9 @@
         <module>trees</module>
         <module>arrays</module>
         <module>linkedlists</module>
+        <module>stack</module>
+	   <module>graphs</module>
+	   <module>design-patterns</module>
     </modules>
 
 

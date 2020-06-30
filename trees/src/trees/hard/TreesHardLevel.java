@@ -52,7 +52,7 @@ public class TreesHardLevel {
 	 * @param target   - target node in tree
 	 * @param distance - prints this distance nodes
 	 */
-	public int printKdistanceNodes(Node root, Node target, int distance) {
+	public int printKDistanceNodes(Node root, Node target, int distance) {
 		if (root == null) {
 			return -1;
 		}
@@ -60,7 +60,7 @@ public class TreesHardLevel {
 			printNodesDown(root, distance);
 			return 0;
 		}
-		int left = printKdistanceNodes(root.getLeft(), target, distance);
+		int left = printKDistanceNodes(root.getLeft(), target, distance);
 		if (left != -1) {
 			if (left + 1 == distance) {
 				System.out.print(root.getValue() + " ");
@@ -69,7 +69,7 @@ public class TreesHardLevel {
 			}
 			return 1 + left;
 		}
-		int right = printKdistanceNodes(root.getRight(), target, distance);
+		int right = printKDistanceNodes(root.getRight(), target, distance);
 		if (right != -1) {
 			if (right + 1 == distance) {
 				System.out.print(root.getValue() + " ");
@@ -106,25 +106,25 @@ public class TreesHardLevel {
 	 */
 	public int numberOfTurns(Node root, int first, int second) {
 		TreesEasyLevel2 treeOperations = new TreesEasyLevel2();
-		Node LCA = treeOperations.leastCommonAncestor(root, first, second);
+		Node lca = treeOperations.leastCommonAncestor(root, first, second);
 		int[] count = new int[1];
-		if (LCA == null) {
+		if (lca == null) {
 			return -1;
 		}
-		if (LCA.getValue() != first && LCA.getValue() != second) {
-			countTurn(LCA.getRight(), second, false, count);
-			countTurn(LCA.getLeft(), second, true, count);
-			countTurn(LCA.getRight(), first, false, count);
-			countTurn(LCA.getLeft(), first, true, count);
+		if (lca.getValue() != first && lca.getValue() != second) {
+			countTurn(lca.getRight(), second, false, count);
+			countTurn(lca.getLeft(), second, true, count);
+			countTurn(lca.getRight(), first, false, count);
+			countTurn(lca.getLeft(), first, true, count);
 			return count[0] + 1;
 		}
-		if (LCA.getValue() == first) {
-			countTurn(LCA.getRight(), second, false, count);
-			countTurn(LCA.getLeft(), second, true, count);
+		if (lca.getValue() == first) {
+			countTurn(lca.getRight(), second, false, count);
+			countTurn(lca.getLeft(), second, true, count);
 			return count[0];
 		} else {
-			countTurn(LCA.getRight(), first, false, count);
-			countTurn(LCA.getLeft(), first, true, count);
+			countTurn(lca.getRight(), first, false, count);
+			countTurn(lca.getLeft(), first, true, count);
 			return count[0];
 		}
 	}

@@ -21,55 +21,73 @@ public class TreesMediumMain2 {
 		TreeTraversals treeTraversals = new TreeTraversals();
 
 		treeOperations.preOrderToPostOrder(preOrderBST, 15);
+		
 		int depth = treeOperations.findDistance(root, 11, 15);
 		System.out.println("Distance between 11 and 15 is " + depth);
+		
 		int maxDiffNodeAncestor = treeOperations.maxDiffNodeAndAncestor(root);
 		System.out.println("Max difference between node and ancestor is " + maxDiffNodeAncestor);
+		
 		Node rootParentArray = treeOperations.createTreeFromParentArray(parentArray, 34);
 		treeTraversals.inOrderTraversal(rootParentArray);
 		System.out.println(" - Inorder traversal of created tree from parent array.");
+		
 		boolean isPreOrderBST = treeOperations.isPreOrderOfBST(preOrderBST, 15);
 		if (isPreOrderBST) {
 			System.out.println("Is PreOrder of BST");
 		} else {
 			System.out.println("Not PreOrder of BST");
 		}
+		
 		treeOperations.kLeafNodes(root, 2);
 		System.out.println(" - Nodes having 2 leaves");
+		
 		int maxSum = treeOperations.maximumPathSumOfTree(root);
 		System.out.println("Maximum path sum of tree is " + maxSum);
+		
 		int count = treeOperations.nodesKDistanceFromLeaf(root, 1);
 		System.out.println("Number of nodes at 1 distance from leaves is " + count);
+		
 		boolean isBST = treeOperations.isBinarySearchTree(root);
 		if (isBST) {
 			System.out.println("is BST");
 		} else {
 			System.out.println("Not BST");
 		}
+		
 		int largestBSTSize = treeOperations.sizeOfLargestBSTinTree(root);
 		System.out.println("Size of largest BST in tree is " + largestBSTSize);
+		
 		int countSumK = treeOperations.countNodesSumAnyPathK(root, 13);
 		System.out.println("count for sum any node with 13 is " + countSumK);
+		
 		boolean isDupSubTree = treeOperations.isDupSubTree(rootString);
 		if (isDupSubTree) {
 			System.out.println("is duplicate subtree");
 		} else {
 			System.out.println("Not duplicate subtree");
 		}
+		
 		treeOperations.numberOfRootLeafPaths(root);
+		
 		int mirror = treeOperations.mirrorOfKey(root, 13);
 		System.out.println("Mirror of 13 is " + mirror);
+		
 		treeOperations.inOrderSuccessor(root);
+		
 		Node rootInLevelOrder = treeOperations.buildTreeInOrderLevelOrder(inOrder, levelOrder);
 		treeTraversals.preOrderTraversal(rootInLevelOrder);
 		System.out.println(" - preOrder of tree from levelOrder and inOrder");
+		
 		Node rootLevelOrder = treeOperations.buildBSTLevelOrder(levelOrderBST);
 		treeTraversals.inOrderTraversal(rootLevelOrder);
 		System.out.println(" - inOrder of BST from levelOrder");
+		
 		Node rootPreOrder = treeOperations.buildTreePreOrderAndMirror(preOrder, preOrderMirror);
 		treeTraversals.inOrderTraversal(rootPreOrder);
 		System.out.println(" - inOrder of tree from preOrder and mirror tree preOrder");
+		
 		int maxSumNonAdjacent = treeOperations.getMaxSumNonAdjacent(root);
-		System.out.println("Max ssum of non adjacent nodes: " + maxSumNonAdjacent);
+		System.out.println("Max sum of non adjacent nodes: " + maxSumNonAdjacent);
 	}
 }

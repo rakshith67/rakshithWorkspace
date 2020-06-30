@@ -13,34 +13,45 @@ public class TreesEasyMain3 {
 		Node root = Node.createTree();
 
 		TreesEasyLevel3 treeOperations = new TreesEasyLevel3();
+		TreeTraversals treeTraversals = new TreeTraversals();
+
 		treeOperations.printPostOrder(inOrder, preOrder, 15);
 		System.out.println(" - PostOrder traversal of created tree.");
+
 		boolean isPerfect = treeOperations.isPerfectTree(root);
 		if (isPerfect) {
 			System.out.println("Perfect tree.");
 		} else {
 			System.out.println("Not perfect tree.");
 		}
+
 		treeOperations.printNodesAtOddLevel(root);
 		System.out.println(" - Nodes at odd levels.");
+
 		int count = treeOperations.getCountForBudget(root, 13);
 		System.out.println("count for 13 budget is " + count);
+
 		treeOperations.printSumOfLeafNodesAtMinLevel(root);
+
 		treeOperations.printPredecessorAndSuccessor(root, 12);
+
 		boolean ismaxHeap = treeOperations.isMaxHeap(root);
 		if (ismaxHeap) {
 			System.out.println("Max heap tree.");
 		} else {
 			System.out.println("Not Max heap tree.");
 		}
+
 		int shortestDistance = treeOperations.shortestDistance(7, 14);
 		System.out.println("Shortest distance between 7 and 14 is " + shortestDistance);
+
 		int kthLevelSum = treeOperations.kthLevelSum(treeString, 2);
 		System.out.println("Kth level sum of the tree is " + kthLevelSum);
+
 		Node deletedTreeRoot = treeOperations.deleteNodesGreaterThanKey(root, 9);
-		TreeTraversals treeTraversals = new TreeTraversals();
 		treeTraversals.inOrderTraversal(deletedTreeRoot);
 		System.out.println(" - deleted tree with nodes greater than 9");
+
 		Node ternaryRoot = treeOperations.buildTreeFromTernaryExp(ternaryExpression, 0);
 		treeTraversals.inOrderTraversal(ternaryRoot);
 		System.out.println(" - inOrder traversal of created ternary tree.");
