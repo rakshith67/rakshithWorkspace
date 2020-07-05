@@ -27,7 +27,7 @@ public class TreesLeetCode {
 	}
 
 	/**
-	 * finds bottom left value of the tre Link:
+	 * finds bottom left value of the tree Link:
 	 * https://leetcode.com/problems/find-bottom-left-tree-value/
 	 * 
 	 */

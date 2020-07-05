@@ -1,10 +1,12 @@
-package graphs.easy;
+package graphs;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class GraphOperations {
 
@@ -400,12 +402,10 @@ public class GraphOperations {
 			for (int y = 0; y < M; y++) {
 				if (A[x][y] == 1) {
 					area[0] = 0;
-				}
-				if (A[x][y] != 0) {
 					fillArrayWithMaxArea(A, x, y, N, M, area);
-				}
-				if (area[0] > maxArea) {
-					maxArea = area[0];
+					if (area[0] > maxArea) {
+						maxArea = area[0];
+					}
 				}
 			}
 		}
@@ -430,6 +430,11 @@ public class GraphOperations {
 		}
 	}
 
+	/**
+	 * Finds whether a path exists from 1 to 2 in a given matrix. Link:
+	 * https://practice.geeksforgeeks.org/problems/find-whether-path-exist/0
+	 *
+	 */
 	public boolean hasPath(int[][] matrix, int size) {
 		int x = -1;
 		int y = -1;
@@ -454,5 +459,218 @@ public class GraphOperations {
 		list[x][y] = 4;
 		return hasPathFromOneToTwo(list, x - 1, y, size) || hasPathFromOneToTwo(list, x, y - 1, size)
 				|| hasPathFromOneToTwo(list, x, y + 1, size) || hasPathFromOneToTwo(list, x + 1, y, size);
+	}
+
+	/**
+	 * Finds the minimum distance to reach from point (0, 0) to (x, y) through 1's
+	 * in a matrix. Link:
+	 * https://practice.geeksforgeeks.org/problems/shortest-source-to-destination-path/0
+	 * 
+	 */
+	public int findMinimumPathToXY(int[][] matrix, int n, int m, int x, int y) {
+		if (matrix[0][0] == 0) {
+			return -1;
+		} else {
+			boolean[][] visited = new boolean[n][m];
+			Deque<Point> deque = new ArrayDeque<>();
+			deque.push(new Point(0, 0, 0));
+			while (!deque.isEmpty()) {
+				Point point = deque.removeFirst();
+				visited[point.x][point.y] = true;
+				if (x == point.x && y == point.y) {
+					return point.distance;
+				}
+				if (point.x + 1 < n && matrix[point.x + 1][point.y] == 1 && !visited[point.x + 1][point.y]) {
+					deque.addLast(new Point(point.x + 1, point.y, point.distance + 1));
+				}
+				if (point.y + 1 < m && matrix[point.x][point.y + 1] == 1 && !visited[point.x][point.y + 1]) {
+					deque.addLast(new Point(point.x, point.y + 1, point.distance + 1));
+				}
+				if (point.x - 1 >= 0 && matrix[point.x - 1][point.y] == 1 && !visited[point.x - 1][point.y]) {
+					deque.addLast(new Point(point.x - 1, point.y, point.distance + 1));
+				}
+				if (point.y - 1 >= 0 && matrix[point.x][point.y - 1] == 1 && !visited[point.x][point.y - 1]) {
+					deque.addLast(new Point(point.x, point.y - 1, point.distance + 1));
+				}
+			}
+			return -1;
+		}
+	}
+
+	/**
+	 * Finds the minimum distance to reach from point (0, 0) to (x, y) through 1's
+	 * in a matrix. Link:
+	 * https://practice.geeksforgeeks.org/problems/distance-of-nearest-cell-having-1/0
+	 * 
+	 */
+	public int[][] findMinDistanceNearestOnes(int[][] matrix, int n, int m) {
+		boolean[][] visited = new boolean[n][m];
+		int[][] result = new int[n][m];
+		Deque<Integer> deque = new ArrayDeque<>();
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				visited[i][j] = false;
+				result[i][j] = Integer.MAX_VALUE;
+			}
+		}
+		while (!deque.isEmpty()) {
+
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the number of iterations required to rot all the oranges in a given
+	 * matrix. Link: https://practice.geeksforgeeks.org/problems/rotten-oranges/0
+	 * 
+	 */
+	public int findNumberOfIterationsToRotOranges(int[][] matrix, int rows, int columns) {
+		Queue<Point> deque = new LinkedList<>();
+		int numberOfIterations = 0;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				if (matrix[i][j] == 2) {
+					deque.add(new Point(i, j, 0));
+				}
+			}
+		}
+		deque.add(new Point(-1, -1, 0));
+		while (!deque.isEmpty()) {
+			boolean flag = false;
+			while (!isDelimitator(deque.peek())) {
+				Point currentPoint = deque.peek();
+				if (isValidIndex(currentPoint.x + 1, currentPoint.y, rows, columns)
+						&& matrix[currentPoint.x + 1][currentPoint.y] == 1) {
+					if (!flag) {
+						numberOfIterations++;
+						flag = true;
+					}
+					matrix[currentPoint.x + 1][currentPoint.y] = 2;
+					currentPoint.x++;
+					deque.add(new Point(currentPoint.x, currentPoint.y, 0));
+					currentPoint.x--;
+				}
+
+				if (isValidIndex(currentPoint.x - 1, currentPoint.y, rows, columns)
+						&& matrix[currentPoint.x - 1][currentPoint.y] == 1) {
+					if (!flag) {
+						numberOfIterations++;
+						flag = true;
+					}
+					matrix[currentPoint.x - 1][currentPoint.y] = 2;
+					currentPoint.x--;
+					deque.add(new Point(currentPoint.x, currentPoint.y, 0));
+					currentPoint.x++;
+				}
+				if (isValidIndex(currentPoint.x, currentPoint.y + 1, rows, columns)
+						&& matrix[currentPoint.x][currentPoint.y + 1] == 1) {
+					if (!flag) {
+						numberOfIterations++;
+						flag = true;
+					}
+					matrix[currentPoint.x][currentPoint.y + 1] = 2;
+					currentPoint.y++;
+					deque.add(new Point(currentPoint.x, currentPoint.y, 0));
+					currentPoint.y--;
+				}
+				if (isValidIndex(currentPoint.x, currentPoint.y - 1, rows, columns)
+						&& matrix[currentPoint.x][currentPoint.y - 1] == 1) {
+					if (!flag) {
+						numberOfIterations++;
+						flag = true;
+					}
+					matrix[currentPoint.x][currentPoint.y - 1] = 2;
+					currentPoint.y--;
+					deque.add(new Point(currentPoint.x, currentPoint.y, 0));
+					currentPoint.y++;
+				}
+				deque.remove();
+
+			}
+			deque.remove();
+			if (!deque.isEmpty()) {
+				deque.add(new Point(-1, -1, 0));
+			}
+		}
+		return allRotted(matrix, rows, columns) ? numberOfIterations : -1;
+	}
+
+	private boolean isDelimitator(Point temp) {
+		return (temp.x == -1 && temp.y == -1);
+	}
+
+	private boolean isValidIndex(int i, int j, int R, int C) {
+		return (i >= 0 && j >= 0 && i < R && j < C);
+	}
+
+	private boolean allRotted(int[][] arr, int R, int C) {
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if (arr[i][j] == 1) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	int[][] visited;
+
+	/**
+	 * Replaces all the O's surrounded by X's to O's in a given matrix. We already
+	 * know chunks of O which remain as O are the ones which have at least one O
+	 * connected to them which is on the boundary.
+	 * Use BFS starting from ‘O’s on the boundary and mark them as ‘B’, then iterate
+	 * over the whole board and mark ‘O’ as ‘X’ and ‘B’ as ‘O’. Link:
+	 * https://www.interviewbit.com/problems/capture-regions-on-board/
+	 * 
+	 */
+	public void captureRegionsOnBoard(ArrayList<ArrayList<Character>> graph) {
+		int rows = graph.size();
+		int columns = graph.get(0).size();
+		visited = new int[rows + 1][columns + 1];
+		int i = 0;
+		int j = 0;
+		for (j = 0; j < columns; j++) {
+			if (graph.get(i).get(j) == 'O') {
+				dfs(graph, i, j, rows, columns);
+			}
+		}
+		i = rows - 1;
+		for (j = 0; j < columns; j++) {
+			if (graph.get(i).get(j) == 'O') {
+				dfs(graph, i, j, rows, columns);
+			}
+		}
+		j = 0;
+		for (i = 0; i < rows; i++) {
+			if (graph.get(i).get(j) == 'O') {
+				dfs(graph, i, j, rows, columns);
+			}
+		}
+		j = columns - 1;
+		for (i = 0; i < rows; i++) {
+			if (graph.get(i).get(j) == 'O') {
+				dfs(graph, i, j, rows, columns);
+			}
+		}
+		for (i = 0; i < rows; i++) {
+			for (j = 0; j < columns; j++) {
+				if (graph.get(i).get(j) == 'O' && visited[i][j] != 1) {
+					graph.get(i).set(j, 'X');
+				}
+			}
+		}
+	}
+
+	private void dfs(ArrayList<ArrayList<Character>> a, int i, int j, int r, int c) {
+		if (i >= r || j >= c || i < 0 || j < 0 || a.get(i).get(j) == 'X' || visited[i][j] == 1) {
+			return;
+		}
+		visited[i][j] = 1;
+		dfs(a, i, j + 1, r, c);
+		dfs(a, i, j - 1, r, c);
+		dfs(a, i + 1, j, r, c);
+		dfs(a, i - 1, j, r, c);
 	}
 }

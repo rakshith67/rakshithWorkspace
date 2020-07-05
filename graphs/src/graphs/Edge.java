@@ -1,4 +1,4 @@
-package graphs.easy;
+package graphs;
 
 public class Edge {
 
