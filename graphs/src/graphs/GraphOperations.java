@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Stack;
 
 public class GraphOperations {
 
@@ -51,6 +52,7 @@ public class GraphOperations {
 		ArrayList<Integer> list = new ArrayList<>();
 		boolean[] visited = new boolean[vertices];
 		Arrays.fill(visited, false);
+		
 		dfs_recursive(0, graphList, list, visited);
 		return list;
 	}
@@ -619,10 +621,11 @@ public class GraphOperations {
 	/**
 	 * Replaces all the O's surrounded by X's to O's in a given matrix. We already
 	 * know chunks of O which remain as O are the ones which have at least one O
-	 * connected to them which is on the boundary.
-	 * Use BFS starting from ‘O’s on the boundary and mark them as ‘B’, then iterate
-	 * over the whole board and mark ‘O’ as ‘X’ and ‘B’ as ‘O’. Link:
-	 * https://www.interviewbit.com/problems/capture-regions-on-board/
+	 * connected to them which is on the boundary. Use BFS starting from ‘O’s on the
+	 * boundary and mark them as ‘B’, then iterate over the whole board and mark ‘O’
+	 * as ‘X’ and ‘B’ as ‘O’. Link1:
+	 * https://www.interviewbit.com/problems/capture-regions-on-board/ Link2:
+	 * https://practice.geeksforgeeks.org/problems/replace-os-with-xs/0
 	 * 
 	 */
 	public void captureRegionsOnBoard(ArrayList<ArrayList<Character>> graph) {
@@ -672,5 +675,65 @@ public class GraphOperations {
 		dfs(a, i, j - 1, r, c);
 		dfs(a, i + 1, j, r, c);
 		dfs(a, i - 1, j, r, c);
+	}
+
+	/**
+	 * Returns the number of strongly connected components in a graph. A strongly
+	 * connected component has vertices in which all can be visited from every
+	 * vertex. Link:
+	 * https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1
+	 * 
+	 */
+	public int kosaraju(ArrayList<ArrayList<Integer>> graph, int V) {
+		Stack<Integer> stack = new Stack<>();
+		boolean visited[] = new boolean[V];
+
+		for (int i = 0; i < V; i++)
+			if (visited[i] == false) {
+				fillOrder(i, visited, stack, graph);
+			}
+
+		ArrayList<ArrayList<Integer>> reverseGraph = getReverseGraph(graph, V);
+		Arrays.fill(visited, false);
+		int count = 0;
+
+		while (stack.empty() == false) {
+			int v = (int) stack.pop();
+			if (visited[v] == false) {
+				count++;
+				DFSUtil(v, visited, reverseGraph);
+			}
+		}
+		return count;
+	}
+
+	private ArrayList<ArrayList<Integer>> getReverseGraph(ArrayList<ArrayList<Integer>> graph, int V) {
+		ArrayList<ArrayList<Integer>> reverseGraph = new ArrayList<>(V);
+		for (int v = 0; v < V; v++) {
+			ArrayList<Integer> list = graph.get(v);
+			for (int i = 0; i < list.size(); i++) {
+				reverseGraph.get(list.get(i)).add(v);
+			}
+		}
+		return reverseGraph;
+	}
+
+	private void fillOrder(int v, boolean[] visited, Stack<Integer> stack, ArrayList<ArrayList<Integer>> graph) {
+		visited[v] = true;
+		for (Integer integer : graph.get(v)) {
+			if (!visited[integer]) {
+				fillOrder(integer, visited, stack, graph);
+			}
+		}
+		stack.push(v);
+	}
+
+	private void DFSUtil(int v, boolean visited[], ArrayList<ArrayList<Integer>> graph) {
+		visited[v] = true;
+		for (Integer integer : graph.get(v)) {
+			if (!visited[integer]) {
+				DFSUtil(integer, visited, graph);
+			}
+		}
 	}
 }

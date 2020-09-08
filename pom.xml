@@ -17,10 +17,11 @@
 	 <modules>
         <module>trees</module>
         <module>arrays</module>
+        <module>strings</module>
         <module>linkedlists</module>
         <module>stack</module>
-	   <module>graphs</module>
-	   <module>design-patterns</module>
+	    <module>graphs</module>
+	    <module>design-patterns</module>
     </modules>
 
 

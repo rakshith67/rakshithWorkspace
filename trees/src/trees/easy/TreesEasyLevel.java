@@ -37,23 +37,11 @@ public class TreesEasyLevel {
 		if (root == null) {
 			return;
 		}
-		if (root.getLeft() != null && root.getRight() != null) {
-			Node temp = root.getLeft();
-			root.setLeft(root.getRight());
-			root.setRight(temp);
-			makeMirrorTree(root.getLeft());
-			makeMirrorTree(root.getRight());
-		} else if (root.getRight() != null) {
-			Node temp = root.getRight();
-			root.setLeft(root.getRight());
-			root.setRight(null);
-			makeMirrorTree(temp);
-		} else {
-			Node temp = root.getLeft();
-			root.setRight(root.getLeft());
-			root.setLeft(null);
-			makeMirrorTree(temp);
-		}
+		Node temp = root.getLeft();
+		root.setLeft(root.getRight());
+		root.setRight(temp);
+		makeMirrorTree(root.getLeft());
+		makeMirrorTree(root.getRight());
 	}
 
 	/**
@@ -106,7 +94,7 @@ public class TreesEasyLevel {
 
 	private void calculateLevelSum(Node root, int i, int[] a) {
 		if (root != null) {
-			a[i] = a[i] + root.getValue();
+			a[i] += root.getValue();
 			calculateLevelSum(root.getLeft(), i + 1, a);
 			calculateLevelSum(root.getRight(), i + 1, a);
 		}
@@ -139,7 +127,8 @@ public class TreesEasyLevel {
 	public boolean childSumParentTree(Node root) {
 		if (root == null || root.getLeft() == null && root.getRight() == null) {
 			return true;
-		} else if ((root.getLeft() != null && root.getRight() != null
+		}
+		if ((root.getLeft() != null && root.getRight() != null
 				&& root.getLeft().getValue() + root.getRight().getValue() != root.getValue())
 				|| (root.getRight() == null && root.getValue() != root.getLeft().getValue())
 				|| (root.getLeft() == null && root.getValue() != root.getRight().getValue())) {
