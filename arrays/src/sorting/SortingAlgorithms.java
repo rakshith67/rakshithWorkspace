@@ -135,4 +135,19 @@ public class SortingAlgorithms {
 		}
 		return i;
 	}
+
+	/**
+	 * Heap sort: based on the min heap extract the minumum value and heapify again
+	 * O(nlogn) and O(1)
+	 */
+	public void heapSort(int[] array) {
+		HeapByArray hba = new HeapByArray(array.length);
+		for (int i = 0; i < array.length; i++) {
+			hba.insertInHeap(array[i]);
+		}
+		for (int i = 0; i < array.length; i++) {
+			array[i] = hba.extractHeadOfHeap();
+		}
+	}
+
 }

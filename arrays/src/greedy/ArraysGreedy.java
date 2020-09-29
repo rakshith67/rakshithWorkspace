@@ -20,7 +20,7 @@ public class ArraysGreedy {
 
 			@Override
 			public int compare(Activity o1, Activity o2) {
-				return 0;
+				return o1.finish - o2.finish;
 			}
 
 		});

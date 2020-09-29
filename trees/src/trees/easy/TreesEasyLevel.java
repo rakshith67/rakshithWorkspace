@@ -394,7 +394,8 @@ public class TreesEasyLevel {
 	 * checks if the two nodes are cousins or not.
 	 * 
 	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/check-if-two-nodes-are-cousins/1
+	 * https://practice.geeksforgeeks.org/problems/check-if-two-nodes-are-cousins/1,
+	 * https://leetcode.com/problems/cousins-in-binary-tree/
 	 * 
 	 * @param root - Root of the tree
 	 */

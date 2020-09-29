@@ -10,6 +10,35 @@ import java.util.Map;
 public class LinkedListMedium {
 
 	/**
+	 * You are given a linked list of N nodes. The task is to remove the loop from
+	 * the linked list, if present. Link:
+	 * https://practice.geeksforgeeks.org/problems/remove-loop-in-linked-list/1
+	 * 
+	 */
+	public void removeLoop(NodeLL head) {
+		NodeLL slow = head;
+		NodeLL fast = head;
+		NodeLL prev = null;
+		while (fast != null && fast.getNext() != null) {
+			prev = slow;
+			slow = slow.getNext();
+			fast = fast.getNext().getNext();
+			if (slow == fast) {
+				break;
+			}
+		}
+		while (true) {
+			if (slow == null || slow == head) {
+				break;
+			}
+			prev = slow;
+			slow = slow.getNext();
+			head = head.getNext();
+		}
+		prev.setNext(null);
+	}
+
+	/**
 	 * swap nodes in pairs.
 	 * 
 	 * Link: https://leetcode.com/problems/swap-nodes-in-pairs/

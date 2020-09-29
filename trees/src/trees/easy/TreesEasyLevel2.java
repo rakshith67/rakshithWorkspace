@@ -474,10 +474,10 @@ public class TreesEasyLevel2 {
 			return null;
 		}
 		Node node = new Node(preOrder[currentIndex[0]]);
-		currentIndex[0]++;
 		if (start == end) {
 			return node;
 		}
+		currentIndex[0]++;
 		int index = search(inOrder, node.getValue(), start, end);
 		node.setLeft(buildTree(inOrder, preOrder, start, index - 1, currentIndex));
 		node.setRight(buildTree(inOrder, preOrder, index + 1, end, currentIndex));

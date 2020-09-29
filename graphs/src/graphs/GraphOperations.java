@@ -52,7 +52,7 @@ public class GraphOperations {
 		ArrayList<Integer> list = new ArrayList<>();
 		boolean[] visited = new boolean[vertices];
 		Arrays.fill(visited, false);
-		
+
 		dfs_recursive(0, graphList, list, visited);
 		return list;
 	}
@@ -354,40 +354,36 @@ public class GraphOperations {
 	}
 
 	/**
-	 * Finds the number of islands with land(1) with water(0) surrounded in a 2
-	 * dimensional matrix. Link:
-	 * https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1
+	 * Given a 2d grid map of '1's (land) and '0's (water), count the number of
+	 * islands. An island is surrounded by water and is formed by connecting
+	 * adjacent lands horizontally or vertically. You may assume all four edges of
+	 * the grid are all surrounded by water. Link:
+	 * https://leetcode.com/problems/number-of-islands/
 	 * 
 	 */
-	public int numberOfIslands(ArrayList<ArrayList<Integer>> edges, int N, int M) {
+	public int numberOfIslands(char[][] grid) {
 		int numberOfIslands = 0;
-		for (int x = 0; x < N; x++) {
-			for (int y = 0; y < M; y++) {
-				if (edges.get(x).get(y) == 1) {
+		for (int x = 0; x < grid.length; x++) {
+			for (int y = 0; y < grid[0].length; y++) {
+				if (grid[x][y] == '1') {
 					numberOfIslands++;
-				}
-				if (edges.get(x).get(y) != 0) {
-					markIslandVisited(edges, x, y, N, M);
+					markIslandVisited(grid, x, y, grid.length, grid[0].length);
 				}
 			}
 		}
 		return numberOfIslands;
 	}
 
-	private void markIslandVisited(ArrayList<ArrayList<Integer>> list, int x, int y, int N, int M) {
+	private void markIslandVisited(char[][] list, int x, int y, int N, int M) {
 		if (x < 0 || y < 0 || x >= N || y >= M) {
 			return;
 		}
-		if (list.get(x).get(y) == 1) {
-			list.get(x).set(y, 2);
-			markIslandVisited(list, x - 1, y - 1, N, M);
+		if (list[x][y] == '1') {
+			list[x][y] = '2';
 			markIslandVisited(list, x - 1, y, N, M);
-			markIslandVisited(list, x - 1, y + 1, N, M);
 			markIslandVisited(list, x, y - 1, N, M);
 			markIslandVisited(list, x, y + 1, N, M);
-			markIslandVisited(list, x + 1, y - 1, N, M);
 			markIslandVisited(list, x + 1, y, N, M);
-			markIslandVisited(list, x + 1, y + 1, N, M);
 		}
 	}
 

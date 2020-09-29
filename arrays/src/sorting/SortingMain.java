@@ -38,6 +38,13 @@ public class SortingMain {
 			System.out.print(array5[i] + " ");
 		}
 		System.out.println();
+		
+		int[] array6 = new int[] { 34, 56, 12, 22, 99, 48, 65, 33, 89, 9, 77, 87 };
+		sortingAlgorithms.heapSort(array6);
+		for (int i = 0; i < array6.length; i++) {
+			System.out.print(array6[i] + " ");
+		}
+		System.out.println();
 	}
 
 }

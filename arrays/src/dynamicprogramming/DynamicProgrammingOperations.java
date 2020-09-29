@@ -304,7 +304,7 @@ public class DynamicProgrammingOperations {
 		return dpCache[0][maxWeight];
 	}
 
-	public int maxPriceTopDown(int[][] dpCache, int[] prices, int[] weights, int currentIndex, int maxWeight) {
+	private int maxPriceTopDown(int[][] dpCache, int[] prices, int[] weights, int currentIndex, int maxWeight) {
 		if (currentIndex >= prices.length || maxWeight == 0) {
 			return 0;
 		}
@@ -341,21 +341,19 @@ public class DynamicProgrammingOperations {
 		if (index1 == s1.length() || index2 == s2.length()) {
 			return 0;
 		}
-		if (dpCache[index1][index2] != 0) {
-			return dpCache[index1][index2];
+		if (dpCache[index1][index2] == 0) {
+			int isEqual = 0;
+			int first = 0;
+			int second = 0;
+			if (s1.charAt(index1) == s2.charAt(index2)) {
+				isEqual = 1 + lcsTopDown(dpCache, s1, s2, index1 + 1, index2 + 1);
+			} else {
+				first = lcsTopDown(dpCache, s1, s2, index1 + 1, index2);
+				second = lcsTopDown(dpCache, s1, s2, index1, index2 + 1);
+			}
+			dpCache[index1][index2] = Math.max(isEqual, Math.max(first, second));
 		}
-		int isEqual = 0;
-		int first = 0;
-		int second = 0;
-		if (s1.charAt(index1) == s2.charAt(index2)) {
-			isEqual = 1 + lcsTopDown(dpCache, s1, s2, index1 + 1, index2 + 1);
-		} else {
-			first = lcsTopDown(dpCache, s1, s2, index1 + 1, index2);
-			second = lcsTopDown(dpCache, s1, s2, index1, index2 + 1);
-		}
-		int result = Math.max(isEqual, Math.max(first, second));
-		dpCache[index1][index2] = result;
-		return result;
+		return dpCache[index1][index2];
 	}
 
 	private int lcsBottomUp(String s1, String s2) {
@@ -394,21 +392,19 @@ public class DynamicProgrammingOperations {
 		if (startIndex == endIndex) {
 			return 1;
 		}
-		if (dpCache[startIndex][endIndex] != 0) {
-			return dpCache[startIndex][endIndex];
+		if (dpCache[startIndex][endIndex] == 0) {
+			int isEqual = 0;
+			int first = 0;
+			int second = 0;
+			if (s1.charAt(startIndex) == s1.charAt(endIndex)) {
+				isEqual = 2 + LPS(dpCache, s1, startIndex + 1, endIndex - 1);
+			} else {
+				first = LPS(dpCache, s1, startIndex + 1, endIndex);
+				second = LPS(dpCache, s1, startIndex, endIndex - 1);
+			}
+			dpCache[startIndex][endIndex] = Math.max(isEqual, Math.max(first, second));
 		}
-		int isEqual = 0;
-		int first = 0;
-		int second = 0;
-		if (s1.charAt(startIndex) == s1.charAt(endIndex)) {
-			isEqual = 2 + LPS(dpCache, s1, startIndex + 1, endIndex - 1);
-		} else {
-			first = LPS(dpCache, s1, startIndex + 1, endIndex);
-			second = LPS(dpCache, s1, startIndex, endIndex - 1);
-		}
-		int result = Math.max(isEqual, Math.max(first, second));
-		dpCache[startIndex][endIndex] = result;
-		return result;
+		return dpCache[startIndex][endIndex];
 	}
 
 	private int lpsBottomUp(int[][] dpCache, String s1) {
@@ -444,22 +440,21 @@ public class DynamicProgrammingOperations {
 			dpCache[startIndex][endIndex] = 1;
 			return 1;
 		}
-		if (dpCache[startIndex][endIndex] != 0) {
-			return dpCache[startIndex][endIndex];
-		}
-		int isEqual = 0;
-		int first = 0;
-		int second = 0;
-		if (s1.charAt(startIndex) == s1.charAt(endIndex)) {
-			int length = endIndex - startIndex - 1;
-			if (length == LPSubstring(dpCache, s1, startIndex + 1, endIndex - 1)) {
-				isEqual = 2 + length;
+		if (dpCache[startIndex][endIndex] == 0) {
+			int isEqual = 0;
+			int first = 0;
+			int second = 0;
+			if (s1.charAt(startIndex) == s1.charAt(endIndex)) {
+				int length = endIndex - startIndex - 1;
+				if (length == LPSubstring(dpCache, s1, startIndex + 1, endIndex - 1)) {
+					isEqual = 2 + length;
+				}
+			} else {
+				first = LPSubstring(dpCache, s1, startIndex + 1, endIndex);
+				second = LPSubstring(dpCache, s1, startIndex, endIndex - 1);
 			}
-		} else {
-			first = LPSubstring(dpCache, s1, startIndex + 1, endIndex);
-			second = LPSubstring(dpCache, s1, startIndex, endIndex - 1);
+			dpCache[startIndex][endIndex] = Math.max(isEqual, Math.max(first, second));
 		}
-		dpCache[startIndex][endIndex] = Math.max(isEqual, Math.max(first, second));
 		return dpCache[startIndex][endIndex];
 	}
 
@@ -604,7 +599,7 @@ public class DynamicProgrammingOperations {
 		dpCache[length] = 0;
 		for (int i = length - 1; i >= 0; i--) {
 			int current = i + nums[i];
-			if (i + nums[i] >= length) {
+			if (current >= length) {
 				dpCache[i] = 1;
 			} else {
 				int min = Integer.MAX_VALUE;
