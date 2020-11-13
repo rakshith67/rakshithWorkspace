@@ -16,17 +16,12 @@ public class ArraysGreedy {
 	 */
 	public int getMaxTasksDone(int[] arrival, int[] destination, int size) {
 		Activity[] activities = new Activity[size];
-		Arrays.sort(activities, new Comparator<Activity>() {
-
-			@Override
-			public int compare(Activity o1, Activity o2) {
-				return o1.finish - o2.finish;
-			}
-
-		});
 		for (int i = 0; i < size; i++) {
 			activities[i] = new Activity(arrival[i], destination[i]);
 		}
+//		Arrays.sort(activities, (element1, element2) -> {
+//			return element1.finish - element2.finish;
+//		});
 		Arrays.sort(activities);
 		int currentDestination = 0;
 		int maxTasks = 0;

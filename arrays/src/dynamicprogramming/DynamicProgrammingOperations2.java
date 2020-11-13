@@ -139,4 +139,323 @@ public class DynamicProgrammingOperations2 {
 		return (josepheus(n - 1, k) + k - 1) % (n + 1);
 	}
 
+	/**
+	 * Given an array of n positive integers and a positive integer s, find the
+	 * minimal length of a contiguous subarray of which the sum ≥ s. If there isn't
+	 * one, return 0 instead. Link:
+	 * https://leetcode.com/problems/minimum-size-subarray-sum/submissions/
+	 * 
+	 */
+	public int minSubArrayLen(int s, int[] nums) {
+		int start = 0;
+		int end = 0;
+		int currentMin = nums.length;
+		int currentSum = 0;
+		boolean greater = false;
+		while (end < nums.length) {
+			while (currentSum < s && end < nums.length) {
+				currentSum += nums[end];
+				end++;
+			}
+			while (currentSum >= s && start < nums.length) {
+				greater = true;
+				if (end - start < currentMin) {
+					currentMin = end - start;
+				}
+				currentSum -= nums[start];
+				start++;
+			}
+		}
+		return greater ? currentMin : 0;
+	}
+
+	/**
+	 * Given n non-negative integers representing an elevation map where the width
+	 * of each bar is 1, compute how much water it is able to trap after raining.
+	 * Link: https://leetcode.com/problems/trapping-rain-water/
+	 * 
+	 */
+	public int trapRainWater(int[] height, boolean isExtraSpace) {
+		if (isExtraSpace) {
+			return trapRainWate(height);
+		} else {
+			return trapRain(height);
+		}
+	}
+
+	private int trapRainWate(int[] height) {
+		int length = height.length;
+		if (length == 0) {
+			return 0;
+		}
+		int[] leftMax = new int[length];
+		int[] rightMax = new int[length];
+		int max = Integer.MIN_VALUE;
+		leftMax[0] = 0;
+		rightMax[length - 1] = 0;
+		for (int i = 1; i < length; i++) {
+			if (height[i - 1] > max) {
+				max = height[i - 1];
+			}
+			leftMax[i] = max;
+		}
+		max = Integer.MIN_VALUE;
+		for (int i = length - 2; i >= 0; i--) {
+			if (height[i + 1] > max) {
+				max = height[i + 1];
+			}
+			rightMax[i] = max;
+		}
+		int count = 0;
+		for (int i = 0; i < length; i++) {
+			int min = Math.min(leftMax[i], rightMax[i]);
+			if (min > height[i]) {
+				count += min - height[i];
+			}
+		}
+		return count;
+	}
+
+	private int trapRain(int[] height) {
+		int length = height.length;
+		if (length == 0) {
+			return 0;
+		}
+		int leftMax = 0;
+		int rightMax = 0;
+		int count = 0;
+		int left = 0;
+		int right = length - 1;
+		while (left <= right) {
+			if (height[left] <= height[right]) {
+				if (height[left] > leftMax) {
+					leftMax = height[left];
+				} else {
+					count += leftMax - height[left];
+				}
+				left++;
+			} else {
+				if (height[right] > rightMax) {
+					rightMax = height[right];
+				} else {
+					count += rightMax - height[right];
+				}
+				right--;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Given n non-negative integers a1, a2, ..., an , where each represents a point
+	 * at coordinate (i, ai). n vertical lines are drawn such that the two endpoints
+	 * of line i is at (i, ai) and (i, 0). Find two lines, which together with
+	 * x-axis forms a container, such that the container contains the most water.
+	 * Note: You may not slant the container and n is at least 2. Link:
+	 * https://leetcode.com/problems/container-with-most-water/
+	 * 
+	 */
+	public int maxArea(int[] height) {
+		int length = height.length;
+		if (length == 0 || length == 1) {
+			return 0;
+		}
+		int left = 0;
+		int right = length - 1;
+		int maxArea = 0;
+		while (left < right) {
+			int area = (right - left) * Math.min(height[left], height[right]);
+			if (area > maxArea) {
+				maxArea = area;
+			}
+			if (height[left] <= height[right]) {
+				left++;
+			} else {
+				right--;
+			}
+		}
+		return maxArea;
+	}
+
+	/**
+	 * Say you have an array for which the i-th element is the price of a given
+	 * stock on day i. Design an algorithm to find the maximum profit. You may
+	 * complete at most k transactions. Note: You may not engage in multiple
+	 * transactions at the same time (ie, you must sell the stock before you buy
+	 * again).
+	 * 
+	 * Link: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+	 * 
+	 * Hint: dp[i][j] = maximum profit from at most i transactions using
+	 * prices[0..j] A transaction is defined as one buy + sell. Now on day j, we
+	 * have two options Do nothing (or buy) which doesn't change the acquired profit
+	 * : dp[i][j] = dp[i][j-1] Sell the stock: In order to sell the stock, you
+	 * must've bought it on a day t=[0..j-1]. Maximum profit that can be attained is
+	 * t:0->j-1 max(prices[j]-prices[t]+dp[i-1][t-1]) where prices[j]-prices[t] is
+	 * the profit from buying on day t and selling on day j. dp[i-1][t-1] is the
+	 * maximum profit that can be made with at most i-1 transactions with prices
+	 * prices[0..t-1]. Time complexity of this approach is O(n2k).
+	 * 
+	 */
+	public int maxProfit(int transactions, int[] prices) {
+		int length = prices.length;
+		if (length == 0 || length == 1) {
+			return 0;
+		}
+		if (transactions >= length / 2) {
+			return quickSolve(prices);
+		}
+		int[][] dpCache = new int[transactions + 1][length];
+		for (int transaction = 1; transaction <= transactions; transaction++) {
+			for (int j = 1; j < length; j++) {
+				int max = 0;
+				for (int m = 0; m < j; m++) {
+					max = Math.max(max, prices[j] - prices[m] + dpCache[transaction - 1][m]);
+				}
+				dpCache[transaction][j] = Math.max(max, dpCache[transaction][j - 1]);
+			}
+		}
+		return dpCache[transactions][length - 1];
+	}
+
+	public int maxProfit2(int k, int[] prices) {
+		int len = prices.length;
+		if (k >= len / 2) {
+			return quickSolve(prices);
+		}
+		int[][] t = new int[k + 1][len];
+		for (int i = 1; i <= k; i++) {
+			int tmpMax = -prices[0];
+			for (int j = 1; j < len; j++) {
+				t[i][j] = Math.max(t[i][j - 1], prices[j] + tmpMax);
+				tmpMax = Math.max(tmpMax, t[i - 1][j - 1] - prices[j]);
+			}
+		}
+		return t[k][len - 1];
+	}
+
+	private int quickSolve(int[] prices) {
+		int len = prices.length, profit = 0;
+		for (int i = 1; i < len; i++) {
+			if (prices[i] > prices[i - 1]) {
+				profit += prices[i] - prices[i - 1];
+			}
+		}
+		return profit;
+	}
+
+	/**
+	 * Given an array, strs, with strings consisting of only 0s and 1s. Also two
+	 * integers m and n. Now your task is to find the maximum number of strings that
+	 * you can form with given m 0s and n 1s. Each 0 and 1 can be used at most once.
+	 * 
+	 * Link: https://leetcode.com/problems/ones-and-zeroes/
+	 * 
+	 * Hint: he problem can be interpreted as: What's the max number of str can we
+	 * pick from strs with limitation of m "0"s and n "1"s. Thus we can define
+	 * dp[i][j] stands for max number of str can we pick from strs with limitation
+	 * of i "0"s and j "1"s. For each str, assume it has a "0"s and b "1"s, we
+	 * update the dp array iteratively and set dp[i][j] = Math.max(dp[i][j], dp[i -
+	 * a][j - b] + 1). So at the end, dp[m][n] is the answer.
+	 * 
+	 */
+	public int findMaxForm(String[] strs, int m, int n) {
+		int[][] dpCache = new int[m + 1][n + 1];
+		for (String str : strs) {
+			int count = getOnes(str);
+			for (int i = m; i >= str.length() - count; i--) {
+				for (int j = n; j >= count; j--) {
+					dpCache[i][j] = Math.max(1 + dpCache[i - (str.length() - count)][j - count], dpCache[i][j]);
+				}
+			}
+		}
+		return dpCache[m][n];
+	}
+
+	private int getOnes(String string) {
+		int count = 0;
+		for (int i = 0; i < string.length(); i++) {
+			if (string.charAt(i) == '1') {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * There are a row of N houses, each house can be painted with one of the three
+	 * colors: red, blue or green. The cost of painting each house with a certain
+	 * color is different. You have to paint all the houses such that no two
+	 * adjacent houses have the same color. The cost of painting each house with a
+	 * certain color is represented by a N x 3 cost matrix A. For example, A[0][0]
+	 * is the cost of painting house 0 with color red; A[1][2] is the cost of
+	 * painting house 1 with color green, and so on. Find the minimum total cost to
+	 * paint all houses.
+	 * 
+	 * Link: https://www.interviewbit.com/problems/paint-house/
+	 * 
+	 */
+	public int paintHouse(ArrayList<ArrayList<Integer>> A) {
+		int[] dpCache = new int[3];
+		int temp0 = A.get(0).get(0);
+		int temp1 = A.get(0).get(1);
+		int temp2 = A.get(0).get(2);
+		for (int i = 0; i < A.size(); i++) {
+			temp0 = dpCache[0];
+			temp1 = dpCache[1];
+			temp2 = dpCache[2];
+			dpCache[0] = A.get(i).get(0) + Math.min(temp1, temp2);
+			dpCache[1] = A.get(i).get(1) + Math.min(temp0, temp2);
+			dpCache[2] = A.get(i).get(2) + Math.min(temp0, temp1);
+		}
+		return Math.min(dpCache[0], Math.min(dpCache[1], dpCache[2]));
+	}
+
+	/**
+	 * The chess knight has a unique movement, it may move two squares vertically
+	 * and one square horizontally, or two squares horizontally and one square
+	 * vertically (with both forming the shape of an L). The possible movements of
+	 * chess knight are shown in this diagaram: A chess knight can move as indicated
+	 * in the chess diagram below: We have a chess knight and a phone pad as shown
+	 * below, the knight can only stand on a numeric cell (i.e. blue cell). Given an
+	 * integer n, return how many distinct phone numbers of length n we can dial.
+	 * You are allowed to place the knight on any numeric cell initially and then
+	 * you should perform n - 1 jumps to dial a number of length n. All jumps should
+	 * be valid knight jumps. As the answer may be very large, return the answer
+	 * modulo 109 + 7.
+	 * 
+	 * Link: https://leetcode.com/problems/knight-dialer/
+	 * 
+	 */
+	public int knightDialer(int n) {
+		if (n == 1) {
+			return 10;
+		}
+		long mod = 1000000007;
+		long[] pre = new long[10];
+		long[] cur = new long[10];
+		Arrays.fill(pre, 1);
+		while (--n > 0) {
+			cur[0] = (pre[4] + pre[6]) % mod;
+			cur[1] = (pre[6] + pre[8]) % mod;
+			cur[2] = (pre[7] + pre[9]) % mod;
+			cur[3] = (pre[4] + pre[8]) % mod;
+			cur[4] = (pre[3] + pre[9] + pre[0]) % mod;
+			// cur[5]=0;
+			cur[6] = (pre[1] + pre[7] + pre[0]) % mod;
+			cur[7] = (pre[2] + pre[6]) % mod;
+			cur[8] = (pre[1] + pre[3]) % mod;
+			cur[9] = (pre[2] + pre[4]) % mod;
+			for (int i = 0; i < 10; i++) {
+				pre[i] = cur[i];
+			}
+		}
+		long sum = 0;
+		for (int i = 0; i < 10; i++) {
+			sum = (sum + cur[i]) % mod;
+		}
+		return (int) sum;
+
+	}
+
 }

@@ -1,5 +1,6 @@
 package dynamicprogramming;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DynamicProgrammingOperations {
@@ -308,18 +309,16 @@ public class DynamicProgrammingOperations {
 		if (currentIndex >= prices.length || maxWeight == 0) {
 			return 0;
 		}
-		if (dpCache[currentIndex][maxWeight] != 0) {
-			return dpCache[currentIndex][maxWeight];
+		if (dpCache[currentIndex][maxWeight] == 0) {
+			int withCurrent = 0;
+			if (weights[currentIndex] <= maxWeight) {
+				withCurrent = prices[currentIndex] + maxPriceTopDown(dpCache, prices, weights, currentIndex + 1,
+						maxWeight - weights[currentIndex]);
+			}
+			int withoutCurrent = maxPriceTopDown(dpCache, prices, weights, currentIndex + 1, maxWeight);
+			dpCache[currentIndex][maxWeight] = Math.max(withCurrent, withoutCurrent);
 		}
-		int withCurrent = 0;
-		if (weights[currentIndex] <= maxWeight) {
-			withCurrent = prices[currentIndex]
-					+ maxPriceTopDown(dpCache, prices, weights, currentIndex + 1, maxWeight - weights[currentIndex]);
-		}
-		int withoutCurrent = maxPriceTopDown(dpCache, prices, weights, currentIndex + 1, maxWeight);
-		int result = Math.max(withCurrent, withoutCurrent);
-		dpCache[currentIndex][maxWeight] = result;
-		return result;
+		return dpCache[currentIndex][maxWeight];
 	}
 
 	/**
@@ -485,7 +484,8 @@ public class DynamicProgrammingOperations {
 		if (dpCache[row][column] == 0) {
 			int left = minCostLastCell(dpCache, matrix, row, column - 1);
 			int up = minCostLastCell(dpCache, matrix, row - 1, column);
-			int current = Math.min(left, up);
+			int with = matrix[row][column] + minCostLastCell(dpCache, matrix, row - 1, column - 1);
+			int current = Math.min(with, Math.min(left, up));
 			if (Integer.MAX_VALUE != current) {
 				dpCache[row][column] = matrix[row][column] + current;
 			}
@@ -604,11 +604,13 @@ public class DynamicProgrammingOperations {
 			} else {
 				int min = Integer.MAX_VALUE;
 				for (int j = i + 1; j <= current && j <= length; j++) {
-					if (dpCache[j] != 0)
+					if (dpCache[j] != 0) {
 						min = Math.min(1 + dpCache[j], min);
+					}
 				}
-				if (min != Integer.MAX_VALUE)
+				if (min != Integer.MAX_VALUE) {
 					dpCache[i] = min;
+				}
 			}
 		}
 		return dpCache[0];
@@ -636,6 +638,31 @@ public class DynamicProgrammingOperations {
 			}
 		}
 		return dp[width - 1];
+	}
+
+	/**
+	 * Given a 2 x N grid of integer, A, choose numbers such that the sum of the
+	 * numbers is maximum and no two chosen numbers are adjacent horizontally,
+	 * vertically or diagonally, and return it. Note: You can choose more than 2
+	 * numbers.
+	 * 
+	 * Link:
+	 * https://www.interviewbit.com/problems/max-sum-without-adjacent-elements/
+	 * 
+	 * Hint: Max Thief robber problem with no adjacent robbing.
+	 * 
+	 */
+	public int adjacent(ArrayList<ArrayList<Integer>> A) {
+		int len = A.get(0).size();
+		int include = Math.max(A.get(0).get(0), A.get(1).get(0));
+		int exclude = 0;
+		int exclude_new;
+		for (int i = 1; i < len; i++) {
+			exclude_new = Math.max(include, exclude);
+			include = exclude + Math.max(A.get(0).get(i), A.get(1).get(i));
+			exclude = exclude_new;
+		}
+		return Math.max(exclude, include);
 	}
 
 }

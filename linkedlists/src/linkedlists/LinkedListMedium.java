@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class LinkedListMedium {
 
@@ -368,5 +369,44 @@ public class LinkedListMedium {
 			}
 		}
 		return head;
+	}
+
+	/**
+	 * ou are given an array of k linked-lists lists, each linked-list is sorted in
+	 * ascending order. Merge all the linked-lists into one sorted linked-list and
+	 * return it.
+	 * 
+	 * Link: https://leetcode.com/problems/merge-k-sorted-lists/
+	 * 
+	 */
+	public NodeLL mergeKLists(NodeLL[] lists) {
+		if (lists == null || lists.length == 0) {
+			return null;
+		}
+		PriorityQueue<NodeLL> queue = new PriorityQueue<NodeLL>(lists.length, (o1, o2) -> {
+			if (o1.getValue() < o2.getValue()) {
+				return -1;
+			} else if (o1.getValue() == o2.getValue()) {
+				return 0;
+
+			} else {
+				return 1;
+			}
+		});
+		NodeLL dummy = new NodeLL(-1);
+		NodeLL tail = dummy;
+		for (int i = 0; i < lists.length; i++) {
+			if (lists[i] != null) {
+				queue.add(lists[i]);
+			}
+		}
+		while (!queue.isEmpty()) {
+			tail.setNext(queue.poll());
+			tail = tail.getNext();
+			if (tail.getNext() != null) {
+				queue.add(tail.getNext());
+			}
+		}
+		return dummy.getNext();
 	}
 }

@@ -487,8 +487,9 @@ public class GraphOperations2 {
 			count[t[1]]++;
 		}
 		for (int i = 1; i <= N; i++) {
-			if (count[i] == N - 1)
+			if (count[i] == N - 1) {
 				return i;
+			}
 		}
 		return -1;
 	}

@@ -33,7 +33,7 @@ public class GraphOperations {
 			List<Integer> adjacents = graphList.get(current);
 			for (int i = 0; i < adjacents.size(); i++) {
 				int integer = adjacents.get(i);
-				if (visited[integer] == false) {
+				if (!visited[integer]) {
 					deque.push(integer);
 					visited[integer] = true;
 				}
@@ -118,11 +118,8 @@ public class GraphOperations {
 			visited[currentVertex] = true;
 			for (int i = 0; i < V; i++) {
 				int edge = list.get(i);
-				if (!visited[i] && edge != 0) {
-					int distance = minimumDistance[currentVertex] + edge;
-					if (distance < minimumDistance[i]) {
-						minimumDistance[i] = distance;
-					}
+				if (!visited[i] && edge != 0 && minimumDistance[currentVertex] + edge < minimumDistance[i]) {
+					minimumDistance[i] = minimumDistance[currentVertex] + edge;
 				}
 			}
 			currentVertex = getMinimumDistanceVertex(minimumDistance, visited);
@@ -265,12 +262,10 @@ public class GraphOperations {
 		while (currentVertex != -1) {
 			ArrayList<Integer> list = edges.get(currentVertex);
 			visited[currentVertex] = true;
-			for (int i = 0; i < vertices; i++) {
-				int edge = list.get(i);
-				if (!visited[i] && edge != 0) {
-					if (edge < minimumDistance[i]) {
-						minimumDistance[i] = edge;
-					}
+			for (int destination = 0; destination < vertices; destination++) {
+				int edge = list.get(destination);
+				if (!visited[destination] && edge != 0 && edge < minimumDistance[destination]) {
+					minimumDistance[destination] = edge;
 				}
 			}
 			currentVertex = getMinimumDistanceVertex(minimumDistance, visited);
@@ -496,28 +491,6 @@ public class GraphOperations {
 	}
 
 	/**
-	 * Finds the minimum distance to reach from point (0, 0) to (x, y) through 1's
-	 * in a matrix. Link:
-	 * https://practice.geeksforgeeks.org/problems/distance-of-nearest-cell-having-1/0
-	 * 
-	 */
-	public int[][] findMinDistanceNearestOnes(int[][] matrix, int n, int m) {
-		boolean[][] visited = new boolean[n][m];
-		int[][] result = new int[n][m];
-		Deque<Integer> deque = new ArrayDeque<>();
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				visited[i][j] = false;
-				result[i][j] = Integer.MAX_VALUE;
-			}
-		}
-		while (!deque.isEmpty()) {
-
-		}
-		return result;
-	}
-
-	/**
 	 * Returns the number of iterations required to rot all the oranges in a given
 	 * matrix. Link: https://practice.geeksforgeeks.org/problems/rotten-oranges/0
 	 * 
@@ -684,11 +657,11 @@ public class GraphOperations {
 		Stack<Integer> stack = new Stack<>();
 		boolean visited[] = new boolean[V];
 
-		for (int i = 0; i < V; i++)
+		for (int i = 0; i < V; i++) {
 			if (visited[i] == false) {
 				fillOrder(i, visited, stack, graph);
 			}
-
+		}
 		ArrayList<ArrayList<Integer>> reverseGraph = getReverseGraph(graph, V);
 		Arrays.fill(visited, false);
 		int count = 0;
