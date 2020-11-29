@@ -32,6 +32,13 @@ public class GoldmanSachsProblems {
 		list3.add(6);
 		matrix.add(list3);
 		System.out.println(specialElementsMatrix(matrix));
+
+		int[] array = new int[] { 6, 45, 78, -23, -56, -77, -9, 3, 7, 7, 66, 99, 86, -100, 68, 98, -56, -34, 94, 65,
+				88 };
+		int[] result = meandaringArray(array);
+		for (int i = 0; i < result.length; i++) {
+			System.out.print(result[i] + " ");
+		}
 	}
 
 	public static int specialElementsMatrix(List<List<Integer>> matrix) {
@@ -152,4 +159,25 @@ public class GoldmanSachsProblems {
 		}
 		return count;
 	}
+
+	public static int[] meandaringArray(int[] array) {
+		Arrays.sort(array);
+		int low = 0;
+		int high = array.length - 1;
+		int[] result = new int[array.length];
+		int k = 0;
+		while (low <= high) {
+			if (low == high) {
+				result[k] = low;
+				break;
+			}
+			result[k++] = array[high];
+			result[k++] = array[low];
+			low++;
+			high--;
+
+		}
+		return result;
+	}
+
 }

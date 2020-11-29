@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class StringsMediumLevel {
 
@@ -218,40 +220,174 @@ public class StringsMediumLevel {
 	}
 
 	/**
-	 * Given a 2D board and a word, find if the word exists in the grid. The word
-	 * can be constructed from letters of sequentially adjacent cells, where
-	 * "adjacent" cells are horizontally or vertically neighboring. The same letter
-	 * cell may not be used more than once.
+	 * Given an encoded string, return its decoded string. The encoding rule is:
+	 * k[encoded_string], where the encoded_string inside the square brackets is
+	 * being repeated exactly k times. Note that k is guaranteed to be a positive
+	 * integer. You may assume that the input string is always valid; No extra white
+	 * spaces, square brackets are well-formed, etc. Furthermore, you may assume
+	 * that the original data does not contain any digits and that digits are only
+	 * for those repeat numbers, k. For example, there won't be input like 3a or
+	 * 2[4].
 	 * 
-	 * Link: https://leetcode.com/problems/word-search/submissions/
+	 * Link: https://leetcode.com/problems/decode-string/
 	 * 
 	 */
-	public boolean exist(char[][] board, String word) {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				if (hasWord(board, word, i, j, 0)) {
-					return true;
+	public String decodeString(String s) {
+		String result = "";
+		Stack<Integer> count = new Stack<>();
+		Stack<String> stack = new Stack<>();
+		int index = 0;
+		while (index < s.length()) {
+			if (Character.isDigit(s.charAt(index))) {
+				int num = 0;
+				while (Character.isDigit(s.charAt(index))) {
+					num = num * 10 + s.charAt(index) - '0';
+					index++;
+				}
+				count.push(num);
+			} else if (s.charAt(index) == '[') {
+				index++;
+				stack.push(result);
+				result = "";
+			} else if (s.charAt(index) == ']') {
+				int current = count.pop();
+				StringBuilder builder = new StringBuilder();
+				while (current > 0) {
+					builder.append(result);
+					current--;
+				}
+				String curr = stack.pop();
+				result = curr + builder.toString();
+				index++;
+			} else {
+				result += s.charAt(index);
+				index++;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Given a string s and a non-empty string p, find all the start indices of p's
+	 * anagrams in s. Strings consists of lowercase English letters only and the
+	 * length of both strings s and p will not be larger than 20,100. The order of
+	 * output does not matter.
+	 * 
+	 * Link: https://leetcode.com/problems/find-all-anagrams-in-a-string/
+	 * 
+	 */
+	public List<Integer> findAnagrams(String s, String p) {
+		int[] array = new int[26];
+		int[] subArray = new int[26];
+		int low = 0;
+		int high = 0;
+		int length = p.length();
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i < length; i++) {
+			subArray[p.charAt(i) - 'a']++;
+		}
+		while (high < s.length()) {
+			if (high - low < length - 1) {
+				if (subArray[s.charAt(high) - 'a'] == 0) {
+					low = high + 1;
+					Arrays.fill(array, 0);
+				} else {
+					array[s.charAt(high) - 'a']++;
+				}
+				high++;
+				continue;
+			} else if (high - low == length - 1) {
+				array[s.charAt(high) - 'a']++;
+				high++;
+				if (Arrays.equals(array, subArray)) {
+					list.add(low);
+				}
+			} else {
+				array[s.charAt(low) - 'a']--;
+				low++;
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Given a string, sort it in decreasing order based on the frequency of
+	 * characters.
+	 * 
+	 * Link: https://leetcode.com/problems/sort-characters-by-frequency/
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public String frequencySort(String s) {
+		Map<Character, Integer> map = new HashMap<>();
+		for (int i = 0; i < s.length(); i++) {
+			map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+		}
+		List<Character>[] bucket = new List[s.length() + 1];
+		for (char ch : map.keySet()) {
+			int freq = map.get(ch);
+			if (bucket[freq] == null) {
+				bucket[freq] = new ArrayList<>();
+			}
+			bucket[freq].add(ch);
+		}
+		StringBuilder builder = new StringBuilder();
+		for (int i = s.length(); i > 0; i--) {
+			if (bucket[i] != null) {
+				for (char ch : bucket[i]) {
+					int j = i;
+					while (j > 0) {
+						builder.append(ch);
+						j--;
+					}
 				}
 			}
 		}
-		return false;
+		return builder.toString();
 	}
 
-	public boolean hasWord(char[][] board, String word, int i, int j, int k) {
-		if (k == word.length()) {
-			return true;
+	/**
+	 * Given a string S, check if the letters can be rearranged so that two
+	 * characters that are adjacent to each other are not the same. If possible,
+	 * output any possible result. If not possible, return the empty string.
+	 * 
+	 * Link: https://leetcode.com/problems/reorganize-string/
+	 * 
+	 */
+	public String reorganizeString(String S) {
+		int[] count = new int[26];
+		for (int i = 0; i < S.length(); i++) {
+			count[S.charAt(i) - 'a']++;
 		}
-		if (i < 0 || j < 0 || i == board.length || j == board[0].length) {
-			return false;
+		StringBuilder builder = new StringBuilder();
+		PriorityQueue<Frequency> queue = new PriorityQueue<>();
+		for (int i = 0; i < 26; i++) {
+			if (count[i] != 0) {
+				queue.add(new Frequency((char) (97 + i), count[i]));
+			}
 		}
-		if (board[i][j] != word.charAt(k)) {
-			return false;
+		while (queue.size() >= 2) {
+			Frequency f1 = queue.poll();
+			Frequency f2 = queue.poll();
+			builder.append(f1.ch);
+			builder.append(f2.ch);
+			if (f1.count > 1) {
+				f1.count--;
+				queue.add(f1);
+			}
+			if (f2.count > 1) {
+				f2.count--;
+				queue.add(f2);
+			}
 		}
-		board[i][j] ^= 256;
-		boolean exist = hasWord(board, word, i + 1, j, k + 1) || hasWord(board, word, i, j + 1, k + 1)
-				|| hasWord(board, word, i - 1, j, k + 1) || hasWord(board, word, i, j - 1, k + 1);
-		board[i][j] ^= 256;
-		return exist;
+		if (queue.size() > 0) {
+			Frequency f1 = queue.poll();
+			if (f1.count > 1) {
+				return "";
+			}
+			builder.append(f1.ch);
+		}
+		return builder.toString();
 	}
 
 }

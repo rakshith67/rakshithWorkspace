@@ -78,4 +78,33 @@ public class TreesLeetCode {
 		}
 		path.remove(path.size() - 1);
 	}
+
+	/**
+	 * Given a binary tree, flatten it to a linked list in-place.
+	 * 
+	 * Link: https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+	 * 
+	 */
+	public void flatten(Node root) {
+		flatList(root);
+	}
+
+	private Node flatList(Node root) {
+		if (root == null) {
+			return null;
+		}
+		Node leftFlat = flatList(root.getLeft());
+		Node rightFlat = flatList(root.getRight());
+		if (leftFlat != null) {
+			root.setRight(leftFlat);
+			while (leftFlat.getRight() != null) {
+				leftFlat = leftFlat.getRight();
+			}
+			leftFlat.setRight(rightFlat);
+		} else {
+			root.setRight(rightFlat);
+		}
+		root.setLeft(null);
+		return root;
+	}
 }

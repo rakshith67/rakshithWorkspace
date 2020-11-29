@@ -34,6 +34,20 @@ public class TrieOperations {
 		return current.isEndOfWord();
 	}
 
+	public boolean startsWith(TrieNode root, String prefix) {
+		TrieNode current = root;
+		for (int i = 0; i < prefix.length(); i++) {
+			char c = prefix.charAt(i);
+			Map<Character, TrieNode> curr = current.getChildren();
+			TrieNode child = curr.get(c);
+			if (child == null) {
+				return false;
+			}
+			current = child;
+		}
+		return true;
+	}
+
 	public void delete(TrieNode trieNode, String word) {
 		if (search(trieNode, word)) {
 			delete(trieNode, word, 0);

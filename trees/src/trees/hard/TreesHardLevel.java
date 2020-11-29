@@ -1,6 +1,8 @@
 package trees.hard;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,5 +211,52 @@ public class TreesHardLevel {
 		int result = Math.max(root.getValue() + withMax, withoutMax);
 		map.put(root, result);
 		return result;
+	}
+
+	/**
+	 * Design an algorithm to serialize and deserialize a binary tree. There is no
+	 * restriction on how your serialization/deserialization algorithm should work
+	 * 
+	 * Link: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+	 * 
+	 */
+	public String serialize(Node root) {
+		StringBuilder builder = new StringBuilder();
+		serializePreOrder(root, builder);
+		return builder.toString();
+	}
+
+	private void serializePreOrder(Node root, StringBuilder builder) {
+		if (root == null) {
+			builder.append("X,");
+			return;
+		}
+		builder.append(root.getValue()).append(',');
+		serializePreOrder(root.getLeft(), builder);
+		serializePreOrder(root.getRight(), builder);
+	}
+
+	// Decodes your encoded data to tree.
+	public Node deserialize(String data) {
+		String[] dataS = data.split(",");
+		Deque<String> deque = new ArrayDeque<>();
+		for (String x : dataS) {
+			deque.addLast(x);
+		}
+		return buildTree(deque);
+	}
+
+	private Node buildTree(Deque<String> deque) {
+		if (deque.isEmpty()) {
+			return null;
+		}
+		String val = deque.removeFirst();
+		if (val.equals("X")) {
+			return null;
+		}
+		Node node = new Node(Integer.valueOf(val));
+		node.setLeft(buildTree(deque));
+		node.setRight(buildTree(deque));
+		return node;
 	}
 }

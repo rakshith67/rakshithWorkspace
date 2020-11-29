@@ -2,7 +2,9 @@ package dynamicprogramming;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DynamicProgrammingOperations2 {
 
@@ -456,6 +458,143 @@ public class DynamicProgrammingOperations2 {
 		}
 		return (int) sum;
 
+	}
+
+	/**
+	 * Given a positive integer n, find the least number of perfect square numbers
+	 * (for example, 1, 4, 9, 16, ...) which sum to n.
+	 * 
+	 * Link: https://leetcode.com/problems/perfect-squares/
+	 * 
+	 */
+	public int numSquares(int n) {
+		int size = (int) Math.sqrt(n);
+		int[] squares = new int[size + 1];
+		for (int i = 1; i < squares.length; i++) {
+			squares[i] = i * i;
+		}
+		int[] cache = new int[n + 1];
+		Arrays.fill(cache, Integer.MAX_VALUE);
+		cache[0] = 0;
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= size; j++) {
+				if (i - squares[j] >= 0) {
+					int res = cache[i - squares[j]];
+					if (res != Integer.MAX_VALUE && 1 + res < cache[i]) {
+						cache[i] = 1 + res;
+					}
+				}
+			}
+		}
+		return cache[n];
+	}
+
+	/**
+	 * Given n, how many structurally unique BST's (binary search trees) that store
+	 * values 1 ... n?
+	 * 
+	 * Link: https://leetcode.com/problems/unique-binary-search-trees/
+	 * 
+	 */
+	public int numTrees(int n) {
+		int[] nums = new int[n + 1];
+		nums[0] = 1;
+		nums[1] = 1;
+		for (int i = 2; i <= n; i++) {
+			for (int j = 1; j <= i; j++) {
+				nums[i] += nums[j - 1] * nums[i - j];
+			}
+		}
+		return nums[n];
+	}
+
+	/**
+	 * You are given a list of non-negative integers, a1, a2, ..., an, and a target,
+	 * S. Now you have 2 symbols + and -. For each integer, you should choose one
+	 * from + and - as its new symbol. Find out how many ways to assign symbols to
+	 * make sum of integers equal to target S.
+	 * 
+	 * Link: https://leetcode.com/problems/target-sum/
+	 * 
+	 */
+	public int findTargetSumWays(int[] nums, int S) {
+		Map<Map.Entry<Integer, Integer>, Integer> map = new HashMap<>();
+		return sum(nums, map, 0, 0, S);
+	}
+
+	private int sum(int[] nums, Map<Map.Entry<Integer, Integer>, Integer> map, int index, int sum, int target) {
+		Map.Entry<Integer, Integer> entry = null; // Map.entry(index, sum);
+		if (map.containsKey(entry)) {
+			return map.get(entry);
+		}
+		if (index == nums.length) {
+			if (sum == target) {
+				return 1;
+			}
+			return 0;
+		}
+		int withPlus = sum(nums, map, index + 1, sum + nums[index], target);
+		int withMinus = sum(nums, map, index + 1, sum - nums[index], target);
+		// entry = Map.entry(index, sum);
+		map.put(entry, withPlus + withMinus);
+		return withPlus + withMinus;
+	}
+
+	/**
+	 * Given a 2D binary matrix filled with 0's and 1's, find the largest square
+	 * containing only 1's and return its area.
+	 * 
+	 * Link: https://leetcode.com/problems/maximal-square/
+	 * 
+	 */
+	public int maximalSquare(char[][] matrix) {
+		if (matrix.length == 0) {
+			return 0;
+		}
+		int rows = matrix.length;
+		int columns = matrix[0].length;
+		int[][] cache = new int[rows + 1][columns + 1];
+		int result = Integer.MIN_VALUE;
+		for (int i = 1; i <= rows; i++) {
+			for (int j = 1; j <= columns; j++) {
+				if (matrix[i - 1][j - 1] == '1') {
+					cache[i][j] = Math.min(cache[i - 1][j], Math.min(cache[i][j - 1], cache[i - 1][j - 1])) + 1;
+					result = Math.max(result, cache[i][j]);
+				}
+			}
+		}
+		return result * result;
+	}
+
+	/**
+	 * Given a non-empty string s and a dictionary wordDict containing a list of
+	 * non-empty words, determine if s can be segmented into a space-separated
+	 * sequence of one or more dictionary words. Note: The same word in the
+	 * dictionary may be reused multiple times in the segmentation. You may assume
+	 * the dictionary does not contain duplicate words.
+	 * 
+	 * Link: https://leetcode.com/problems/word-break/
+	 * 
+	 */
+	public boolean wordBreak(String s, List<String> wordDict) {
+		Boolean[] seen = new Boolean[s.length()];
+		return wordBreakUtil(s, wordDict, 0, seen);
+	}
+
+	private boolean wordBreakUtil(String s, List<String> dict, int start, Boolean[] seen) {
+		if (start == s.length()) {
+			return true;
+		}
+		if (seen[start] == null) {
+			for (String word : dict) {
+				if (s.startsWith(word, start) && wordBreakUtil(s, dict, start + word.length(), seen)) {
+					seen[start] = true;
+					return true;
+				}
+			}
+		}
+		seen[start] = false;
+		return seen[start];
 	}
 
 }

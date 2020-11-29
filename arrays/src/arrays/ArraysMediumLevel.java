@@ -1,9 +1,15 @@
 package arrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.Stack;
 
 public class ArraysMediumLevel {
 
@@ -90,49 +96,6 @@ public class ArraysMediumLevel {
 			}
 		}
 		return greater ? currentMin : 0;
-	}
-
-	/**
-	 * Given two sorted arrays nums1 and nums2 of size m and n respectively, return
-	 * the median of the two sorted arrays. Follow up: The overall run time
-	 * complexity should be O(log (m+n)).
-	 * 
-	 * Link: https://leetcode.com/problems/median-of-two-sorted-arrays/
-	 * 
-	 */
-	public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-		if (nums1.length > nums2.length) {
-			return findMedianSortedArrays(nums2, nums1);
-		}
-		int x = nums1.length;
-		int y = nums2.length;
-		int middle = (x + y + 1) / 2;
-
-		int low = 0;
-		int high = x;
-		while (low <= high) {
-			int partitionX = (low + high) / 2;
-			int partitionY = middle - partitionX;
-
-			int maxLeftX = partitionX == 0 ? Integer.MIN_VALUE : nums1[partitionX - 1];
-			int minRightX = partitionX == x ? Integer.MAX_VALUE : nums1[partitionX];
-
-			int maxLeftY = partitionY == 0 ? Integer.MIN_VALUE : nums2[partitionY - 1];
-			int minRightY = partitionY == y ? Integer.MAX_VALUE : nums2[partitionY];
-
-			if (maxLeftX <= minRightY && maxLeftY <= minRightX) {
-				if ((x + y) % 2 == 0) {
-					return (Math.max(maxLeftX, maxLeftY) + Math.min(minRightY, minRightX)) / (double) 2;
-				} else {
-					return Math.max(maxLeftX, maxLeftY);
-				}
-			} else if (maxLeftX > minRightY) {
-				high = partitionX - 1;
-			} else {
-				low = partitionX + 1;
-			}
-		}
-		return -1;
 	}
 
 	/**
@@ -427,53 +390,541 @@ public class ArraysMediumLevel {
 	}
 
 	/**
-	 * Given a collection of distinct integers, return all possible permutations.
+	 * Given a non negative integer number num. For every numbers i in the range 0 ≤
+	 * i ≤ num calculate the number of 1's in their binary representation and return
+	 * them as an array.
 	 * 
-	 * Link: https://leetcode.com/problems/permutations/
+	 * Link: https://leetcode.com/problems/counting-bits/submissions/
 	 * 
 	 */
-	public List<List<Integer>> permute(int[] nums) {
-		List<List<Integer>> list = new ArrayList<>();
-		backTrackList(nums, list, new ArrayList<>(), new boolean[nums.length]);
-		return list;
+	public int[] countBits(int num) {
+		int[] result = new int[num + 1];
+		result[0] = 0;
+		for (int i = 1; i <= num; i++) {
+			result[i] = result[i / 2] + (i & 1);
+		}
+		return result;
 	}
 
-	private void backTrackList(int[] nums, List<List<Integer>> list, List<Integer> current, boolean[] used) {
-		if (current.size() == nums.length) {
-			list.add(new ArrayList<>(current));
+	/**
+	 * Given a list of daily temperatures T, return a list such that, for each day
+	 * in the input, tells you how many days you would have to wait until a warmer
+	 * temperature. If there is no future day for which this is possible, put 0
+	 * instead. For example, given the list of temperatures T = [73, 74, 75, 71, 69,
+	 * 72, 76, 73], your output should be [1, 1, 4, 2, 1, 1, 0, 0]. Note: The length
+	 * of temperatures will be in the range [1, 30000]. Each temperature will be an
+	 * integer in the range [30, 100].
+	 * 
+	 * Link: https://leetcode.com/problems/daily-temperatures/submissions/
+	 * 
+	 */
+	public int[] dailyTemperatures(int[] temp) {
+		if (temp.length == 1) {
+			return new int[1];
 		}
-		for (int i = 0; i < nums.length; i++) {
-			if (used[i]) {
+		int[] result = new int[temp.length];
+		int[] stack = new int[temp.length];
+		int top = -1;
+		for (int i = 0; i < temp.length; i++) {
+			while (top > -1 && temp[i] > temp[stack[top]]) {
+				int index = stack[top--];
+				result[index] = i - index;
+			}
+			stack[++top] = i;
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public int nextGreaterElement(int n) {
+		char[] arr = String.valueOf(n).toCharArray();
+		int i = arr.length - 2;
+		while (i >= 0 && arr[i] >= arr[i + 1]) {
+			i--;
+		}
+		if (i < 0) {
+			return -1;
+		}
+		int high = arr.length - 1;
+		while (high > 0 && arr[high] <= arr[i]) {
+			high--;
+		}
+		if (high < 0) {
+			return -1;
+		}
+		swap(arr, i, high);
+		int low = i + 1;
+		high = arr.length - 1;
+		while (low < high) {
+			swap(arr, low, high);
+			low++;
+			high--;
+		}
+		try {
+			return Integer.valueOf(String.valueOf(arr));
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+
+	private void swap(char[] arr, int i, int j) {
+		char temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+
+	/**
+	 * Given a circular array (the next element of the last element is the first
+	 * element of the array), print the Next Greater Number for every element. The
+	 * Next Greater Number of a number x is the first greater number to its
+	 * traversing-order next in the array, which means you could search circularly
+	 * to find its next greater number. If it doesn't exist, output -1 for this
+	 * number.
+	 *
+	 * Link: https://leetcode.com/problems/next-greater-element-ii/
+	 *
+	 */
+	public int[] nextGreaterElements(int[] nums) {
+		if (nums.length == 1) {
+			return new int[] { -1 };
+		}
+		int n = nums.length;
+		int[] result = new int[n];
+		Arrays.fill(result, -1);
+		Stack<Integer> stack = new Stack<>();
+		for (int i = 0; i < 2 * n; i++) {
+			while (!stack.isEmpty() && nums[stack.peek()] < nums[i % n]) {
+				result[stack.pop()] = nums[i % n];
+			}
+			stack.push(i % n);
+		}
+		return result;
+	}
+
+	/**
+	 * Suppose you have a random list of people standing in a queue. Each person is
+	 * described by a pair of integers (h, k), where h is the height of the person
+	 * and k is the number of people in front of this person who have a height
+	 * greater than or equal to h. Write an algorithm to reconstruct the queue.
+	 * 
+	 * Link: https://leetcode.com/problems/queue-reconstruction-by-height/
+	 * 
+	 */
+	public int[][] reconstructQueue(int[][] people) {
+		PriorityQueue<Person> queue = new PriorityQueue<>((p1, p2) -> {
+			if (p1.height != p2.height) {
+				return p2.height - p1.height;
+			} else {
+				return p1.nums - p2.nums;
+			}
+		});
+		for (int i = 0; i < people.length; i++) {
+			queue.add(new Person(people[i][0], people[i][1]));
+		}
+		List<Person> list = new LinkedList<>();
+		while (!queue.isEmpty()) {
+			Person p = queue.poll();
+			if (p.nums < list.size()) {
+				list.add(p.nums, p);
+			} else {
+				list.add(p);
+			}
+		}
+		int k = 0;
+		for (Person p : list) {
+			people[k][0] = p.height;
+			people[k][1] = p.nums;
+			k++;
+		}
+		return people;
+	}
+
+	/**
+	 * Given an n x n binary grid, in one step you can choose two adjacent rows of
+	 * the grid and swap them. A grid is said to be valid if all the cells above the
+	 * main diagonal are zeros. Return the minimum number of steps needed to make
+	 * the grid valid, or -1 if the grid cannot be valid. The main diagonal of a
+	 * grid is the diagonal that starts at cell (1, 1) and ends at cell (n, n).
+	 * 
+	 * Link: https://leetcode.com/problems/minimum-swaps-to-arrange-a-binary-grid/
+	 * 
+	 */
+	public int minSwaps(int[][] grid) {
+		int[] right = new int[grid.length];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = grid[0].length - 1; j >= 0; j--) {
+				if (grid[i][j] == 1) {
+					right[i] = j;
+					break;
+				}
+			}
+		}
+		int count = 0;
+		int length = right.length;
+		for (int i = 0; i < length; i++) {
+			if (right[i] <= i) {
 				continue;
 			}
-			used[i] = true;
-			current.add(nums[i]);
-			backTrackList(nums, list, current, used);
-			used[i] = false;
-			current.remove(current.size() - 1);
+			int j = i;
+			while (j < length && right[j] > i) {
+				j++;
+			}
+			if (j == length) {
+				return -1;
+			}
+			while (j > i) {
+				int temp = right[j];
+				right[j] = right[j - 1];
+				right[j - 1] = temp;
+				j--;
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * You are given an n x n 2D matrix representing an image, rotate the image by
+	 * 90 degrees (clockwise). You have to rotate the image in-place, which means
+	 * you have to modify the input 2D matrix directly. DO NOT allocate another 2D
+	 * matrix and do the rotation.
+	 * 
+	 * Link: https://leetcode.com/problems/rotate-image/
+	 * 
+	 */
+	public void rotate(int[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = i + 1; j < matrix.length; j++) {
+				int temp = matrix[i][j];
+				matrix[i][j] = matrix[j][i];
+				matrix[j][i] = temp;
+			}
+		}
+		for (int i = 0; i < matrix.length; i++) {
+			int j = 0;
+			int k = matrix.length - 1;
+			while (j < k) {
+				int temp = matrix[i][j];
+				matrix[i][j] = matrix[i][k];
+				matrix[i][k] = temp;
+				j++;
+				k--;
+			}
 		}
 	}
 
 	/**
-	 * Given a set of distinct integers, nums, return all possible subsets (the
-	 * power set). Note: The solution set must not contain duplicate subsets.
+	 * Write an efficient algorithm that searches for a value in an m x n matrix.
+	 * This matrix has the following properties: Integers in each row are sorted in
+	 * ascending from left to right. Integers in each column are sorted in ascending
+	 * from top to bottom.
 	 * 
-	 * Link: https://leetcode.com/problems/subsets/
+	 * Link: https://leetcode.com/problems/search-a-2d-matrix-ii/
 	 * 
 	 */
-	public List<List<Integer>> subsets(int[] nums) {
+	public boolean searchMatrix(int[][] matrix, int target) {
+		if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
+			return false;
+		}
+		int col = matrix[0].length - 1;
+		int row = 0;
+		while (col >= 0 && row <= matrix.length - 1) {
+			if (target == matrix[row][col]) {
+				return true;
+			} else if (target < matrix[row][col]) {
+				col--;
+			} else if (target > matrix[row][col]) {
+				row++;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Given an array of intervals where intervals[i] = [starti, endi], merge all
+	 * overlapping intervals, and return an array of the non-overlapping intervals
+	 * that cover all the intervals in the input.
+	 * 
+	 * Link: https://leetcode.com/problems/merge-intervals/
+	 * 
+	 */
+	public int[][] merge(int[][] intervals) {
+		if (intervals.length <= 1) {
+			return intervals;
+		}
+		Arrays.sort(intervals, (i1, i2) -> Integer.compare(i1[0], i2[0]));
+		List<int[]> result = new ArrayList<>();
+		result.add(new int[] { intervals[0][0], intervals[0][1] });
+		for (int i = 1; i < intervals.length; i++) {
+			int[] current = result.get(result.size() - 1);
+			if (current[1] >= intervals[i][0]) {
+				current[1] = Math.max(current[1], intervals[i][1]);
+			} else {
+				result.add(new int[] { intervals[i][0], intervals[i][1] });
+			}
+		}
+		return result.toArray(new int[result.size()][]);
+	}
+
+	/**
+	 * Given an array nums of n integers, are there elements a, b, c in nums such
+	 * that a + b + c = 0? Find all unique triplets in the array which gives the sum
+	 * of zero. Notice that the solution set must not contain duplicate triplets.
+	 * 
+	 * Link: https://leetcode.com/problems/3sum/
+	 * 
+	 */
+	public List<List<Integer>> threeSum(int[] nums) {
 		List<List<Integer>> list = new ArrayList<>();
-		backTrackList(nums, list, new ArrayList<>(), 0);
+		Arrays.sort(nums);
+		int low = 0;
+		int high = nums.length - 1;
+		int sum = -1;
+		for (int i = 0; i < nums.length - 2; i++) {
+			if (i == 0 || (nums[i] != nums[i - 1])) {
+				low = i + 1;
+				high = nums.length - 1;
+				while (low < high) {
+					sum = nums[i] + nums[low] + nums[high];
+					if (sum == 0) {
+						List<Integer> curr = new ArrayList<>();
+						list.add(curr);
+						curr.add(nums[i]);
+						curr.add(nums[low]);
+						curr.add(nums[high]);
+						while (low < nums.length - 1 && nums[low] == nums[low + 1]) {
+							low++;
+						}
+						while (high > 0 && nums[high] == nums[high - 1]) {
+							high--;
+						}
+						low++;
+						high--;
+					} else if (sum < 0) {
+						low++;
+					} else {
+						high--;
+					}
+				}
+			}
+		}
 		return list;
 	}
 
-	private void backTrackList(int[] nums, List<List<Integer>> list, List<Integer> current, int start) {
-		list.add(new ArrayList<>(current));
-		for (int i = start; i < nums.length; i++) {
-			current.add(nums[i]);
-			backTrackList(nums, list, current, i + 1);
-			current.remove(current.size() - 1);
+	/**
+	 * Given an integer array nums, you need to find one continuous subarray that if
+	 * you only sort this subarray in ascending order, then the whole array will be
+	 * sorted in ascending order. Return the shortest such subarray and output its
+	 * length.
+	 * 
+	 * Link: https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
+	 * 
+	 * Hint: from left find the index that is less than max of left and from right
+	 * find the index that is greater than min of right.
+	 * 
+	 */
+	public int findUnsortedSubarray(int[] nums) {
+		int n = nums.length;
+		int max = nums[0];
+		int min = nums[n - 1];
+		int low = -1;
+		int high = -2;
+		;
+		for (int i = 1; i < n; i++) {
+			max = Math.max(max, nums[i]);
+			min = Math.min(min, nums[n - 1 - i]);
+			if (nums[i] < max) {
+				high = i;
+			}
+			if (nums[n - 1 - i] > min) {
+				low = n - 1 - i;
+			}
 		}
+		return high - low + 1;
 	}
 
+	/**
+	 * Given a characters array tasks, representing the tasks a CPU needs to do,
+	 * where each letter represents a different task. Tasks could be done in any
+	 * order. Each task is done in one unit of time. For each unit of time, the CPU
+	 * could complete either one task or just be idle. However, there is a
+	 * non-negative integer n that represents the cooldown period between two same
+	 * tasks (the same letter in the array), that is that there must be at least n
+	 * units of time between any two same tasks. Return the least number of units of
+	 * times that the CPU will take to finish all the given tasks.
+	 * 
+	 * Link: https://leetcode.com/problems/task-scheduler/
+	 * 
+	 */
+	public int leastInterval(char[] tasks, int n) {
+		if (n == 0) {
+			return tasks.length;
+		}
+		int[] array = new int[26];
+		int max = 0;
+		for (int i = 0; i < tasks.length; i++) {
+			array[tasks[i] - 'A']++;
+			if (array[tasks[i] - 'A'] > max) {
+				max = array[tasks[i] - 'A'];
+			}
+		}
+		int maxCount = 0;
+		for (int i = 0; i < 26; i++) {
+			if (array[i] == max) {
+				maxCount++;
+			}
+		}
+		// System.out.println(max + " " + maxCount);
+		int result = max + ((max - 1) * n) + (maxCount - 1);
+		return result > tasks.length ? result : tasks.length;
+	}
+
+	/**
+	 * Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be
+	 * validated according to the following rules: Each row must contain the digits
+	 * 1-9 without repetition. Each column must contain the digits 1-9 without
+	 * repetition. Each of the nine 3 x 3 sub-boxes of the grid must contain the
+	 * digits 1-9 without repetition. Note: A Sudoku board (partially filled) could
+	 * be valid but is not necessarily solvable. Only the filled cells need to be
+	 * validated according to the mentioned rules.
+	 * 
+	 * Link: https://leetcode.com/problems/valid-sudoku
+	 * 
+	 */
+	public boolean isValidSudoku(char[][] board) {
+		Map<Integer, Set<Character>> rows = new HashMap<>();
+		Map<Integer, Set<Character>> columns = new HashMap<>();
+		Map<Integer, Set<Character>> cubes = new HashMap<>();
+		for (int i = 0; i < 9; i++) {
+			rows.put(i, new HashSet<>());
+			columns.put(i, new HashSet<>());
+			cubes.put(i, new HashSet<>());
+		}
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				if (board[i][j] != '.') {
+					Set<Character> row = rows.get(i);
+					Set<Character> column = columns.get(j);
+					int index = 3 * (i / 3) + (j / 3);
+					Set<Character> cube = cubes.get(index);
+					if (row.contains(board[i][j])) {
+						return false;
+					}
+					if (column.contains(board[i][j])) {
+						return false;
+					}
+					if (cube.contains(board[i][j])) {
+						return false;
+					}
+					cube.add(board[i][j]);
+					row.add(board[i][j]);
+					column.add(board[i][j]);
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Given a n x n matrix where each of the rows and columns are sorted in
+	 * ascending order, find the kth smallest element in the matrix. Note that it is
+	 * the kth smallest element in the sorted order, not the kth distinct element.
+	 * 
+	 * Link: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+	 * 
+	 */
+	public int kthSmallest(int[][] matrix, int k) {
+		PriorityQueue<PointVal> queue = new PriorityQueue<>();
+		for (int j = 0; j < matrix.length; j++) {
+			queue.add(new PointVal(0, j, matrix[0][j]));
+		}
+		for (int i = 0; i < k - 1; i++) {
+			PointVal tuple = queue.poll();
+			if (tuple.x == matrix.length - 1) {
+				continue;
+			}
+			queue.add(new PointVal(tuple.x + 1, tuple.y, matrix[tuple.x + 1][tuple.y]));
+		}
+		return queue.poll().val;
+	}
+
+	/**
+	 * Given an array of integers nums sorted in ascending order, find the starting
+	 * and ending position of a given target value. If target is not found in the
+	 * array, return [-1, -1].
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+	 * 
+	 */
+	public int[] searchRange(int[] nums, int target) {
+		int[] range = new int[] { -1, -1 };
+		if (nums.length == 0) {
+			return range;
+		}
+		int start = 0;
+		int end = nums.length - 1;
+		while (start < end) {
+			int mid = (start + end) / 2;
+			if (nums[mid] < target) {
+				start = mid + 1;
+			} else {
+				end = mid;
+			}
+		}
+		if (nums[start] != target) {
+			return range;
+		}
+		range[0] = start;
+		end = nums.length - 1;
+		while (start < end) {
+			int mid = ((start + end) / 2) + 1;
+			if (nums[mid] > target) {
+				end = mid - 1;
+			} else {
+				start = mid;
+			}
+		}
+		range[1] = end;
+		return range;
+	}
+
+	/**
+	 * A sequence of numbers is called a wiggle sequence if the differences between
+	 * successive numbers strictly alternate between positive and negative. The
+	 * first difference (if one exists) may be either positive or negative. A
+	 * sequence with fewer than two elements is trivially a wiggle sequence. For
+	 * example, [1,7,4,9,2,5] is a wiggle sequence because the differences
+	 * (6,-3,5,-7,3) are alternately positive and negative. In contrast, [1,4,7,2,5]
+	 * and [1,7,4,5,5] are not wiggle sequences, the first because its first two
+	 * differences are positive and the second because its last difference is zero.
+	 * Given a sequence of integers, return the length of the longest subsequence
+	 * that is a wiggle sequence. A subsequence is obtained by deleting some number
+	 * of elements (eventually, also zero) from the original sequence, leaving the
+	 * remaining elements in their original order.
+	 * 
+	 * Link: https://leetcode.com/problems/wiggle-subsequence/
+	 * 
+	 */
+	public int wiggleMaxLength(int[] nums) {
+		if (nums.length < 2) {
+			return nums.length;
+		}
+		int up = 1;
+		int down = 1;
+		for (int i = 1; i < nums.length; i++) {
+			if (nums[i] > nums[i - 1]) {
+				up = down + 1;
+				continue;
+			}
+			if (nums[i] < nums[i - 1]) {
+				down = up + 1;
+			}
+		}
+		return Math.max(up, down);
+	}
 }

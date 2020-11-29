@@ -358,4 +358,23 @@ public class StringsEasyLevel {
 		}
 		return (String[]) result.toArray();
 	}
+
+	/**
+	 * Given a string, find the first non-repeating character in it and return its
+	 * index. If it doesn't exist, return -1.
+	 * 
+	 * Link: https://leetcode.com/problems/first-unique-character-in-a-string/
+	 * 
+	 */
+	public int firstUniqChar(String s) {
+		int ans = Integer.MAX_VALUE;
+		for (char c = 'a'; c <= 'z'; c++) {
+			int left = s.indexOf(c);
+			if (left != -1 && left == s.lastIndexOf(c)) {
+				ans = Math.min(left, ans);
+			}
+
+		}
+		return ans == Integer.MAX_VALUE ? -1 : ans;
+	}
 }
