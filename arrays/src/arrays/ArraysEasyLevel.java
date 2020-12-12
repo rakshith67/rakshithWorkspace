@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class ArraysEasyLevel1 {
+public class ArraysEasyLevel {
 
 	/**
 	 * Given two sorted arrays A and B, such that the arrays may have some common

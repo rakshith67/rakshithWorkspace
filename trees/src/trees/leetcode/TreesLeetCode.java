@@ -3,7 +3,10 @@ package trees.leetcode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.tree.TreeNode;
+
 import trees.basic.Node;
+import trees.basic.NodeRight;
 import trees.basic.TreeIntOperations;
 
 public class TreesLeetCode {
@@ -106,5 +109,166 @@ public class TreesLeetCode {
 		}
 		root.setLeft(null);
 		return root;
+	}
+
+	int sum;
+
+	/**
+	 * Given the root of a Binary Search Tree (BST), convert it to a Greater Tree
+	 * such that every key of the original BST is changed to the original key plus
+	 * sum of all keys greater than the original key in BST. As a reminder, a binary
+	 * search tree is a tree that satisfies these constraints: The left subtree of a
+	 * node contains only nodes with keys less than the node's key. The right
+	 * subtree of a node contains only nodes with keys greater than the node's key.
+	 * Both the left and right subtrees must also be binary search trees.
+	 *
+	 * Link: https://leetcode.com/problems/convert-bst-to-greater-tree/
+	 *
+	 */
+	public Node convertBST(Node root) {
+		sum = 0;
+		gst(root);
+		return root;
+	}
+
+	private void gst(Node root) {
+		if (root == null) {
+			return;
+		}
+		gst(root.getRight());
+		sum += root.getValue();
+		root.setValue(sum);
+		gst(root.getLeft());
+	}
+
+	/**
+	 * Given an integer array with no duplicates. A maximum tree building on this
+	 * array is defined as follow: The root is the maximum number in the array. The
+	 * left subtree is the maximum tree constructed from left part subarray divided
+	 * by the maximum number. The right subtree is the maximum tree constructed from
+	 * right part subarray divided by the maximum number. Construct the maximum tree
+	 * by the given array and output the root node of this tree.
+	 * 
+	 * Link: https://leetcode.com/problems/maximum-binary-tree/
+	 * 
+	 */
+	public Node constructMaximumBinaryTree(int[] nums) {
+		return constructBinaryTree(nums, 0, nums.length - 1);
+	}
+
+	private Node constructBinaryTree(int[] nums, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+		if (start == end) {
+			return new Node(nums[start]);
+		}
+		int index = findMax(nums, start, end);
+		Node root = new Node(nums[index]);
+		root.setLeft(constructBinaryTree(nums, start, index - 1));
+		root.setRight(constructBinaryTree(nums, index + 1, end));
+		return root;
+	}
+
+	private int findMax(int[] nums, int start, int end) {
+		int index = -1;
+		int max = Integer.MIN_VALUE;
+		for (int i = start; i <= end; i++) {
+			if (nums[i] > max) {
+				max = nums[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	/**
+	 * You are given a perfect binary tree where all leaves are on the same level,
+	 * and every parent has two children. The binary tree has the following
+	 * definition: Populate each next pointer to point to its next right node. If
+	 * there is no next right node, the next pointer should be set to NULL.
+	 * Initially, all next pointers are set to NULL.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
+	 * 
+	 */
+	public NodeRight connect(NodeRight root) {
+		if (root == null || root.getLeft() == null)
+			return root;
+
+		root.getLeft().setNextRight(root.getRight());
+		if (root.getNextRight() != null) {
+			root.getRight().setNextRight(root.getNextRight().getLeft());
+		}
+		connect(root.getLeft());
+		connect(root.getRight());
+
+		return root;
+	}
+
+	/**
+	 * Given a binary tree, write a function to get the maximum width of the given
+	 * tree. The maximum width of a tree is the maximum width among all levels. The
+	 * width of one level is defined as the length between the end-nodes (the
+	 * leftmost and right most non-null nodes in the level, where the null nodes
+	 * between the end-nodes are also counted into the length calculation. It is
+	 * guaranteed that the answer will in the range of 32-bit signed integer.
+	 * 
+	 * Link: https://leetcode.com/problems/maximum-width-of-binary-tree/
+	 * 
+	 */
+	public int widthOfBinaryTree(Node root) {
+		return dfs(root, 0, 1, new ArrayList<Integer>(), new ArrayList<Integer>());
+	}
+
+	public int dfs(Node root, int level, int order, List<Integer> start, List<Integer> end) {
+		if (root == null) {
+			return 0;
+		}
+		if (start.size() == level) {
+			start.add(order);
+			end.add(order);
+		} else {
+			end.set(level, order);
+		}
+		int cur = end.get(level) - start.get(level) + 1;
+		int left = dfs(root.getLeft(), level + 1, 2 * order, start, end);
+		int right = dfs(root.getRight(), level + 1, 2 * order + 1, start, end);
+		return Math.max(cur, Math.max(left, right));
+	}
+
+	/**
+	 * We are given the head node root of a binary tree, where additionally every
+	 * node's value is either a 0 or a 1. Return the same tree where every subtree
+	 * (of the given tree) not containing a 1 has been removed. (Recall that the
+	 * subtree of a node X is X, plus every node that is a descendant of X.)
+	 * 
+	 * Link: https://leetcode.com/problems/binary-tree-pruning/
+	 * 
+	 */
+	public Node pruneTree(Node root) {
+		removeSubTree(root);
+		if (root.getLeft() == null && root.getRight() == null) {
+			if (root.getValue() == 0) {
+				return null;
+			}
+		}
+		return root;
+	}
+
+	private boolean removeSubTree(Node root) {
+		if (root == null) {
+			return true;
+		}
+		boolean left = removeSubTree(root.getLeft());
+		boolean right = removeSubTree(root.getRight());
+		if (left) {
+			root.setLeft(null);
+		}
+		if (right) {
+			root.setRight(null);
+		}
+		return left && right && root.getValue() == 0;
 	}
 }

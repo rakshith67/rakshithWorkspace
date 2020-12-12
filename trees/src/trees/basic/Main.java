@@ -18,7 +18,7 @@ public class Main {
 		System.out.println(" - ReverseLevelOrderTraversal");
 		treeTraversals.levelOrderTraversalLine(root);
 		System.out.println(" - LineLevelOrderTraversal");
-		treeTraversals.spiralLevelOrderTraversal(root);
+		treeTraversals.zigzagLevelOrder(root);
 		System.out.println(" - spiralLevelOrderTraversal");
 		treeTraversals.diagonalTraversal(root);
 		System.out.println(" - diagonalTraversal");

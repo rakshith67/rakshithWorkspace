@@ -1,8 +1,11 @@
 package trees.basic;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -142,34 +145,32 @@ public class TreeTraversals {
 	/**
 	 * Prints the spiral levelOrder traversal of the tree.
 	 * 
-	 * GFG link:
-	 * https://practice.geeksforgeeks.org/problems/level-order-traversal-in-spiral-form/1
+	 * Link: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/submissions/
 	 * 
 	 * @param root - root of the tree
 	 */
-	public void spiralLevelOrderTraversal(Node root) {
-		TreeIntOperations intOperations = new TreeIntOperations();
-		int height = intOperations.height(root);
-		for (int i = 1; i <= height; i++) {
-			levelOrderTraversalSpiralRecursive(root, i, 1);
-		}
-	}
-
-	private void levelOrderTraversalSpiralRecursive(Node root, int depth, int j) {
-		if (root == null) {
-			return;
-		}
-		if (depth == j) {
-			System.out.print(root.getValue() + " ");
-		}
-		if (depth % 2 == 0) {
-			levelOrderTraversalSpiralRecursive(root.getLeft(), depth, j + 1);
-			levelOrderTraversalSpiralRecursive(root.getRight(), depth, j + 1);
-		} else {
-			levelOrderTraversalSpiralRecursive(root.getRight(), depth, j + 1);
-			levelOrderTraversalSpiralRecursive(root.getLeft(), depth, j + 1);
-		}
-	}
+	public List<List<Integer>> zigzagLevelOrder(Node root) {
+        List<List<Integer>> ret = new ArrayList<>();
+        fillZigZag(root, ret, 0);
+        return ret;
+    }
+    
+    private void fillZigZag(Node root, List<List<Integer>> list, int level){
+        if(root == null){
+            return;
+        }
+        if(level >= list.size()){
+            list.add(new LinkedList<>());
+        }
+        List<Integer> current = list.get(level);
+        if(level % 2 == 0){
+            current.add(root.getValue());
+        }else{
+            current.add(0, root.getValue());
+        }
+        fillZigZag(root.getLeft(), list, level + 1);
+        fillZigZag(root.getRight(), list, level + 1);
+    }
 
 	/**
 	 * Prints the reverse levelOrder traversal of the tree.
@@ -189,7 +190,7 @@ public class TreeTraversals {
 		}
 	}
 
-	private void fillArrayInLevel(Node root, int[] a) {
+	private void fillArrayInLevel(Node root, int[] array) {
 		if (root == null) {
 			return;
 		}
@@ -202,7 +203,7 @@ public class TreeTraversals {
 				queue.add(removedNode.getRight());
 			if (removedNode.getLeft() != null)
 				queue.add(removedNode.getLeft());
-			a[i] = removedNode.getValue();
+			array[i] = removedNode.getValue();
 			i++;
 		}
 	}

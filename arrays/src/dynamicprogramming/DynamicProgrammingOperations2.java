@@ -142,36 +142,6 @@ public class DynamicProgrammingOperations2 {
 	}
 
 	/**
-	 * Given an array of n positive integers and a positive integer s, find the
-	 * minimal length of a contiguous subarray of which the sum ≥ s. If there isn't
-	 * one, return 0 instead. Link:
-	 * https://leetcode.com/problems/minimum-size-subarray-sum/submissions/
-	 * 
-	 */
-	public int minSubArrayLen(int s, int[] nums) {
-		int start = 0;
-		int end = 0;
-		int currentMin = nums.length;
-		int currentSum = 0;
-		boolean greater = false;
-		while (end < nums.length) {
-			while (currentSum < s && end < nums.length) {
-				currentSum += nums[end];
-				end++;
-			}
-			while (currentSum >= s && start < nums.length) {
-				greater = true;
-				if (end - start < currentMin) {
-					currentMin = end - start;
-				}
-				currentSum -= nums[start];
-				start++;
-			}
-		}
-		return greater ? currentMin : 0;
-	}
-
-	/**
 	 * Given n non-negative integers representing an elevation map where the width
 	 * of each bar is 1, compute how much water it is able to trap after raining.
 	 * Link: https://leetcode.com/problems/trapping-rain-water/
@@ -344,6 +314,60 @@ public class DynamicProgrammingOperations2 {
 			}
 		}
 		return profit;
+	}
+
+	/**
+	 * Say you have an array for which the ith element is the price of a given stock
+	 * on day i. Design an algorithm to find the maximum profit. You may complete at
+	 * most two transactions. Note: You may not engage in multiple transactions at
+	 * the same time (i.e., you must sell the stock before you buy again).
+	 * 
+	 * Link: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+	 * 
+	 */
+	public int maxProfitUptoTwo(int[] array) {
+		if (array.length < 2) {
+			return 0;
+		}
+		int[] first = new int[array.length];
+		int[] second = new int[array.length + 1];
+		int min = array[0];
+		int current = Integer.MIN_VALUE;
+		for (int i = 1; i < array.length; i++) {
+			int diff = array[i] - min;
+			if (diff > current) {
+				current = diff;
+			}
+			first[i] = current;
+			if (array[i] < min) {
+				min = array[i];
+			}
+		}
+		int max = array[array.length - 1];
+		current = Integer.MIN_VALUE;
+		for (int i = array.length - 1; i >= 0; i--) {
+			int diff = max - array[i];
+			if (diff > current) {
+				current = diff;
+			}
+			second[i] = current;
+			if (array[i] > max) {
+				max = array[i];
+			}
+		}
+		int firstMax = Integer.MIN_VALUE;
+		for (int i = 0; i < array.length; i++) {
+			if (first[i] > firstMax) {
+				firstMax = first[i];
+			}
+		}
+		int totalMax = Integer.MIN_VALUE;
+		for (int i = 0; i < array.length; i++) {
+			if (first[i] + second[i + 1] > totalMax) {
+				totalMax = Math.max(first[i], first[i] + second[i + 1]);
+			}
+		}
+		return totalMax;
 	}
 
 	/**
@@ -595,6 +619,43 @@ public class DynamicProgrammingOperations2 {
 		}
 		seen[start] = false;
 		return seen[start];
+	}
+
+	/**
+	 * Given a non-empty array nums containing only positive integers, find if the
+	 * array can be partitioned into two subsets such that the sum of elements in
+	 * both subsets is equal.
+	 * 
+	 * Link: https://leetcode.com/problems/partition-equal-subset-sum/
+	 * 
+	 */
+	public boolean canPartition(int[] nums) {
+		int sum = 0;
+		for (int num : nums) {
+			sum += num;
+		}
+		if ((sum & 1) == 1) {
+			return false;
+		}
+		Boolean[] cache = new Boolean[(sum / 2) + 1];
+		return canPart(nums, cache, sum / 2, 0);
+	}
+
+	private boolean canPart(int[] nums, Boolean[] dpCache, int target, int start) {
+		if (target < 0) {
+			return false;
+		}
+		if (target == 0) {
+			return true;
+		}
+		if (start == nums.length) {
+			return false;
+		}
+		if (dpCache[target] == null) {
+			dpCache[target] = canPart(nums, dpCache, target - nums[start], start + 1)
+					|| canPart(nums, dpCache, target, start + 1);
+		}
+		return dpCache[target];
 	}
 
 }

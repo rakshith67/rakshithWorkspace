@@ -377,4 +377,36 @@ public class StringsEasyLevel {
 		}
 		return ans == Integer.MAX_VALUE ? -1 : ans;
 	}
+
+	/**
+	 * Given a non-empty string s, you may delete at most one character. Judge
+	 * whether you can make it a palindrome.
+	 * 
+	 * Link: https://leetcode.com/problems/valid-palindrome-ii/
+	 * 
+	 */
+	public boolean validPalindrome(String s) {
+		int l = 0;
+		int r = s.length() - 1;
+		while (l <= r) {
+			if (s.charAt(l) == s.charAt(r)) {
+				l++;
+				r--;
+			} else {
+				return isPalindrome(s, l, r - 1) || isPalindrome(s, l + 1, r);
+			}
+		}
+		return true;
+	}
+
+	private boolean isPalindrome(String str, int s, int t) {
+		while (s <= t) {
+			if (str.charAt(s) != str.charAt(t)) {
+				return false;
+			}
+			s++;
+			t--;
+		}
+		return true;
+	}
 }

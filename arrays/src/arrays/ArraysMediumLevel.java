@@ -866,6 +866,7 @@ public class ArraysMediumLevel {
 		if (nums.length == 0) {
 			return range;
 		}
+
 		int start = 0;
 		int end = nums.length - 1;
 		while (start < end) {
@@ -876,9 +877,11 @@ public class ArraysMediumLevel {
 				end = mid;
 			}
 		}
+
 		if (nums[start] != target) {
 			return range;
 		}
+
 		range[0] = start;
 		end = nums.length - 1;
 		while (start < end) {
@@ -927,4 +930,282 @@ public class ArraysMediumLevel {
 		}
 		return Math.max(up, down);
 	}
+
+	/**
+	 * Given an m x n matrix. If an element is 0, set its entire row and column to
+	 * 0. Do it in-place.
+	 * 
+	 * Link: https://leetcode.com/problems/set-matrix-zeroes/
+	 * 
+	 */
+	void setZeroes(int[][] matrix) {
+		int col0 = 1;
+		int rows = matrix.length;
+		int cols = matrix[0].length;
+
+		for (int i = 0; i < rows; i++) {
+			if (matrix[i][0] == 0) {
+				col0 = 0;
+			}
+			for (int j = 1; j < cols; j++) {
+				if (matrix[i][j] == 0) {
+					matrix[i][0] = matrix[0][j] = 0;
+				}
+			}
+		}
+
+		for (int i = rows - 1; i >= 0; i--) {
+			for (int j = cols - 1; j >= 1; j--) {
+				if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+					matrix[i][j] = 0;
+				}
+			}
+			if (col0 == 0) {
+				matrix[i][0] = 0;
+			}
+		}
+	}
+
+	/**
+	 * Implement next permutation, which rearranges numbers into the
+	 * lexicographically next greater permutation of numbers. If such an arrangement
+	 * is not possible, it must rearrange it as the lowest possible order (i.e.,
+	 * sorted in ascending order). The replacement must be in place and use only
+	 * constant extra memory.
+	 * 
+	 * Link: https://leetcode.com/problems/next-permutation/
+	 * 
+	 */
+	public void nextPermutation(int[] arr) {
+		int i = arr.length - 2;
+		while (i >= 0 && arr[i] >= arr[i + 1]) {
+			i--;
+		}
+		if (i < 0) {
+			Arrays.sort(arr);
+			return;
+		}
+		int high = arr.length - 1;
+		while (high > 0 && arr[high] <= arr[i]) {
+			high--;
+		}
+		if (high < 0) {
+			Arrays.sort(arr);
+			return;
+		}
+		swap(arr, i, high);
+		int low = i + 1;
+		high = arr.length - 1;
+		while (low < high) {
+			swap(arr, low, high);
+			low++;
+			high--;
+		}
+	}
+
+	private void swap(int[] arr, int i, int j) {
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+
+	/**
+	 * Given an m x n matrix, return all elements of the matrix in spiral order.
+	 * 
+	 * Link: https://leetcode.com/problems/spiral-matrix/
+	 * 
+	 */
+	public List<Integer> spiralOrder(int[][] matrix) {
+		int rowBegin = 0;
+		int rowEnd = matrix.length - 1;
+		int columnBegin = 0;
+		int columnEnd = matrix[0].length - 1;
+		List<Integer> list = new ArrayList<>();
+		while (rowBegin <= rowEnd && columnBegin <= columnEnd) {
+			for (int j = columnBegin; j <= columnEnd; j++) {
+				list.add(matrix[rowBegin][j]);
+			}
+			rowBegin++;
+
+			for (int i = rowBegin; i <= rowEnd; i++) {
+				list.add(matrix[i][columnEnd]);
+			}
+			columnEnd--;
+
+			if (rowBegin <= rowEnd) {
+				for (int j = columnEnd; j >= columnBegin; j--) {
+					list.add(matrix[rowEnd][j]);
+				}
+				rowEnd--;
+			}
+			if (columnBegin <= columnEnd) {
+				for (int i = rowEnd; i >= rowBegin; i--) {
+					list.add(matrix[i][columnBegin]);
+				}
+				columnBegin++;
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Given a positive integer n, generate an n x n matrix filled with elements
+	 * from 1 to n2 in spiral order.
+	 * 
+	 * Link: https://leetcode.com/problems/spiral-matrix-ii/
+	 * 
+	 */
+	public int[][] generateMatrix(int n) {
+		int[][] matrix = new int[n][n];
+		int rowBegin = 0;
+		int rowEnd = n - 1;
+		int columnBegin = 0;
+		int columnEnd = n - 1;
+		int count = 1;
+		while (rowBegin <= rowEnd && columnBegin <= columnEnd) {
+			for (int j = columnBegin; j <= columnEnd; j++) {
+				matrix[rowBegin][j] = count;
+				count++;
+			}
+			rowBegin++;
+
+			for (int i = rowBegin; i <= rowEnd; i++) {
+				matrix[i][columnEnd] = count;
+				count++;
+			}
+			columnEnd--;
+
+			if (rowBegin <= rowEnd) {
+				for (int j = columnEnd; j >= columnBegin; j--) {
+					matrix[rowEnd][j] = count;
+					count++;
+				}
+				rowEnd--;
+			}
+
+			if (columnBegin <= columnEnd) {
+				for (int i = rowEnd; i >= rowBegin; i--) {
+					matrix[i][columnBegin] = count;
+					count++;
+				}
+				columnBegin++;
+			}
+		}
+		return matrix;
+	}
+
+	/**
+	 * Given an array nums of n integers and an integer target, find three integers
+	 * in nums such that the sum is closest to target. Return the sum of the three
+	 * integers. You may assume that each input would have exactly one solution.
+	 * 
+	 * Link: https://leetcode.com/problems/3sum-closest/submissions/
+	 * 
+	 */
+	public int threeSumClosest(int[] nums, int target) {
+		Arrays.sort(nums);
+		int low = 0;
+		int high = nums.length - 1;
+		int sum = 0;
+		int closest = 100000;
+		for (int i = 0; i < nums.length - 2; i++) {
+			if (i > 0 && nums[i] == nums[i - 1]) {
+				continue;
+			}
+			low = i + 1;
+			high = nums.length - 1;
+			while (low < high) {
+				sum = nums[i] + nums[low] + nums[high];
+				int diff = Math.abs(sum - target);
+				if (diff < Math.abs(closest - target)) {
+					closest = sum;
+				}
+				if (sum > target) {
+					high--;
+				} else {
+					low++;
+				}
+			}
+		}
+		return closest;
+	}
+
+	/**
+	 * Given an array, rotate the array to the right by k steps, where k is
+	 * non-negative. Follow up: Try to come up as many solutions as you can, there
+	 * are at least 3 different ways to solve this problem. Could you do it in-place
+	 * with O(1) extra space?
+	 * 
+	 * Link: https://leetcode.com/problems/rotate-array/
+	 * 
+	 */
+	public void rotate(int[] nums, int k) {
+		k %= nums.length;
+		reverse(nums, 0, nums.length - 1);
+		reverse(nums, 0, k - 1);
+		reverse(nums, k, nums.length - 1);
+	}
+
+	private void reverse(int[] nums, int start, int end) {
+		while (start < end) {
+			int temp = nums[start];
+			nums[start] = nums[end];
+			nums[end] = temp;
+			start++;
+			end--;
+		}
+	}
+
+	/**
+	 * A peak element is an element that is strictly greater than its neighbors.
+	 * Given an integer array nums, find a peak element, and return its index. If
+	 * the array contains multiple peaks, return the index to any of the peaks. You
+	 * may imagine that nums[-1] = nums[n] = -∞.
+	 * 
+	 * Link: https://leetcode.com/problems/find-peak-element/
+	 * 
+	 */
+	public int findPeakElement(int[] nums) {
+		int low = 0;
+		int high = nums.length - 1;
+		while (low < high) {
+			int mid1 = (low + high) / 2;
+			int mid2 = mid1 + 1;
+			if (nums[mid1] < nums[mid2]) {
+				low = mid2;
+			} else {
+				high = mid1;
+			}
+		}
+		return low;
+	}
+
+	/**
+	 * Given a sorted array nums, remove the duplicates in-place such that
+	 * duplicates appeared at most twice and return the new length. Do not allocate
+	 * extra space for another array; you must do this by modifying the input array
+	 * in-place with O(1) extra memory.
+	 *
+	 * Link: https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
+	 */
+	public int removeDuplicates(int[] nums) {
+		int i = 0;
+		int count = 0;
+		int k = 0;
+		while (i < nums.length) {
+			if (i + 1 < nums.length && nums[i] == nums[i + 1]) {
+				nums[k++] = nums[i++];
+				nums[k++] = nums[i++];
+				count += 2;
+				while (i < nums.length && nums[i] == nums[i - 1]) {
+					i++;
+				}
+			} else {
+				nums[k++] = nums[i++];
+				count++;
+			}
+		}
+		return count;
+	}
+
 }
