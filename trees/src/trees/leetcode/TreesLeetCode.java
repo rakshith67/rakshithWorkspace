@@ -1,9 +1,9 @@
 package trees.leetcode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.tree.TreeNode;
+import java.util.Queue;
 
 import trees.basic.Node;
 import trees.basic.NodeRight;
@@ -270,5 +270,100 @@ public class TreesLeetCode {
 			root.setRight(null);
 		}
 		return left && right && root.getValue() == 0;
+	}
+
+	int result;
+
+	/**
+	 * Given the root of a binary tree, find the maximum value V for which there
+	 * exist different nodes A and B where V = |A.val - B.val| and A is an ancestor
+	 * of B. A node A is an ancestor of B if either: any child of A is equal to B,
+	 * or any child of A is an ancestor of B.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/
+	 * 
+	 */
+	public int maxAncestorDiff(Node root) {
+		result = 0;
+		fillMax(root, root.getValue(), root.getValue());
+		return result;
+	}
+
+	private void fillMax(Node root, int min, int max) {
+		if (root == null) {
+			return;
+		}
+		if (Math.abs(root.getValue() - min) > result) {
+			result = Math.abs(root.getValue() - min);
+		}
+		if (Math.abs(root.getValue() - max) > result) {
+			result = Math.abs(root.getValue() - max);
+		}
+		if (root.getValue() < min) {
+			min = root.getValue();
+		} else if (root.getValue() > max) {
+			max = root.getValue();
+		}
+		fillMax(root.getLeft(), min, max);
+		fillMax(root.getRight(), min, max);
+	}
+
+	/**
+	 * Given the root of a binary tree, determine if it is a complete binary tree.
+	 * In a complete binary tree, every level, except possibly the last, is
+	 * completely filled, and all nodes in the last level are as far left as
+	 * possible. It can have between 1 and 2h nodes inclusive at the last level h.
+	 * 
+	 * Link: https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+	 * 
+	 */
+	public boolean isCompleteTree(Node root) {
+		if (root == null) {
+			return true;
+		}
+		Queue<Node> deque = new LinkedList<>();
+		deque.add(root);
+		while (null != deque.peek()) {
+			Node current = deque.poll();
+			deque.add(current.getLeft());
+			deque.add(current.getRight());
+		}
+		while (!deque.isEmpty() && deque.peek() == null) {
+			deque.poll();
+		}
+		return deque.isEmpty();
+	}
+
+	private int maxLevel = 0;
+	private int sum2 = 0;
+
+	/**
+	 * Given a binary tree, return the sum of values of its deepest leaves.
+	 * 
+	 * Link: https://leetcode.com/problems/deepest-leaves-sum/
+	 * 
+	 */
+	public int deepestLeavesSum(Node root) {
+		if (root == null)
+			return 0;
+		calculateSumAtLevel(root, 0);
+		return sum2;
+
+	}
+
+	private void calculateSumAtLevel(Node root, int level) {
+
+		if (root == null)
+			return;
+		if (level > maxLevel) {
+			sum2 = 0;
+			maxLevel = level;
+		}
+		if (level == maxLevel) {
+			sum2 = sum2 + root.getValue();
+		}
+		calculateSumAtLevel(root.getLeft(), level + 1);
+		calculateSumAtLevel(root.getRight(), level + 1);
 	}
 }

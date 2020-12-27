@@ -594,7 +594,7 @@ public class GraphOperations {
 	 * boundary and mark them as ‘B’, then iterate over the whole board and mark ‘O’
 	 * as ‘X’ and ‘B’ as ‘O’. Link1:
 	 * https://www.interviewbit.com/problems/capture-regions-on-board/ Link2:
-	 * https://practice.geeksforgeeks.org/problems/replace-os-with-xs/0
+	 * https://leetcode.com/problems/surrounded-regions/
 	 * 
 	 */
 	public void captureRegionsOnBoard(ArrayList<ArrayList<Character>> graph) {

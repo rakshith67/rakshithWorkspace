@@ -733,7 +733,6 @@ public class ArraysMediumLevel {
 		int min = nums[n - 1];
 		int low = -1;
 		int high = -2;
-		;
 		for (int i = 1; i < n; i++) {
 			max = Math.max(max, nums[i]);
 			min = Math.min(min, nums[n - 1 - i]);
@@ -1203,6 +1202,330 @@ public class ArraysMediumLevel {
 			} else {
 				nums[k++] = nums[i++];
 				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Given an integer array of size n, find all elements that appear more than ⌊
+	 * n/3 ⌋ times. Follow-up: Could you solve the problem in linear time and in
+	 * O(1) space?
+	 * 
+	 * Link: https://leetcode.com/problems/majority-element-ii/
+	 * 
+	 */
+	public List<Integer> majorityElement(int[] nums) {
+		List<Integer> list = new ArrayList<>();
+		if (nums.length == 0) {
+			return list;
+		}
+		int candidate1 = nums[0];
+		int candidate2 = nums[0];
+		int count1 = 0;
+		int count2 = 0;
+		for (int i = 0; i < nums.length; i++) {
+			if (nums[i] == candidate1) {
+				count1++;
+			} else if (nums[i] == candidate2) {
+				count2++;
+			} else if (count1 == 0) {
+				candidate1 = nums[i];
+				count1++;
+			} else if (count2 == 0) {
+				candidate2 = nums[i];
+				count2++;
+			} else {
+				count1--;
+				count2--;
+			}
+		}
+		count1 = 0;
+		count2 = 0;
+		for (int i = 0; i < nums.length; i++) {
+			if (nums[i] == candidate1) {
+				count1++;
+			} else if (nums[i] == candidate2) {
+				count2++;
+			}
+		}
+		if (count1 > nums.length / 3) {
+			list.add(candidate1);
+		}
+		if (count2 > nums.length / 3) {
+			list.add(candidate2);
+		}
+		return list;
+	}
+
+	/**
+	 * Your are given an array of positive integers nums. Count and print the number
+	 * of (contiguous) subarrays where the product of all the elements in the
+	 * subarray is less than k.
+	 * 
+	 * Link: https://leetcode.com/problems/subarray-product-less-than-k/
+	 * 
+	 * Hint: The idea is always keep an max-product-window less than K; Every time
+	 * shift window by adding a new number on the right(j), if the product is
+	 * greater than k, then try to reduce numbers on the left(i), until the subarray
+	 * product fit less than k again, (subarray could be empty); Each step
+	 * introduces x new subarrays, where x is the size of the current window (j + 1
+	 * - i); example: for window (5, 2), when 6 is introduced, it add 3 new
+	 * subarray: (5, (2, (6)))
+	 * 
+	 */
+	public int numSubarrayProductLessThanK(int[] nums, int k) {
+		if (k == 0) {
+			return 0;
+		}
+		int low = 0;
+		int high = 0;
+		int product = 1;
+		int count = 0;
+		while (high < nums.length) {
+			product *= nums[high];
+			while (low <= high && product >= k) {
+				product /= nums[low++];
+			}
+			count += high - low + 1;
+			high++;
+		}
+		return count;
+	}
+
+	/**
+	 * Given an array A of integers, return the number of (contiguous, non-empty)
+	 * subarrays that have a sum divisible by K.
+	 * 
+	 * Link: https://leetcode.com/problems/subarray-sums-divisible-by-k/
+	 * 
+	 * Hint: store the remainder of sum of subarray and check it that remainder
+	 * exists in previous sub arrays so that the sub array from that point to
+	 * current point remainder is 0 which is divisible by K
+	 */
+	public int subarraysDivByK(int[] nums, int K) {
+		int[] map = new int[K];
+		map[0] = 1;
+		int count = 0, sum = 0;
+		for (int i = 0; i < nums.length; i++) {
+			sum = (sum + nums[i]) % K;
+			if (sum < 0) {
+				sum += K;
+			}
+			count += map[sum];
+			map[sum]++;
+		}
+		return count;
+	}
+
+	/**
+	 * Given a matrix of M x N elements (M rows, N columns), return all elements of
+	 * the matrix in diagonal order as shown in the below image.
+	 * 
+	 * Link: https://leetcode.com/problems/diagonal-traverse/
+	 * 
+	 */
+	public int[] findDiagonalOrder(int[][] matrix) {
+		if (matrix == null || matrix.length == 0) {
+			return new int[0];
+		}
+
+		int N = matrix.length;
+		int M = matrix[0].length;
+		int row = 0, column = 0;
+		int direction = 1;
+		int[] result = new int[N * M];
+		int r = 0;
+
+		while (row < N && column < M) {
+			result[r++] = matrix[row][column];
+			int new_row = row + (direction == 1 ? -1 : 1);
+			int new_column = column + (direction == 1 ? 1 : -1);
+			if (new_row < 0 || new_row == N || new_column < 0 || new_column == M) {
+				if (direction == 1) {
+					row += (column == M - 1 ? 1 : 0);
+					column += (column < M - 1 ? 1 : 0);
+				} else {
+					column += (row == N - 1 ? 1 : 0);
+					row += (row < N - 1 ? 1 : 0);
+				}
+				direction = 1 - direction;
+			} else {
+				row = new_row;
+				column = new_column;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Given a circular array C of integers represented by A, find the maximum
+	 * possible sum of a non-empty subarray of C. Here, a circular array means the
+	 * end of the array connects to the beginning of the array. (Formally, C[i] =
+	 * A[i] when 0 <= i < A.length, and C[i+A.length] = C[i] when i >= 0.) Also, a
+	 * subarray may only include each element of the fixed buffer A at most once.
+	 * (Formally, for a subarray C[i], C[i+1], ..., C[j], there does not exist i <=
+	 * k1, k2 <= j with k1 % A.length = k2 % A.length.)
+	 * 
+	 * Link: https://leetcode.com/problems/maximum-sum-circular-subarray/
+	 * 
+	 */
+	public int maxSubarraySumCircular(int[] A) {
+		int currentMax = 0;
+		int max = Integer.MIN_VALUE;
+		int currentMin = 0;
+		int min = Integer.MAX_VALUE;
+		int sum = 0;
+		for (int i = 0; i < A.length; i++) {
+			sum += A[i];
+			currentMax += A[i];
+			currentMin += A[i];
+			if (currentMax > max) {
+				max = currentMax;
+			}
+			if (currentMin < min) {
+				min = currentMin;
+			}
+			if (currentMax < 0) {
+				currentMax = 0;
+			}
+			if (currentMin > 0) {
+				currentMin = 0;
+			}
+		}
+		if (sum == min) {
+			min = 0;
+		}
+		return Math.max(max, sum - min);
+	}
+
+	/**
+	 * Given an array of integers A, find the sum of min(B), where B ranges over
+	 * every (contiguous) subarray of A. Since the answer may be large, return the
+	 * answer modulo 10^9 + 7.
+	 * 
+	 * Link: https://leetcode.com/problems/sum-of-subarray-minimums/
+	 * 
+	 * Hint:
+	 * 
+	 * left[i] + 1 equals to the number of subarray ending with A[i], and A[i] is
+	 * single minimum.
+	 * 
+	 * right[i] + 1 equals to the number of subarray starting with A[i], and A[i] is
+	 * the first minimum.
+	 * 
+	 * Finally f(i) = (left[i] + 1) * (right[i] + 1)
+	 * 
+	 * For [3,1,2,4] as example: left + 1 = [1,2,1,1] right + 1 = [1,3,2,1] f =
+	 * [1,6,2,1] res = 3 * 1 + 1 * 6 + 2 * 2 + 4 * 1 = 17
+	 * 
+	 */
+	public int sumSubarrayMins(int[] A) {
+		long res = 0;
+		int mod = (int) 1e9 + 7;
+		int n = A.length;
+		int[] left = new int[n];
+		int[] right = new int[n];
+		Stack<int[]> stack = new Stack<>();
+		for (int i = 0; i < n; ++i) {
+			int count = 1;
+			while (!stack.isEmpty() && stack.peek()[0] > A[i]) {
+				count += stack.pop()[1];
+			}
+			stack.push(new int[] { A[i], count });
+			left[i] = count;
+		}
+		stack.clear();
+		for (int i = n - 1; i >= 0; i--) {
+			int count = 1;
+			while (!stack.isEmpty() && stack.peek()[0] >= A[i]) {
+				count += stack.pop()[1];
+			}
+			stack.push(new int[] { A[i], count });
+			right[i] = count;
+		}
+		for (int i = 0; i < n; ++i) {
+			res = (res + (long) A[i] * left[i] * right[i]) % mod;
+		}
+		return (int) res;
+	}
+
+	/**
+	 * You are given an array representing a row of seats where seats[i] = 1
+	 * represents a person sitting in the ith seat, and seats[i] = 0 represents that
+	 * the ith seat is empty (0-indexed). There is at least one empty seat, and at
+	 * least one person sitting. Alex wants to sit in the seat such that the
+	 * distance between him and the closest person to him is maximized. Return that
+	 * maximum distance to the closest person.
+	 * 
+	 * Link: https://leetcode.com/problems/maximize-distance-to-closest-person/
+	 * 
+	 */
+	public int maxDistToClosest(int[] seats) {
+		int max = 0;
+		int last = -1;
+		for (int i = 0; i < seats.length; i++) {
+			if (seats[i] == 1) {
+				if (last < 0) {
+					max = i;
+				} else {
+					if ((i - last) / 2 > max) {
+						max = (i - last) / 2;
+					}
+				}
+				last = i;
+			}
+		}
+		if (seats.length - last - 1 > max) {
+			max = seats.length - last - 1;
+		}
+		return max;
+	}
+
+	/**
+	 * Given an integer array nums, return true if there exists a triple of indices
+	 * (i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k]. If no such
+	 * indices exists, return false.
+	 * 
+	 * Link: https://leetcode.com/problems/increasing-triplet-subsequence/
+	 * 
+	 */
+	public boolean increasingTriplet(int[] nums) {
+		int small = Integer.MAX_VALUE;
+		int large = Integer.MAX_VALUE;
+		for (int i = 0; i < nums.length; i++) {
+			if (nums[i] <= small) {
+				small = nums[i];
+			} else if (nums[i] <= large) {
+				large = nums[i];
+			} else {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Given an array consists of non-negative integers, your task is to count the
+	 * number of triplets chosen from the array that can make triangles if we take
+	 * them as side lengths of a triangle.
+	 * 
+	 * Link: https://leetcode.com/problems/valid-triangle-number/
+	 * 
+	 */
+	public int triangleNumber(int[] nums) {
+		int count = 0;
+		Arrays.sort(nums);
+		for (int i = nums.length - 1; i >= 2; i--) {
+			int low = 0;
+			int high = i - 1;
+			while (low < high) {
+				if (nums[low] + nums[high] > nums[i]) {
+					count += high - low;
+					high--;
+				} else {
+					low++;
+				}
 			}
 		}
 		return count;

@@ -409,4 +409,20 @@ public class StringsEasyLevel {
 		}
 		return true;
 	}
+
+	/**
+	 * Given a column title as appear in an Excel sheet, return its corresponding
+	 * column number.
+	 * 
+	 * Link: https://leetcode.com/problems/excel-sheet-column-number/
+	 * 
+	 */
+	public int titleToNumber(String s) {
+		int count = 0;
+		for (int i = 0; i < s.length(); i++) {
+			int val = s.charAt(i) - 'A' + 1;
+			count = count * 26 + val;
+		}
+		return count;
+	}
 }
