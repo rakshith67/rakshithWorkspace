@@ -1,7 +1,9 @@
 package arrays;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1526,6 +1528,162 @@ public class ArraysMediumLevel {
 				} else {
 					low++;
 				}
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * In a deck of cards, every card has a unique integer. You can order the deck
+	 * in any order you want. Initially, all the cards start face down (unrevealed)
+	 * in one deck. Now, you do the following steps repeatedly, until all cards are
+	 * revealed: Take the top card of the deck, reveal it, and take it out of the
+	 * deck. If there are still cards in the deck, put the next top card of the deck
+	 * at the bottom of the deck. If there are still unrevealed cards, go back to
+	 * step 1. Otherwise, stop. Return an ordering of the deck that would reveal the
+	 * cards in increasing order. The first entry in the answer is considered to be
+	 * the top of the deck.
+	 * 
+	 * Link: https://leetcode.com/problems/reveal-cards-in-increasing-order/
+	 * 
+	 */
+	public int[] deckRevealedIncreasing(int[] deck) {
+		Deque<Integer> deque = new ArrayDeque<>();
+		for (int i = 0; i < deck.length; i++) {
+			deque.add(i);
+		}
+		Arrays.sort(deck);
+		int[] result = new int[deck.length];
+		for (int i = 0; i < deck.length; i++) {
+			result[deque.pollFirst()] = deck[i];
+			if (!deque.isEmpty()) {
+				deque.add(deque.pollFirst());
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Given a non-negative integer, you could swap two digits at most once to get
+	 * the maximum valued number. Return the maximum valued number you could get.
+	 * 
+	 * Link: https://leetcode.com/problems/maximum-swap/
+	 * 
+	 */
+	public int maximumSwap(int num) {
+		char[] A = Integer.toString(num).toCharArray();
+		int[] max = new int[A.length];
+		Arrays.fill(max, -1);
+		int current = (int) A[A.length - 1];
+		int index = A.length - 1;
+		for (int i = A.length - 2; i >= 0; i--) {
+			if (A[i] > current) {
+				current = A[i];
+				index = i;
+			} else if (A[i] < current) {
+				max[i] = index;
+			}
+		}
+		for (int i = 0; i < A.length; i++) {
+			if (max[i] != -1) {
+				char temp = A[max[i]];
+				A[max[i]] = A[i];
+				A[i] = temp;
+				return Integer.valueOf(new String(A));
+			}
+		}
+		return num;
+	}
+
+	/**
+	 * In a row of dominoes, A[i] and B[i] represent the top and bottom halves of
+	 * the ith domino. (A domino is a tile with two numbers from 1 to 6 - one on
+	 * each half of the tile.) We may rotate the ith domino, so that A[i] and B[i]
+	 * swap values. Return the minimum number of rotations so that all the values in
+	 * A are the same, or all the values in B are the same. If it cannot be done,
+	 * return -1.
+	 * 
+	 * Link: https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/
+	 * 
+	 */
+	public int minDominoRotations(int[] A, int[] B) {
+		int min = Integer.MAX_VALUE;
+		for (int i = 1; i <= 6; i++) {
+			min = Math.min(min, getRotation(A, B, i));
+			min = Math.min(min, getRotation(B, A, i));
+		}
+		return min == Integer.MAX_VALUE ? -1 : min;
+	}
+
+	private int getRotation(int[] A, int[] B, int n) {
+		int res = 0;
+		for (int i = 0; i < A.length; i++) {
+			if (A[i] == n) {
+				continue;
+			}
+			if (B[i] != n) {
+				return Integer.MAX_VALUE;
+			}
+			res++;
+		}
+		return res;
+	}
+
+	/**
+	 * There are several cards arranged in a row, and each card has an associated
+	 * number of points The points are given in the integer array cardPoints. In one
+	 * step, you can take one card from the beginning or from the end of the row.
+	 * You have to take exactly k cards. Your score is the sum of the points of the
+	 * cards you have taken. Given the integer array cardPoints and the integer k,
+	 * return the maximum score you can obtain.
+	 * 
+	 * Link: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+	 * 
+	 */
+	public int maxScore(int[] cardPoints, int k) {
+		int sum1 = 0;
+		int sum2 = 0;
+		for (int i = 0; i < k; i++) {
+			sum1 += cardPoints[i];
+		}
+		for (int i = cardPoints.length - 1; i >= cardPoints.length - k; i--) {
+			sum2 += cardPoints[i];
+		}
+		int total = 0;
+		int left = 0;
+		int left2 = k - 1;
+		int right2 = cardPoints.length - k;
+		int right = cardPoints.length - 1;
+		for (int i = 0; i < k; i++) {
+			if (sum1 > sum2) {
+				total += cardPoints[left];
+				sum1 -= cardPoints[left++];
+				sum2 -= cardPoints[right2++];
+			} else {
+				total += cardPoints[right];
+				sum2 -= cardPoints[right--];
+				sum1 -= cardPoints[left2--];
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * Given an array arr that is a permutation of [0, 1, ..., arr.length - 1], we
+	 * split the array into some number of "chunks" (partitions), and individually
+	 * sort each chunk. After concatenating them, the result equals the sorted
+	 * array. What is the most number of chunks we could have made?
+	 * 
+	 * Link: https://leetcode.com/problems/max-chunks-to-make-sorted/
+	 * 
+	 */
+	public int maxChunksToSorted(int[] arr) {
+		int count = 0;
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < arr.length; i++) {
+			max = Math.max(max, arr[i]);
+			if (max == i) {
+				count++;
 			}
 		}
 		return count;
