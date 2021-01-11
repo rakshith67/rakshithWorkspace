@@ -806,4 +806,82 @@ public class TreesLeetCode {
 		inOrder(root.getRight());
 	}
 
+	Node ans;
+
+	/**
+	 * Given two binary trees original and cloned and given a reference to a node
+	 * target in the original tree. The cloned tree is a copy of the original tree.
+	 * Return a reference to the same node in the cloned tree. Note that you are not
+	 * allowed to change any of the two trees or the target node and the answer must
+	 * be a reference to a node in the cloned tree. Follow up: Solve the problem if
+	 * repeated values on the tree are allowed.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/find-a-corresponding-node-of-a-binary-tree-in-a-clone-of-that-tree/
+	 * 
+	 */
+	public final Node getTargetCopy(final Node original, final Node cloned, final Node target) {
+		ans = null;
+		traverse(original, cloned, target);
+		return ans;
+	}
+
+	private void traverse(Node original, Node cloned, Node target) {
+		if (original == null) {
+			return;
+		}
+		if (original == target) {
+			ans = cloned;
+			return;
+		}
+		traverse(original.getLeft(), cloned.getLeft(), target);
+		traverse(original.getRight(), cloned.getRight(), target);
+	}
+
+	StringBuilder builder;
+	/**
+	 * Given two binary trees original and cloned and given a reference to a node
+	 * target in the original tree. The cloned tree is a copy of the original tree.
+	 * Return a reference to the same node in the cloned tree. Note that you are not
+	 * allowed to change any of the two trees or the target node and the answer must
+	 * be a reference to a node in the cloned tree.Tree contains deup elements
+	 * 
+	 */
+	public final Node getTargetCopyDup(final Node original, final Node cloned, final Node target) {
+		builder = new StringBuilder();
+		traverse(original, target);
+		System.out.println(builder.toString());
+		return getCloned(cloned, 0);
+	}
+
+	private boolean traverse(Node original, Node target) {
+		if (original == null) {
+			return false;
+		}
+		if (original == target) {
+			return true;
+		}
+		builder.append('L');
+		if (traverse(original.getLeft(), target)) {
+			return true;
+		}
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append('R');
+		if (traverse(original.getRight(), target)) {
+			return true;
+		}
+		builder.deleteCharAt(builder.length() - 1);
+		return false;
+	}
+
+	private Node getCloned(Node cloned, int current) {
+		if (current == builder.length()) {
+			return cloned;
+		}
+		if (builder.charAt(current) == 'L') {
+			return getCloned(cloned.getLeft(), current + 1);
+		}
+		return getCloned(cloned.getRight(), current + 1);
+	}
+
 }

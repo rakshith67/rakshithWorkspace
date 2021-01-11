@@ -430,4 +430,75 @@ public class StringsMediumLevel {
 		return max;
 	}
 
+	/**
+	 * Given an array of strings products and a string searchWord. We want to design
+	 * a system that suggests at most three product names from products after each
+	 * character of searchWord is typed. Suggested products should have common
+	 * prefix with the searchWord. If there are more than three products with a
+	 * common prefix return the three lexicographically minimums products. Return
+	 * list of lists of the suggested products after each character of searchWord is
+	 * typed.
+	 * 
+	 * Link: https://leetcode.com/problems/search-suggestions-system/
+	 * 
+	 */
+	public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+		TrieNode node = new TrieNode();
+		for (String word : products) {
+			insert(node, word);
+		}
+		List<List<String>> list = new ArrayList<>();
+		for (int i = 0; i < searchWord.length(); i++) {
+			StringBuilder builder = new StringBuilder();
+			List<String> current = new ArrayList<>();
+			search(current, node, searchWord.substring(0, i + 1), 0, builder);
+			list.add(current);
+		}
+		return list;
+	}
+
+	private void insert(TrieNode node, String word) {
+		TrieNode current = node;
+		for (int i = 0; i < word.length(); i++) {
+			TrieNode children = current.child[word.charAt(i) - 'a'];
+			if (children == null) {
+				children = new TrieNode();
+				current.child[word.charAt(i) - 'a'] = children;
+			}
+			current = children;
+		}
+		current.isWord = true;
+	}
+
+	private void search(List<String> list, TrieNode node, String prefix, int i, StringBuilder builder) {
+		if (list.size() == 3) {
+			return;
+		}
+		if (i >= prefix.length() && node.isWord) {
+			list.add(builder.toString());
+		}
+		if (i < prefix.length()) {
+			TrieNode child = node.child[prefix.charAt(i) - 'a'];
+			if (child == null) {
+				return;
+			}
+			builder.append(prefix.charAt(i));
+			search(list, child, prefix, i + 1, builder);
+		} else {
+			for (int j = 0; j < 26; j++) {
+				if (node.child[j] != null) {
+					builder.append((char) (97 + j));
+					search(list, node.child[j], prefix, i + 1, builder);
+					builder.deleteCharAt(builder.length() - 1);
+				}
+			}
+		}
+	}
+
+}
+
+class TrieNode {
+	public TrieNode[] child = new TrieNode[26];
+	public boolean isWord = false;
+
 }

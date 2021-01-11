@@ -1689,4 +1689,184 @@ public class ArraysMediumLevel {
 		return count;
 	}
 
+	/**
+	 * You are given a map of a server center, represented as a m * n integer matrix
+	 * grid, where 1 means that on that cell there is a server and 0 means that it
+	 * is no server. Two servers are said to communicate if they are on the same row
+	 * or on the same column. Return the number of servers that communicate with any
+	 * other server.
+	 * 
+	 * Link: https://leetcode.com/problems/count-servers-that-communicate/
+	 * 
+	 */
+	public int countServers(int[][] grid) {
+		int count = 0;
+		if (grid.length == 0) {
+			return count;
+		}
+		int[] row = new int[grid.length];
+		int[] column = new int[grid[0].length];
+
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				if (grid[i][j] == 1) {
+					row[i]++;
+					column[j]++;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				if (grid[i][j] == 1 && (row[i] > 1 || column[j] > 1)) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Given a binary array nums, you should delete one element from it. Return the
+	 * size of the longest non-empty subarray containing only 1's in the resulting
+	 * array. Return 0 if there is no such subarray.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/
+	 * 
+	 */
+	public int longestSubarray(int[] nums) {
+		int start = 0;
+		int maxCount = 0;
+		int max = 0;
+		for (int end = 0; end < nums.length; end++) {
+			if (nums[end] == 1) {
+				maxCount++;
+			}
+			if (end - start + 1 - maxCount > 1) {
+				while (start < nums.length && nums[start] == 1) {
+					start++;
+					maxCount--;
+				}
+				start++;
+			}
+			if (end - start > max) {
+				max = end - start;
+			}
+		}
+		return max;
+	}
+
+	/**
+	 * Given a set of non-overlapping intervals, insert a new interval into the
+	 * intervals (merge if necessary). You may assume that the intervals were
+	 * initially sorted according to their start times.
+	 * 
+	 * Link: https://leetcode.com/problems/insert-interval/
+	 * 
+	 */
+	public int[][] insert(int[][] intervals, int[] newInterval) {
+		int start = newInterval[0];
+		int end = newInterval[1];
+		List<int[]> list = new ArrayList<>();
+		for (int[] interval : intervals) {
+			int curStart = interval[0];
+			int curEnd = interval[1];
+			if (curEnd < start) {
+				list.add(new int[] { curStart, curEnd });
+			} else if (curStart > end) {
+				list.add(new int[] { start, end });
+				start = curStart;
+				end = curEnd;
+			} else {
+				start = Math.min(start, curStart);
+				end = Math.max(end, curEnd);
+			}
+		}
+		list.add(new int[] { start, end });
+		int[][] res = new int[list.size()][2];
+		for (int i = 0; i < list.size(); i++) {
+			res[i][0] = list.get(i)[0];
+			res[i][1] = list.get(i)[1];
+		}
+		return res;
+	}
+
+	/**
+	 * Given an array nums of n integers and an integer target, are there elements
+	 * a, b, c, and d in nums such that a + b + c + d = target? Find all unique
+	 * quadruplets in the array which gives the sum of target. Notice that the
+	 * solution set must not contain duplicate quadruplets.
+	 * 
+	 * Link: https://leetcode.com/problems/4sum/
+	 * 
+	 */
+	public List<List<Integer>> fourSum(int[] nums, int target) {
+		List<List<Integer>> res = new ArrayList<>();
+		int n = nums.length;
+		if (n < 4) {
+			return res;
+		}
+		Arrays.sort(nums);
+		if (nums[0] * 4 > target) {
+			return res;
+		}
+		if (nums[n - 1] * 4 < target) {
+			return res;
+		}
+		for (int i = 0; i < n - 3; i++) {
+			if (nums[i] * 4 > target) {
+				break;
+			}
+			for (int j = i + 1; j < n - 2; j++) {
+				int a = j + 1;
+				int b = n - 1;
+				int current2Sum = nums[i] + nums[j];
+				while (a < b) {
+					int maxSum = target - current2Sum;
+					if (nums[a] * 2 > maxSum) {
+						break;
+					}
+					if (nums[b] * 2 < maxSum) {
+						break;
+					}
+					int sum = nums[a] + nums[b];
+					if (current2Sum + sum == target) {
+						List<Integer> list = new ArrayList<>();
+						list.add(nums[i]);
+						list.add(nums[j]);
+						list.add(nums[a]);
+						list.add(nums[b]);
+						res.add(list);
+						a++;
+						b--;
+						while (a < b && nums[b + 1] == nums[b]) {
+							b--;
+						}
+						while (a < b && nums[a - 1] == nums[a]) {
+							a++;
+						}
+					} else if (current2Sum + sum > target) {
+						b--;
+						while (a < b && nums[b + 1] == nums[b]) {
+							b--;
+						}
+					} else {
+						a++;
+						while (a < b && nums[a - 1] == nums[a]) {
+							a++;
+						}
+					}
+				}
+				while (j < n - 2 && nums[j] == nums[j + 1]) {
+					j++;
+				}
+			}
+			while (i < n - 3 && nums[i] == nums[i + 1]) {
+				i++;
+			}
+		}
+		return res;
+	}
+
 }
