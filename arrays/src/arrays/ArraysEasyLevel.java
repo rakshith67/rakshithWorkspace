@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -1067,6 +1068,102 @@ public class ArraysEasyLevel {
 			return max1;
 		}
 		return max3;
+	}
+
+	/**
+	 * Given a m * n matrix mat of ones (representing soldiers) and zeros
+	 * (representing civilians), return the indexes of the k weakest rows in the
+	 * matrix ordered from the weakest to the strongest. A row i is weaker than row
+	 * j, if the number of soldiers in row i is less than the number of soldiers in
+	 * row j, or they have the same number of soldiers but i is less than j.
+	 * Soldiers are always stand in the frontier of a row, that is, always ones may
+	 * appear first and then zeros.
+	 * 
+	 * Link: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
+	 * 
+	 */
+	public int[] kWeakestRows(int[][] mat, int k) {
+		int[] index = new int[k];
+		PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> {
+			if (a[0] == b[0]) {
+				return b[1] - a[1];
+			}
+			return b[0] - a[0];
+		});
+
+		for (int i = 0; i < mat.length; i++) {
+			int count = getOnes(mat[i]);
+			queue.add(new int[] { count, i });
+			if (queue.size() > k) {
+				queue.poll();
+			}
+		}
+
+		for (int i = k - 1; i >= 0; i--) {
+			index[i] = queue.poll()[1];
+		}
+		return index;
+	}
+
+	private int getOnes(int[] row) {
+		int low = 0;
+		int high = row.length;
+		while (low < high) {
+			int mid = (low + high) / 2;
+			if (row[mid] == 1) {
+				low = mid + 1;
+			} else {
+				high = mid;
+			}
+		}
+		return low;
+	}
+
+	/**
+	 * Given an array nums with n integers, your task is to check if it could become
+	 * non-decreasing by modifying at most 1 element. We define an array is
+	 * non-decreasing if nums[i] <= nums[i + 1] holds for every i (0-based) such
+	 * that (0 <= i <= n - 2).
+	 * 
+	 * Link: https://leetcode.com/problems/non-decreasing-array/
+	 * 
+	 */
+	public boolean checkPossibility(int[] nums) {
+		int count = 0;
+		for (int i = 1; i < nums.length && count < 2; i++) {
+			if (nums[i] < nums[i - 1]) {
+				count++;
+				if (i - 2 < 0 || nums[i - 2] <= nums[i]) {
+					nums[i - 1] = nums[i];
+				} else {
+					nums[i] = nums[i - 1];
+				}
+			}
+		}
+		return count < 2;
+	}
+
+	/**
+	 * Given an array A of 0s and 1s, consider N_i: the i-th subarray from A[0] to
+	 * A[i] interpreted as a binary number (from most-significant-bit to
+	 * least-significant-bit.) Return a list of booleans answer, where answer[i] is
+	 * true if and only if N_i is divisible by 5.
+	 * 
+	 * Link: https://leetcode.com/problems/binary-prefix-divisible-by-5/
+	 * 
+	 */
+	public List<Boolean> prefixesDivBy5(int[] A) {
+		List<Boolean> list = new ArrayList<>();
+		int current = 0;
+		for (int i = 0; i < A.length; i++) {
+			current = ((current * 2) + A[i]) % 5;
+			if (current == 0) {
+				list.add(true);
+			} else {
+				list.add(false);
+			}
+		}
+		return list;
 	}
 
 }
