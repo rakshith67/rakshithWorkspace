@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -1164,6 +1165,394 @@ public class ArraysEasyLevel {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * Given a sorted array of distinct integers and a target value, return the
+	 * index if the target is found. If not, return the index where it would be if
+	 * it were inserted in order.
+	 * 
+	 * Link: https://leetcode.com/problems/search-insert-position/
+	 * 
+	 */
+	public int searchInsert(int[] nums, int target) {
+		int low = 0;
+		int high = nums.length;
+		int current = Integer.MAX_VALUE;
+		int result = -1;
+		while (low < high) {
+			int mid = (low + high) / 2;
+			if (Math.abs(nums[mid] - target) < current) {
+				current = Math.abs(nums[mid] - target);
+				result = mid;
+			}
+			if (nums[mid] >= target) {
+				high = mid;
+			} else {
+				low = mid + 1;
+			}
+		}
+		if (nums[result] < target) {
+			return result + 1;
+		} else {
+			return result;
+		}
+	}
+
+	/**
+	 * Given a 2D integer matrix M representing the gray scale of an image, you need
+	 * to design a smoother to make the gray scale of each cell becomes the average
+	 * gray scale (rounding down) of all the 8 surrounding cells and itself. If a
+	 * cell has less than 8 surrounding cells, then use as many as you can.
+	 * 
+	 * Link: https://leetcode.com/problems/image-smoother/
+	 * 
+	 */
+	public int[][] imageSmoother(int[][] M) {
+		if (M.length == 0) {
+			return new int[0][0];
+		}
+		int[][] result = new int[M.length][M[0].length];
+		for (int i = 0; i < M.length; i++) {
+			for (int j = 0; j < M[0].length; j++) {
+				result[i][j] = getAvg(M, i, j);
+			}
+		}
+		return result;
+	}
+
+	private int getAvg(int[][] M, int i, int j) {
+		int count = 0;
+		int sum = 0;
+		int left = i - 1 < 0 ? 0 : i - 1;
+		int right = i + 1 < M.length ? i + 1 : M.length - 1;
+		int top = j - 1 < 0 ? 0 : j - 1;
+		int bottom = j + 1 < M[0].length ? j + 1 : M[0].length - 1;
+		for (int row = left; row <= right; row++) {
+			for (int col = top; col <= bottom; col++) {
+				count++;
+				sum += M[row][col];
+			}
+		}
+		return sum / count;
+	}
+
+	/**
+	 * You are given an array of distinct integers arr and an array of integer
+	 * arrays pieces, where the integers in pieces are distinct. Your goal is to
+	 * form arr by concatenating the arrays in pieces in any order. However, you are
+	 * not allowed to reorder the integers in each array pieces[i]. Return true if
+	 * it is possible to form the array arr from pieces. Otherwise, return false.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/check-array-formation-through-concatenation/
+	 * 
+	 */
+	public boolean canFormArray(int[] arr, int[][] pieces) {
+		Map<Integer, int[]> map = new HashMap<>();
+		for (int i = 0; i < pieces.length; i++) {
+			if (pieces[i].length > 0) {
+				map.put(pieces[i][0], pieces[i]);
+			}
+		}
+		for (int i = 0; i < arr.length; i++) {
+			int[] current = map.get(arr[i]);
+			if (current == null) {
+				return false;
+			}
+			for (int j = 0; j < current.length; j++) {
+				if (arr[i++] != current[j]) {
+					return false;
+				}
+			}
+			i--;
+		}
+		return true;
+	}
+
+	/**
+	 * For a non-negative integer X, the array-form of X is an array of its digits
+	 * in left to right order. For example, if X = 1231, then the array form is
+	 * [1,2,3,1]. Given the array-form A of a non-negative integer X, return the
+	 * array-form of the integer X+K.
+	 * 
+	 * Link: https://leetcode.com/problems/add-to-array-form-of-integer/
+	 * 
+	 */
+	public List<Integer> addToArrayForm(int[] A, int K) {
+		List<Integer> list = new LinkedList<>();
+		int i = A.length - 1;
+		int sum = 0;
+		int carry = 0;
+		while (i >= 0 || K > 0) {
+			if (i >= 0) {
+				sum = A[i] + (K % 10) + carry;
+			} else {
+				sum = (K % 10) + carry;
+			}
+			if (sum > 9) {
+				list.add(0, sum % 10);
+				carry = sum / 10;
+			} else {
+				list.add(0, sum);
+				carry = 0;
+			}
+			K /= 10;
+			i--;
+		}
+		if (carry > 0) {
+			list.add(0, carry);
+		}
+		return list;
+	}
+
+	/**
+	 * Given an array of integers nums, write a method that returns the "pivot"
+	 * index of this array. We define the pivot index as the index where the sum of
+	 * all the numbers to the left of the index is equal to the sum of all the
+	 * numbers to the right of the index. If no such index exists, we should return
+	 * -1. If there are multiple pivot indexes, you should return the left-most
+	 * pivot index.
+	 * 
+	 * Link: https://leetcode.com/problems/find-pivot-index/
+	 * 
+	 */
+	public int pivotIndex(int[] nums) {
+		int sum = 0;
+		for (int i = 0; i < nums.length; i++) {
+			sum += nums[i];
+		}
+		int right = 0;
+		int index = -1;
+		for (int i = nums.length - 1; i >= 0; i--) {
+			int left = sum - nums[i] - right;
+			if (left == right) {
+				index = i;
+			}
+			right += nums[i];
+		}
+		return index;
+	}
+
+	/**
+	 * You have a long flowerbed in which some of the plots are planted, and some
+	 * are not. However, flowers cannot be planted in adjacent plots. Given an
+	 * integer array flowerbed containing 0's and 1's, where 0 means empty and 1
+	 * means not empty, and an integer n, return if n new flowers can be planted in
+	 * the flowerbed without violating the no-adjacent-flowers rule.
+	 * 
+	 * Link: https://leetcode.com/problems/can-place-flowers/
+	 * 
+	 */
+	public boolean canPlaceFlowers(int[] flowerbed, int n) {
+		for (int i = 0; i < flowerbed.length && n > 0; i++) {
+			if (flowerbed[i] == 1) {
+				i++;
+				continue;
+			}
+			if ((i + 1 >= flowerbed.length) || (i + 1 < flowerbed.length && flowerbed[i + 1] == 0)) {
+				n--;
+				i++;
+			}
+		}
+		return n == 0;
+	}
+
+	/**
+	 * In a deck of cards, each card has an integer written on it. Return true if
+	 * and only if you can choose X >= 2 such that it is possible to split the
+	 * entire deck into 1 or more groups of cards, where: Each group has exactly X
+	 * cards. All the cards in each group have the same integer.
+	 * 
+	 * Link: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/
+	 * 
+	 */
+	public boolean hasGroupsSizeX(int[] deck) {
+		Map<Integer, Integer> map = new HashMap<>();
+		for (int i = 0; i < deck.length; i++) {
+			map.put(deck[i], map.getOrDefault(deck[i], 0) + 1);
+		}
+		int gcdC = -1;
+		for (Integer key : map.keySet()) {
+			if (gcdC == -1) {
+				gcdC = map.get(key);
+			} else {
+				gcdC = gcd(gcdC, map.get(key));
+			}
+		}
+		return gcdC >= 2;
+	}
+
+	private int gcd(int x, int y) {
+		while (x != y) {
+			if (x > y) {
+				x = x - y;
+			} else {
+				y = y - x;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * The school cafeteria offers circular and square sandwiches at lunch break,
+	 * referred to by numbers 0 and 1 respectively. All students stand in a queue.
+	 * Each student either prefers square or circular sandwiches. The number of
+	 * sandwiches in the cafeteria is equal to the number of students. The
+	 * sandwiches are placed in a stack. At each step: If the student at the front
+	 * of the queue prefers the sandwich on the top of the stack, they will take it
+	 * and leave the queue. Otherwise, they will leave it and go to the queue's end.
+	 * This continues until none of the queue students want to take the top sandwich
+	 * and are thus unable to eat. You are given two integer arrays students and
+	 * sandwiches where sandwiches[i] is the type of the i​​​​​​th sandwich in the
+	 * stack (i = 0 is the top of the stack) and students[j] is the preference of
+	 * the j​​​​​​th student in the initial queue (j = 0 is the front of the queue).
+	 * Return the number of students that are unable to eat.
+	 * 
+	 * Link: https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
+	 * 
+	 */
+	public int countStudents(int[] students, int[] sandwiches) {
+		int[] a = { 0, 0 };
+		for (int i = 0; i < students.length; i++) {
+			a[students[i]]++;
+		}
+		int k = 0;
+		while (k < sandwiches.length) {
+			if (a[sandwiches[k]] > 0) {
+				a[sandwiches[k]]--;
+			} else {
+				break;
+			}
+			k += 1;
+		}
+		return sandwiches.length - k;
+	}
+
+	/**
+	 * You are given an integer n. An array nums of length n + 1 is generated in the
+	 * following way: nums[0] = 0 nums[1] = 1 nums[2 * i] = nums[i] when 2 <= 2 * i
+	 * <= n nums[2 * i + 1] = nums[i] + nums[i + 1] when 2 <= 2 * i + 1 <= n Return
+	 * the maximum integer in the array nums​​​.
+	 * 
+	 * Link: https://leetcode.com/problems/get-maximum-in-generated-array/
+	 * 
+	 */
+	public int getMaximumGenerated(int n) {
+		int[] array = new int[n + 1];
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < n + 1; i++) {
+			if (i == 0 || i == 1) {
+				array[i] = i;
+
+			} else if (i % 2 == 0) {
+				array[i] = array[i / 2];
+			} else {
+				array[i] = array[i / 2] + array[(i / 2) + 1];
+			}
+			if (array[i] > max) {
+				max = array[i];
+			}
+		}
+		return max;
+	}
+
+	/**
+	 * Given an integer n and an integer array rounds. We have a circular track
+	 * which consists of n sectors labeled from 1 to n. A marathon will be held on
+	 * this track, the marathon consists of m rounds. The ith round starts at sector
+	 * rounds[i - 1] and ends at sector rounds[i]. For example, round 1 starts at
+	 * sector rounds[0] and ends at sector rounds[1] Return an array of the most
+	 * visited sectors sorted in ascending order. Notice that you circulate the
+	 * track in ascending order of sector numbers in the counter-clockwise direction
+	 * (See the first example).
+	 * 
+	 * Link: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
+	 * 
+	 * Hint: If start <= end, return the range [start, end]. If end < start, return
+	 * the range [1, end] + range [start, n].
+	 * 
+	 */
+	public List<Integer> mostVisited(int n, int[] A) {
+		List<Integer> result = new ArrayList<>();
+		for (int i = A[0]; i <= A[A.length - 1]; i++) {
+			result.add(i);
+		}
+		if (result.size() > 0) {
+			return result;
+		}
+		for (int i = 1; i <= A[A.length - 1]; i++) {
+			result.add(i);
+		}
+		for (int i = A[0]; i <= n; i++) {
+			result.add(i);
+		}
+		return result;
+	}
+
+	/**
+	 * Given an array of positive integers arr, find a pattern of length m that is
+	 * repeated k or more times. A pattern is a subarray (consecutive sub-sequence)
+	 * that consists of one or more values, repeated multiple times consecutively
+	 * without overlapping. A pattern is defined by its length and the number of
+	 * repetitions. Return true if there exists a pattern of length m that is
+	 * repeated k or more times, otherwise return false.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/
+	 * 
+	 */
+	public boolean containsPattern(int[] arr, int m, int k) {
+		int i = 0;
+		int j = i + m;
+		int count = 0;
+		for (i = 0; i < arr.length - m; i++) {
+			if (arr[i] != arr[j]) {
+				count = 0;
+			} else if ((++count) == (k - 1) * m) {
+				return true;
+			}
+			j++;
+		}
+		return false;
+	}
+
+	/**
+	 * You have a bomb to defuse, and your time is running out! Your informer will
+	 * provide you with a circular array code of length of n and a key k. To decrypt
+	 * the code, you must replace every number. All the numbers are replaced
+	 * simultaneously. If k > 0, replace the ith number with the sum of the next k
+	 * numbers. If k < 0, replace the ith number with the sum of the previous k
+	 * numbers. If k == 0, replace the ith number with 0. As code is circular, the
+	 * next element of code[n-1] is code[0], and the previous element of code[0] is
+	 * code[n-1]. Given the circular array code and an integer key k, return the
+	 * decrypted code to defuse the bomb!
+	 * 
+	 * Link: https://leetcode.com/problems/defuse-the-bomb/
+	 * 
+	 */
+	public int[] decrypt(int[] code, int k) {
+		int[] res = new int[code.length];
+		if (k == 0) {
+			return res;
+		}
+		int start = 1;
+		int end = k;
+		int sum = 0;
+		if (k < 0) {
+			k = -k;
+			start = code.length - k;
+			end = code.length - 1;
+		}
+		for (int i = start; i <= end; i++) {
+			sum += code[i];
+		}
+		for (int i = 0; i < code.length; i++) {
+			res[i] = sum;
+			sum -= code[(start++) % code.length];
+			sum += code[(++end) % code.length];
+		}
+		return res;
 	}
 
 }
