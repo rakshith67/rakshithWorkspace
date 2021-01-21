@@ -1555,4 +1555,91 @@ public class ArraysEasyLevel {
 		return res;
 	}
 
+	/**
+	 * Given an array of integers arr, return true if we can partition the array
+	 * into three non-empty parts with equal sums. Formally, we can partition the
+	 * array if we can find indexes i + 1 < j with (arr[0] + arr[1] + ... + arr[i]
+	 * == arr[i + 1] + arr[i + 2] + ... + arr[j - 1] == arr[j] + arr[j + 1] + ... +
+	 * arr[arr.length - 1])
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/partition-array-into-three-parts-with-equal-sum/
+	 * 
+	 */
+	public boolean canThreePartsEqualSum(int[] A) {
+		int sum = 0;
+		for (int i = 0; i < A.length; i++) {
+			sum += A[i];
+		}
+		if (sum % 3 != 0) {
+			return false;
+		}
+		int average = sum / 3;
+		int current = 0;
+		int count = 0;
+		for (int i = 0; i < A.length; i++) {
+			current += A[i];
+			if (current == average) {
+				count++;
+				current = 0;
+			}
+		}
+		return count >= 3;
+	}
+
+	/**
+	 * Given a 2D grid of size m x n and an integer k. You need to shift the grid k
+	 * times. In one shift operation: Element at grid[i][j] moves to grid[i][j + 1].
+	 * Element at grid[i][n - 1] moves to grid[i + 1][0]. Element at grid[m - 1][n -
+	 * 1] moves to grid[0][0]. Return the 2D grid after applying shift operation k
+	 * times.
+	 * 
+	 * Link: https://leetcode.com/problems/shift-2d-grid/
+	 * 
+	 */
+	public List<List<Integer>> shiftGrid(int[][] grid, int k) {
+		int numCols = grid[0].length;
+		int numRows = grid.length;
+
+		List<List<Integer>> newGrid = new ArrayList<>();
+		for (int row = 0; row < numRows; row++) {
+			List<Integer> newRow = new ArrayList<>();
+			newGrid.add(newRow);
+			for (int col = 0; col < numCols; col++) {
+				newRow.add(0);
+			}
+		}
+
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numCols; col++) {
+				int newCol = (col + k) % numCols;
+				int wrapAroundCount = (col + k) / numCols;
+				int newRow = (row + wrapAroundCount) % numRows;
+				newGrid.get(newRow).set(newCol, grid[row][col]);
+			}
+		}
+		return newGrid;
+	}
+
+	/**
+	 * Say you have an array prices for which the ith element is the price of a
+	 * given stock on day i. Design an algorithm to find the maximum profit. You may
+	 * complete as many transactions as you like (i.e., buy one and sell one share
+	 * of the stock multiple times). Note: You may not engage in multiple
+	 * transactions at the same time (i.e., you must sell the stock before you buy
+	 * again).
+	 *
+	 * Link: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+	 *
+	 */
+	public int maxProfit(int[] prices) {
+		int max = 0;
+        for(int i = 1; i < prices.length; i++){
+            if(prices[i] > prices[i - 1]){
+                max += prices[i] - prices[i - 1];
+            }
+        }
+        return max;
+	}
+
 }

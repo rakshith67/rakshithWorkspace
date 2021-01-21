@@ -1869,4 +1869,201 @@ public class ArraysMediumLevel {
 		return res;
 	}
 
+	/**
+	 * Find the kth largest element in an unsorted array. Note that it is the kth
+	 * largest element in the sorted order, not the kth distinct element.
+	 * 
+	 * Link: https://leetcode.com/problems/kth-largest-element-in-an-array/
+	 * 
+	 */
+	public int findKthLargest(int[] nums, int k) {
+		k = nums.length - k;
+		int low = 0;
+		int high = nums.length - 1;
+		while (low < high) {
+			int j = partition(nums, low, high);
+			if (j > k) {
+				high = j - 1;
+			} else if (j < k) {
+				low = j + 1;
+			} else {
+				break;
+			}
+		}
+		return nums[k];
+	}
+
+	private int partition(int[] array, int start, int end) {
+		int index = start - 1;
+		for (int j = start; j <= end; j++) {
+			if (array[j] <= array[end]) {
+				index++;
+				int temp = array[index];
+				array[index] = array[j];
+				array[j] = temp;
+			}
+		}
+		return index;
+	}
+
+	/**
+	 * Given an integer array nums, reorder it such that nums[0] < nums[1] > nums[2]
+	 * < nums[3].... You may assume the input array always has a valid answer.
+	 * 
+	 * Link: https://leetcode.com/problems/wiggle-sort-ii/
+	 * 
+	 */
+	public void wiggleSort(int[] nums) {
+		int n = nums.length;
+		int median = findKthLargest(nums, (n + 1) / 2);
+
+		int left = 0, i = 0, right = n - 1;
+		while (i <= right) {
+			if (nums[newIndex(i, n)] > median) {
+				swap(nums, newIndex(left++, n), newIndex(i++, n));
+			} else if (nums[newIndex(i, n)] < median) {
+				swap(nums, newIndex(right--, n), newIndex(i, n));
+			} else {
+				i++;
+			}
+		}
+	}
+
+	private int newIndex(int index, int n) {
+		return (1 + 2 * index) % (n | 1);
+	}
+
+	private int die = 2;
+	private int live = 3;
+	private int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }, { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
+
+	/**
+	 * According to Wikipedia's article: "The Game of Life, also known simply as
+	 * Life, is a cellular automaton devised by the British mathematician John
+	 * Horton Conway in 1970." The board is made up of an m x n grid of cells, where
+	 * each cell has an initial state: live (represented by a 1) or dead
+	 * (represented by a 0). Each cell interacts with its eight neighbors
+	 * (horizontal, vertical, diagonal) using the following four rules (taken from
+	 * the above Wikipedia article): Any live cell with fewer than two live
+	 * neighbors dies as if caused by under-population. Any live cell with two or
+	 * three live neighbors lives on to the next generation. Any live cell with more
+	 * than three live neighbors dies, as if by over-population. Any dead cell with
+	 * exactly three live neighbors becomes a live cell, as if by reproduction. The
+	 * next state is created by applying the above rules simultaneously to every
+	 * cell in the current state, where births and deaths occur simultaneously.
+	 * Given the current state of the m x n grid board, return the next state.
+	 * 
+	 * Link: https://leetcode.com/problems/game-of-life/
+	 * 
+	 */
+	public void gameOfLife(int[][] board) {
+		int rows = board.length;
+		int cols = board[0].length;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				int around = countLive(i, j, board);
+				if (board[i][j] == 0 && around == 3)
+					board[i][j] = live;
+				else if (board[i][j] == 1) {
+					if (around == 2 || around == 3)
+						continue;
+					if (around < 2 || around > 3)
+						board[i][j] = die;
+				}
+			}
+		}
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (board[i][j] == die)
+					board[i][j] = 0;
+				if (board[i][j] == live)
+					board[i][j] = 1;
+			}
+		}
+
+	}
+
+	private int countLive(int i, int j, int[][] board) {
+		int count = 0;
+		for (int[] dir : dirs) {
+			int x = i + dir[0];
+			int y = j + dir[1];
+			if (x >= 0 && y >= 0 && x < board.length && y < board[0].length) {
+				if (board[x][y] == 1 || board[x][y] == die)
+					count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Given an array of integers nums and an integer limit, return the size of the
+	 * longest non-empty subarray such that the absolute difference between any two
+	 * elements of this subarray is less than or equal to limit.
+	 * 
+	 * Link:
+	 * https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+	 * 
+	 */
+	public int longestSubarray(int[] nums, int limit) {
+		if (nums.length <= 1) {
+			return nums.length;
+		}
+		Deque<Integer> min = new ArrayDeque<>();
+		Deque<Integer> max = new ArrayDeque<>();
+		int i = 0;
+		int j;
+		for (j = 0; j < nums.length; j++) {
+			while (!min.isEmpty() && nums[j] < min.peekLast()) {
+				min.pollLast();
+			}
+			while (!max.isEmpty() && nums[j] > max.peekLast()) {
+				max.pollLast();
+			}
+			min.add(nums[j]);
+			max.add(nums[j]);
+			if (max.peek() - min.peek() > limit) {
+				if (max.peek() == nums[i]) {
+					max.poll();
+				}
+				if (min.peek() == nums[i]) {
+					min.poll();
+				}
+				i++;
+			}
+		}
+		return j - i;
+	}
+
+	/**
+	 * A zero-indexed array A of length N contains all integers from 0 to N-1. Find
+	 * and return the longest length of set S, where S[i] = {A[i], A[A[i]],
+	 * A[A[A[i]]], ... } subjected to the rule below. Suppose the first element in S
+	 * starts with the selection of element A[i] of index = i, the next element in S
+	 * should be A[A[i]], and then A[A[A[i]]]… By that analogy, we stop adding right
+	 * before a duplicate element occurs in S.
+	 * 
+	 * Link: https://leetcode.com/problems/array-nesting/
+	 * 
+	 */
+	public int arrayNesting(int[] nums) {
+		int length = 0;
+		int index = -1;
+		int current = -1;
+		int temp = -1;
+		for (int i = 0; i < nums.length; i++) {
+			index = i;
+			current = 0;
+			while (nums[index] != Integer.MAX_VALUE) {
+				current++;
+				temp = nums[index];
+				nums[index] = Integer.MAX_VALUE;
+				index = temp;
+			}
+			length = Math.max(length, current);
+		}
+		return length;
+	}
+
 }
