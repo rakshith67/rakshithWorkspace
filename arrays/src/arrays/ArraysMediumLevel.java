@@ -2066,4 +2066,238 @@ public class ArraysMediumLevel {
 		return length;
 	}
 
+	static final int[] PRIMES = new int[] { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+			73, 79, 83, 89, 97 };
+
+	/**
+	 * Given a non-empty string check if it can be constructed by taking a substring
+	 * of it and appending multiple copies of the substring together. You may assume
+	 * the given string consists of lowercase English letters only and its length
+	 * will not exceed 10000.
+	 * 
+	 * Link: https://leetcode.com/problems/repeated-substring-pattern/
+	 * 
+	 */
+	public static boolean repeatedSubstringPattern(String s) {
+		int n = s.length();
+		for (int p : PRIMES) {
+			if (n < p || n % p != 0) {
+				continue;
+			}
+			int m = n / p;
+			boolean ok = true;
+			for (int i = 1; i < p; i++) {
+				if (!s.substring(0, m).equals(s.substring(i * m, (i + 1) * m))) {
+					ok = false;
+					break;
+				}
+			}
+			if (ok) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * You are given a string time in the form of hh:mm, where some of the digits in
+	 * the string are hidden (represented by ?). The valid times are those
+	 * inclusively between 00:00 and 23:59. Return the latest valid time you can get
+	 * from time by replacing the hidden digits.
+	 * 
+	 * Link: https://leetcode.com/problems/latest-time-by-replacing-hidden-digits/
+	 * 
+	 */
+	public String maximumTime(String time) {
+		char[] string = time.toCharArray();
+		if (string[0] == '?') {
+			if (string[1] >= '4' && string[1] <= '9') {
+				string[0] = '1';
+			} else {
+				string[0] = '2';
+			}
+		}
+		if (string[1] == '?') {
+			if (string[0] == '2') {
+				string[1] = '3';
+			} else {
+				string[1] = '9';
+			}
+		}
+		if (string[3] == '?') {
+			string[3] = '5';
+		}
+		if (string[4] == '?') {
+			string[4] = '9';
+		}
+		return String.valueOf(string);
+	}
+
+	/**
+	 * Given a string, determine if it is a palindrome, considering only
+	 * alphanumeric characters and ignoring cases.
+	 * 
+	 * Link: https://leetcode.com/problems/valid-palindrome/
+	 * 
+	 */
+	public boolean isPalindrome(String s) {
+		int i = 0;
+		int j = s.length() - 1;
+		char[] string = s.toCharArray();
+		while (i < j) {
+			if (!Character.isLetter(string[i]) && !Character.isDigit(string[i])) {
+				i++;
+				continue;
+			}
+			if (!Character.isLetter(string[j]) && !Character.isDigit(string[j])) {
+				j--;
+				continue;
+			}
+			char left = string[i];
+			char right = string[j];
+			if (left != right) {
+				if (Character.isLetter(left) && Character.isLetter(right)) {
+					if (Math.abs(left - right) != 32) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+			i++;
+			j--;
+		}
+		return true;
+	}
+
+	/**
+	 * Your friend is typing his name into a keyboard. Sometimes, when typing a
+	 * character c, the key might get long pressed, and the character will be typed
+	 * 1 or more times. You examine the typed characters of the keyboard. Return
+	 * True if it is possible that it was your friends name, with some characters
+	 * (possibly none) being long pressed.
+	 * 
+	 * Link: https://leetcode.com/problems/long-pressed-name/
+	 * 
+	 */
+	public boolean isLongPressedName(String name, String typed) {
+		char[] string1 = name.toCharArray();
+		char[] type = typed.toCharArray();
+		int k = 0;
+		for (int i = 0; i < string1.length; i++) {
+			int j = i + 1;
+			while (j < string1.length && string1[j] == string1[i]) {
+				j++;
+			}
+			char ch = string1[i];
+			int count = 0;
+			while (k < type.length && type[k] == ch) {
+				count++;
+				k++;
+			}
+			if (count < j - i) {
+				return false;
+			}
+			i = j - 1;
+		}
+		if (k < type.length) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * You are given a string s, return the number of segments in the string. A
+	 * segment is defined to be a contiguous sequence of non-space characters.
+	 * 
+	 * Link: https://leetcode.com/problems/number-of-segments-in-a-string/
+	 * 
+	 */
+	public int countSegments(String s) {
+		if (s.isEmpty()) {
+			return 0;
+		}
+		int count = 0;
+		int i = 0;
+		while (i < s.length() && s.charAt(i) == ' ') {
+			i++;
+		}
+		while (i < s.length()) {
+			count++;
+			while (i < s.length() && s.charAt(i) != ' ') {
+				i++;
+			}
+			while (i < s.length() && s.charAt(i) == ' ') {
+				i++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Given a string s consists of some words separated by spaces, return the
+	 * length of the last word in the string. If the last word does not exist,
+	 * return 0. A word is a maximal substring consisting of non-space characters
+	 * only.
+	 * 
+	 * Link: https://leetcode.com/problems/length-of-last-word/
+	 * 
+	 */
+	public int lengthOfLastWord(String s) {
+		int i = s.length() - 1;
+		while (i >= 0 && s.charAt(i) == ' ') {
+			i--;
+		}
+		int j = i;
+		while (i >= 0 && s.charAt(i) != ' ') {
+			i--;
+		}
+		return j - i;
+	}
+
+	/**
+	 * Given two strings A and B of lowercase letters, return true if you can swap
+	 * two letters in A so the result is equal to B, otherwise, return false.
+	 * Swapping letters is defined as taking two indices i and j (0-indexed) such
+	 * that i != j and swapping the characters at A[i] and A[j]. For example,
+	 * swapping at indices 0 and 2 in "abcd" results in "cbad".
+	 * 
+	 * Link: https://leetcode.com/problems/buddy-strings/
+	 * 
+	 */
+	public boolean buddyStrings(String A, String B) {
+		if (A.length() != B.length()) {
+			return false;
+		}
+		if (A.equals(B)) {
+			int[] count = new int[26];
+			for (int i = 0; i < A.length(); i++) {
+				count[A.charAt(i) - 'a']++;
+			}
+			for (int i = 0; i < 26; i++) {
+				if (count[i] > 1) {
+					return true;
+				}
+			}
+			return false;
+		}
+		int index1 = -1;
+		int index2 = -1;
+		for (int i = 0; i < A.length(); i++) {
+			if (A.charAt(i) != B.charAt(i)) {
+				if (index1 == -1) {
+					index1 = i;
+				} else if (index2 == -1) {
+					index2 = i;
+				} else {
+					return false;
+				}
+			}
+		}
+		if (index1 == -1 || index2 == -1) {
+			return false;
+		}
+		return A.charAt(index1) == B.charAt(index2) && A.charAt(index2) == B.charAt(index1);
+	}
+
 }

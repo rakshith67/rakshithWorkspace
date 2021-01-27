@@ -589,6 +589,65 @@ public class StringsMediumLevel {
 		return rv;
 	}
 
+	/**
+	 * Given a balanced parentheses string S, compute the score of the string based
+	 * on the following rule: () has score 1 AB has score A + B, where A and B are
+	 * balanced parentheses strings. (A) has score 2 * A, where A is a balanced
+	 * parentheses string.
+	 * 
+	 * Link: https://leetcode.com/problems/score-of-parentheses/
+	 * 
+	 */
+	public int scoreOfParentheses(String S) {
+		int current = 0;
+		int result = 0;
+		for (int i = 0; i < S.length(); i++) {
+			if (S.charAt(i) == '(') {
+				current++;
+			} else {
+				current--;
+				if (S.charAt(i - 1) == '(') {
+					result += 1 << current;
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Given an input string s, reverse the order of the words. A word is defined as
+	 * a sequence of non-space characters. The words in s will be separated by at
+	 * least one space. Return a string of the words in reverse order concatenated
+	 * by a single space. Note that s may contain leading or trailing spaces or
+	 * multiple spaces between two words. The returned string should only have a
+	 * single space separating the words. Do not include any extra spaces.
+	 * 
+	 * Link: https://leetcode.com/problems/reverse-words-in-a-string/
+	 * 
+	 */
+	public String reverseWords(String s) {
+		if (s == null || s.length() == 0) {
+			return s;
+		}
+		int n = s.length(), i = n - 1;
+		StringBuilder sb = new StringBuilder();
+		while (i >= 0) {
+			while (i >= 0 && s.charAt(i) == ' ') {
+				i--;
+			}
+			if (i < 0) {
+				break;
+			}
+			int nextSpace = s.lastIndexOf(' ', i);
+			if (sb.length() > 0) {
+				sb.append(' ');
+			}
+			sb.append(s.substring(nextSpace + 1, i + 1));
+			i = nextSpace - 1;
+		}
+		return sb.toString();
+	}
+
 }
 
 class TrieNode {
