@@ -648,6 +648,77 @@ public class StringsMediumLevel {
 		return sb.toString();
 	}
 
+	/**
+	 * Given a string s, remove duplicate letters so that every letter appears once
+	 * and only once. You must make sure your result is the smallest in
+	 * lexicographical order among all possible results.
+	 * 
+	 * Link: https://leetcode.com/problems/remove-duplicate-letters/
+	 * 
+	 */
+	public String removeDuplicateLetters(String s) {
+		StringBuilder sb = new StringBuilder();
+		int[] count = new int[26];
+		boolean[] used = new boolean[26];
+		char[] chs = s.toCharArray();
+
+		for (char c : chs) {
+			count[c - 'a']++;
+		}
+		for (char c : chs) {
+			count[c - 'a']--;
+			if (used[c - 'a'] == true)
+				continue;
+
+			while (sb.length() > 0 && sb.charAt(sb.length() - 1) > c && count[sb.charAt(sb.length() - 1) - 'a'] > 0) {
+				used[sb.charAt(sb.length() - 1) - 'a'] = false;
+				sb.deleteCharAt(sb.length() - 1);
+			}
+
+			sb.append(c);
+			used[c - 'a'] = true;
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Given a string s of '(' , ')' and lowercase English characters. Your task is
+	 * to remove the minimum number of parentheses ( '(' or ')', in any positions )
+	 * so that the resulting parentheses string is valid and return any valid
+	 * string. Formally, a parentheses string is valid if and only if: It is the
+	 * empty string, contains only lowercase characters, or It can be written as AB
+	 * (A concatenated with B), where A and B are valid strings, or It can be
+	 * written as (A), where A is a valid string.
+	 * 
+	 * Link: https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/
+	 * 
+	 */
+	public String minRemoveToMakeValid(String s) {
+		Stack<Integer> stack = new Stack<>();
+		char[] array = s.toCharArray();
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '(') {
+				stack.push(i);
+			} else if (s.charAt(i) == ')') {
+				if (!stack.isEmpty()) {
+					stack.pop();
+				} else {
+					array[i] = '*';
+				}
+			}
+		}
+		while (!stack.isEmpty()) {
+			array[stack.pop()] = '*';
+		}
+		for (int i = 0; i < s.length(); i++) {
+			if (array[i] != '*') {
+				builder.append(array[i]);
+			}
+		}
+		return builder.toString();
+	}
+
 }
 
 class TrieNode {

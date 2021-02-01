@@ -123,4 +123,48 @@ public class StringsHardLevel {
 		board[i][j] ^= 256;
 		return exist;
 	}
+
+	/**
+	 * Given two strings s and t, return the minimum window in s which will contain
+	 * all the characters in t. If there is no such window in s that covers all
+	 * characters in t, return the empty string "". Note that If there is such a
+	 * window, it is guaranteed that there will always be only one unique minimum
+	 * window in s.
+	 * 
+	 * Link: https://leetcode.com/problems/minimum-window-substring/
+	 * 
+	 */
+	public String minWindow(String s, String t) {
+		int[] tFreq = new int[58];
+		for (int i = 0; i < t.length(); i++) {
+			tFreq[t.charAt(i) - 'A']++;
+		}
+		int[] sFreq = new int[58];
+		int low = 0;
+		int high = 0;
+		int min = Integer.MAX_VALUE;
+		String result = null;
+		while (high < s.length()) {
+			sFreq[s.charAt(high) - 'A']++;
+			while (high - low + 1 >= t.length() && isEqual(tFreq, sFreq)) {
+				if (min > high - low + 1) {
+					result = s.substring(low, high + 1);
+					min = high - low + 1;
+				}
+				sFreq[s.charAt(low) - 'A']--;
+				low++;
+			}
+			high++;
+		}
+		return result == null ? "" : result;
+	}
+
+	private boolean isEqual(int[] tFreq, int[] sFreq) {
+		for (int i = 0; i < 58; i++) {
+			if (tFreq[i] > sFreq[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
