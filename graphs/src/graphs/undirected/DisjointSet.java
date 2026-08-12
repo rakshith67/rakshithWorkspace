@@ -12,41 +12,32 @@ public class DisjointSet {
                 {3, 7}
         };
         int n = 7;
-        UnionFind unionFind = new UnionFind(n);
-        for (int[] edge : edges) {
-            if (!unionFind.union(edge[0], edge[1])) {
-                System.out.println("Is a cycle");
-            }
-        }
-        boolean isValidTree = unionFind.getNumberOfComponents() == 1;
-        System.out.println("Valid Tree: " + isValidTree);
-        System.out.println("Is not a cycle");
-    }
-}
-
-class UnionFind {
-    private final int[] parent;
-    private final int[] rank;
-    private int numberOfComponents;
-
-    public UnionFind(int n) {
-        parent = new int[n + 1];
-        rank = new int[n + 1];
-        for (int i = 0; i <=n; i++) {
+        int[] parent = new int[n + 1];
+        int[] rank = new int[n + 1];
+        int[] numberOfComponents = new int[]{n};
+        for (int i = 0; i <= n; i++) {
             parent[i] = i;
             rank[i] = 1;
         }
-        this.numberOfComponents = n;
+
+        for (int[] edge : edges) {
+            if (!union(parent, rank, edge[0], edge[1], numberOfComponents)) {
+                System.out.println("Is a cycle");
+            }
+        }
+        boolean isValidTree = numberOfComponents[0] == 1;
+        System.out.println("Valid Tree: " + isValidTree);
+        System.out.println("Is not a cycle");
     }
 
-    public boolean union(int u, int v) {
-        int parent1 = find(u);
-        int parent2 = find(v);
+    public static boolean union(int[] parent, int[] rank, int u, int v, int[] numberOfComponents) {
+        int parent1 = find(parent, u);
+        int parent2 = find(parent, v);
 
         if (parent1 == parent2) {
             return false;
         }
-        numberOfComponents--;
+        numberOfComponents[0]--;
         if (rank[parent1] >= rank[parent2]) {
             parent[parent2] = parent1;
             rank[parent1] += rank[parent2];
@@ -57,16 +48,13 @@ class UnionFind {
         return true;
     }
 
-    public int find(int u) {
+    public static int find(int[] parent, int u) {
         int p = parent[u];
         while (p != parent[p]) {
             parent[p] = parent[parent[p]];
             p = parent[p];
         }
         return p;
-    }
 
-    public int getNumberOfComponents() {
-        return numberOfComponents;
     }
 }
